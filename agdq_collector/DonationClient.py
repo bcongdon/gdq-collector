@@ -17,13 +17,17 @@ class DonationClient:
     def __init__(self, donation_url):
         self.url = donation_url
 
+    def _get_page(self):
+        ''' Explicit get_page function to allow mocking in tests '''
+        return requests.get(self.url).text
+
     def scrape(self):
         '''
         Scrapes Donation Stats page and returns a namedtuple with current
         results
         '''
 
-        soup = BeautifulSoup(requests.get(self.url).text, "html.parser")
+        soup = BeautifulSoup(self._get_page(), "html.parser")
         totals = soup.find('small').text.strip().split('\n')
         tot_mon = float(DonationClient.mon_re.search(
                         totals[1]).group(1).replace(',', ''))

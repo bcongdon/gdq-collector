@@ -1,0 +1,1943 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Games Done Quick</title>
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+<link type="text/css" rel="stylesheet" href="/static/res/css/main.css"/>
+<script src="/static/res/js/main.min.js"></script>
+<link rel="shortcut icon" href="/static/res/img/favicon/favicon.ico">
+<link rel="apple-touch-icon" sizes="57x57" href="/static/res/img/favicon/apple-touch-icon-57x57.png">
+<link rel="apple-touch-icon" sizes="114x114" href="/static/res/img/favicon/apple-touch-icon-114x114.png">
+<link rel="apple-touch-icon" sizes="72x72" href="/static/res/img/favicon/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="144x144" href="/static/res/img/favicon/apple-touch-icon-144x144.png">
+<link rel="apple-touch-icon" sizes="60x60" href="/static/res/img/favicon/apple-touch-icon-60x60.png">
+<link rel="apple-touch-icon" sizes="120x120" href="/static/res/img/favicon/apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon" sizes="76x76" href="/static/res/img/favicon/apple-touch-icon-76x76.png">
+<link rel="apple-touch-icon" sizes="152x152" href="/static/res/img/favicon/apple-touch-icon-152x152.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/static/res/img/favicon/apple-touch-icon-180x180.png">
+<link rel="icon" type="image/png" href="/static/res/img/favicon/favicon-192x192.png" sizes="192x192">
+<link rel="icon" type="image/png" href="/static/res/img/favicon/favicon-160x160.png" sizes="160x160">
+<link rel="icon" type="image/png" href="/static/res/img/favicon/favicon-96x96.png" sizes="96x96">
+<link rel="icon" type="image/png" href="/static/res/img/favicon/favicon-16x16.png" sizes="16x16">
+<link rel="icon" type="image/png" href="/static/res/img/favicon/favicon-32x32.png" sizes="32x32">
+<meta name="msapplication-TileColor" content="#2b5797">
+<meta name="msapplication-TileImage" content="/static/res/img/favicon/mstile-144x144.png">
+<meta name="msapplication-config" content="/static/res/img/favicon/browserconfig.xml">
+</head>
+<body>
+<div id="battlescene" style="display: none;">
+<p id="inputscene" style="color: #aaff33; font-family: Arial, sans-serif; font-weight: 500; font-size: 56px; position: absolute; top: 6%; right: 10%; text-shadow: 0 0 5px #22ff22;">
+Input 1 </p>
+<a href="#" title="Click to return whence you came, Harrier." onclick="location.reload();">
+<video id="battlevideo" preload="none" loop style="position: fixed; height: 100%; width: 100%; right: 0; left: 0; bottom: 0; margin-left: auto; margin-right: auto;">
+<source id="battlesource1" type="video/webm" src="/static/res/video/harrierverylow.webm">
+<source src="/static/res/video/harrierverylow.mp4" type="video/mp4">
+</video>
+</a>
+</div>
+<div id="scene">
+<div id="white-bg">
+<nav id="top" class="navbar navbar-default navbar-static-top navbar-inverse" role="navigation">
+<div class="container">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+<span class="sr-only">Toggle navigation</span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+</button>
+<a class="navbar-brand visible-xs-inline" href="#" onclick="window.history.go(-1); return false;"><i class="fa fa-chevron-left"></i></a> <a class="navbar-brand" href="/"><img src="/static/res/img/gdqlogo.png" style="height: 100%" alt="Games Done Quick"/></a>
+</div>
+<div id="bs-example-navbar-collapse-1" class="collapse navbar-collapse">
+<ul class="nav navbar-nav">
+<li class="dropdown">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown">AGDQ2017 Event Info
+<span class="caret"></span></a>
+<ul class="dropdown-menu" role="menu">
+<li><a href="https://gamesdonequick.com/attend"><i class="fa fa-ticket fa-fw"></i> How to Attend</a></li>
+<li><a href="https://gamesdonequick.com/rules"><i class="fa fa-gavel fa-fw"></i> Event Rules</a></li>
+<li class="divider"></li>
+<li><a href="https://gamesdonequick.com/schedule"><i class="fa fa-clock-o fa-fw"></i> Event Schedule</a></li>
+<li><a href="https://gamesdonequick.com/submission/all"><i class="fa fa-gamepad fa-fw"></i> All Game
+Submissions</a>
+</li>
+<li class="divider"></li>
+<li><a href="https://gamesdonequick.com/prize-guide"><i class="fa fa-gift fa-fw"></i> Prize Submission Guide</a></li>
+<li><a href="https://gamesdonequick.com/submission-guide"><i class="fa fa-book fa-fw"></i> Game Submission Guide</a></li>
+</ul>
+</li>
+<li class="dropdown">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown">About Us <span class="caret"></span></a>
+<ul class="dropdown-menu" role="menu">
+<li><a href="https://gamesdonequick.com/privacy"><i class="fa fa-eye-slash fa-fw"></i> Privacy Policy</a></li>
+<li><a href="https://gamesdonequick.com/contact"><i class="fa fa-pencil fa-fw"></i> Contact Us</a></li>
+<li><a href="https://gamesdonequick.com/faq"><i class="fa fa-question-circle fa-fw"></i> Frequently Asked
+Questions</a></li>
+<li class="divider"></li>
+<li role="presentation" class="dropdown-header">Our Communities</li>
+<li><a href="http://speeddemosarchive.com">Speed Demos Archive</a></li>
+<li><a href="http://speedrunslive.com">Speed Runs Live</a></li>
+</ul>
+</li>
+<li>
+<a href="/hotfix"><i class="fa fa-fw fa-bolt" aria-hidden="true"></i>
+<strong><em>GDQ HOTFIX</em></strong></a>
+</li>
+<li>
+<a href="https://www.youtube.com/user/gamesdonequick/playlists"><i class="fa fa-fw fa-youtube-play" aria-hidden="true"></i></a>
+</li>
+</ul>
+<a href="https://gamesdonequick.com/auth/login" role="button" class="btn btn-primary btn-sm navbar-btn navbar-right extra-button-space">Login</a>
+<a href="https://gamesdonequick.com/auth/register" role="button" class="btn btn-danger btn-sm navbar-btn navbar-right extra-button-space">Register</a>
+</div>
+</div>
+</nav>
+<div class="container">
+</div>
+<div class="container text-center">
+<div class="fa-stack center-block medium-icon-red fa-5x">
+<i class="fa fa-circle fa-stack-2x"></i> <i class="fa fa-clock-o fa-stack-1x fa-inverse"></i>
+</div>
+<h1 class="text-gdq-red extra-spacing">AGDQ2017 Schedule</h1>
+<h4 class="text-gdq-black well ">All start and end times below are converted to your local time<span id="offset-detected"></span>.</h4>
+</div>
+<table id="runTable" class="table table-condensed">
+<thead>
+<tr class="day-split">
+<td>Time &amp; Length</td>
+<td>Run</td>
+<td>Runners</td>
+<td class="visible-lg">Setup&nbsp;Length</td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="start-time text-right">2017-01-08T16:30:00Z</td>
+<td>Pre-Show</td>
+<td rowspan="2">SpikeVegeta, feasel, Golden, Blechy, Darkman78</td>
+<td rowspan="2" class="visible-lg text-center"></td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:30:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-08T17:00:00Z</td>
+<td>Ape Escape 2</td>
+<td rowspan="2">iongravirei</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 1:00:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-08T18:10:00Z</td>
+<td>The Legend of Zelda: Ocarina of Time 3D</td>
+<td rowspan="2">benstephens56</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 2:00:00 </td>
+<td>All Dungeons</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-08T20:20:00Z</td>
+<td>Borderlands 2</td>
+<td rowspan="2">Shockwve, Amyrlinn</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 2:00:00 </td>
+<td>2 Player Co-op</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-08T22:30:00Z</td>
+<td>Psychonauts</td>
+<td rowspan="2">demoli</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:57:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-08T23:37:00Z</td>
+<td>Shovel Knight</td>
+<td rowspan="2">Smaugy, MunchaKoopas</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:52:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-09T00:39:00Z</td>
+<td>Mega Man</td>
+<td rowspan="2">WhiteHat94, Endy, dxtr, coolkid</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:25:00 </td>
+<td>All Stages</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-09T01:14:00Z</td>
+<td>Super Mario Kart</td>
+<td rowspan="2">KVD, Sami Cetin</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:32:00 </td>
+<td>Time Trial Race</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-09T01:56:00Z</td>
+<td>Quake</td>
+<td rowspan="2">coolkid</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:20:00 </td>
+<td>Any% easy</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-09T02:26:00Z</td>
+<td>Metal Gear Solid 2: Sons of Liberty</td>
+<td rowspan="2">Jaguar King</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 1:40:00 </td>
+<td>Any% European Extreme</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-09T04:16:00Z</td>
+<td>Devil May Cry</td>
+<td rowspan="2">Maxylobes</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 1:05:00 </td>
+<td>New Game / Normal</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-09T05:31:00Z</td>
+<td>Resident Evil Zero HD Remaster</td>
+<td rowspan="2">Pessimism</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 1:16:00 </td>
+<td>Wesker Mode</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-09T06:57:00Z</td>
+<td>Silent Hill 4: The Room</td>
+<td rowspan="2">AnEternalEnigma</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 1:15:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-09T08:22:00Z</td>
+<td>F.E.A.R. Extraction Point</td>
+<td rowspan="2">Overfiendvip</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:48:00 </td>
+<td>Low Difficulty</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-09T09:20:00Z</td>
+<td>Hitman: Blood Money</td>
+<td rowspan="2">Saintmillion</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:40:00 </td>
+<td>PRO/SA</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-09T10:10:00Z</td>
+<td>The Turing Test</td>
+<td rowspan="2">Azorae</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:45:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-09T11:05:00Z</td>
+<td>Hyper Princess Pitch</td>
+<td rowspan="2">WanderingMind, MBM</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:15:00 </td>
+<td>Combat Lady, All Stages</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-09T11:30:00Z</td>
+<td>Hydra Castle Labyrinth</td>
+<td rowspan="2">ForOhFor</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:35:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-09T12:15:00Z</td>
+<td>Kalimba</td>
+<td rowspan="2">DevilSquirrel</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:20:00 </td>
+<td>Inner World</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-09T12:45:00Z</td>
+<td>New Super Hook Girl</td>
+<td rowspan="2">bjw</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:10:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-09T13:05:00Z</td>
+<td>Valdis Story: Abyssal City</td>
+<td rowspan="2">RiskyCB</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:45:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-09T14:00:00Z</td>
+<td>SEUM: Speedrunners from Hell</td>
+<td rowspan="2">MattyIce3131</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:25:00 </td>
+<td>Speedrun Mode: All Levels</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-09T14:35:00Z</td>
+<td>Salt and Sanctuary</td>
+<td rowspan="2">Grimelios</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:42:00 </td>
+<td>All Bosses</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-09T15:27:00Z</td>
+<td>Magic Sword</td>
+<td rowspan="2">Pro_JN, yelsraek</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:28:00 </td>
+<td>Normal Beginning</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-09T16:05:00Z</td>
+<td>Joe and Mac 2</td>
+<td rowspan="2">dram55</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:26:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-09T16:36:00Z</td>
+<td>Congo&#039;s Caper</td>
+<td rowspan="2">Omnigamer</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:25:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-09T17:06:00Z</td>
+<td>Batman: Return of the Joker</td>
+<td rowspan="2">Toad22484</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:20:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-09T17:31:00Z</td>
+<td>Sunset Riders</td>
+<td rowspan="2">Gusmancini</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:24:00 </td>
+<td>Any% Hard pistols</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-09T18:00:00Z</td>
+<td>Super Bomberman</td>
+<td rowspan="2">Crak Atak</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:20:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-09T18:25:00Z</td>
+<td>Smart Ball</td>
+<td rowspan="2">giygasblues</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:25:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-09T18:55:00Z</td>
+<td>Mario Paint</td>
+<td rowspan="2">DoDeChehedron</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:06:00 </td>
+<td>Gnat Attack Level 3</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-09T19:11:00Z</td>
+<td>Battle Clash</td>
+<td rowspan="2">SCXCR</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:26:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-09T19:47:00Z</td>
+<td>Sega Bass Fishing</td>
+<td rowspan="2">Fuzzyness</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:12:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-09T20:09:00Z</td>
+<td>SETUP BLOCK 1</td>
+<td rowspan="2">Tech Crew</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:50:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-09T21:09:00Z</td>
+<td>Super Monkey Ball 2</td>
+<td rowspan="2">Peanut</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:40:00 </td>
+<td>Story Mode All Levels</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-09T21:59:00Z</td>
+<td>Super Monkey Ball Adventure</td>
+<td rowspan="2">Pokehero</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:20:00 </td>
+<td>All Difficulties</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-09T22:29:00Z</td>
+<td>Luigi&#039;s Mansion</td>
+<td rowspan="2">Snap32</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 1:17:00 </td>
+<td>100%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-09T23:56:00Z</td>
+<td>Pokemon Emerald</td>
+<td rowspan="2">TheTyrant14</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 3:00:00 </td>
+<td>Any% Glitchless</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-10T03:06:00Z</td>
+<td>Tetris with Cardcaptor Sakura: Eternal Heart</td>
+<td rowspan="2">KevinDDR, EnchantressOfNumbers</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:25:00 </td>
+<td>Story Mode (Normal)</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-10T03:41:00Z</td>
+<td>Blaster Master</td>
+<td rowspan="2">Skavenger216, ShiningDragoon</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:39:00 </td>
+<td>Any% Warpless</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-10T04:30:00Z</td>
+<td>Ninja Gaiden</td>
+<td rowspan="2">dxtr, Gusmancini</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:20:00 </td>
+<td>Pacifist%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-10T05:00:00Z</td>
+<td>Ninja Gaiden II: The Dark Sword of Chaos</td>
+<td rowspan="2">Gusmancini</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:19:00 </td>
+<td>Pacifist</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-10T05:24:00Z</td>
+<td>Sparkster</td>
+<td rowspan="2">Drakodan</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:25:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-10T05:59:00Z</td>
+<td>Decap Attack</td>
+<td rowspan="2">cook</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:35:00 </td>
+<td>Beat the game</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-10T06:44:00Z</td>
+<td>Adventure Island 4</td>
+<td rowspan="2">puchiedarcy</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:30:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-10T07:24:00Z</td>
+<td>Adventure Island 2 (GB)</td>
+<td rowspan="2">Ppotdot1</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:28:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-10T08:02:00Z</td>
+<td>Shippuu! Iron Leaguer</td>
+<td rowspan="2">Neerrm</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:20:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-10T08:32:00Z</td>
+<td>Mickey&#039;s Dangerous Chase</td>
+<td rowspan="2">Adefgames</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:18:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-10T09:00:00Z</td>
+<td>Fortified Zone</td>
+<td rowspan="2">CuteFluffyBunny</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:15:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-10T09:25:00Z</td>
+<td>Jazz Jackrabbit</td>
+<td rowspan="2">CapnClever</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:35:00 </td>
+<td>6-Episode</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-10T10:10:00Z</td>
+<td>Jumping Flash! 2</td>
+<td rowspan="2">TonyOgbot</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:30:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-10T10:50:00Z</td>
+<td>Intelligent Qube (Kurushi)</td>
+<td rowspan="2">CaneofPacci</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:30:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-10T11:30:00Z</td>
+<td>LittleBigPlanet 3</td>
+<td rowspan="2">RbdJellyfish</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:55:00 </td>
+<td>Any% no-create</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-10T12:35:00Z</td>
+<td>Road Trip Adventure</td>
+<td rowspan="2">Konasumi</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:30:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-10T13:15:00Z</td>
+<td>Pac-Man World</td>
+<td rowspan="2">Joester98</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:40:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-10T14:05:00Z</td>
+<td>Mega Man Legends</td>
+<td rowspan="2">BlueMetal</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:58:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-10T15:13:00Z</td>
+<td>Katamari Damacy</td>
+<td rowspan="2">sunkir</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:34:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-10T15:57:00Z</td>
+<td>Super Smash Bros. Melee</td>
+<td rowspan="2">Fuzzyness</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:55:00 </td>
+<td>All Events</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-10T17:02:00Z</td>
+<td>Metroid Prime 2: Echoes</td>
+<td rowspan="2">Miles</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 1:50:00 </td>
+<td>Low% (6%)</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-10T18:57:00Z</td>
+<td>SETUP BLOCK 2</td>
+<td rowspan="2">Tech Crew</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:50:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-10T19:57:00Z</td>
+<td>Dark Messiah of Might and Magic</td>
+<td rowspan="2">Razgrillz</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:45:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-10T20:52:00Z</td>
+<td>Fallout: New Vegas</td>
+<td rowspan="2">progamingwithed</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:30:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-10T21:27:00Z</td>
+<td>System Shock 2</td>
+<td rowspan="2">M1_Account</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:17:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-10T21:49:00Z</td>
+<td>Descent II</td>
+<td rowspan="2">SpootyBiscuit</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:55:00 </td>
+<td>Hotshot Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-10T22:49:00Z</td>
+<td>Daikatana</td>
+<td rowspan="2">Cubeface</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:55:00 </td>
+<td>Any% No Sidekicks</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-10T23:49:00Z</td>
+<td>Half-Life: Blue Shift</td>
+<td rowspan="2">Cubeface</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:35:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-11T00:29:00Z</td>
+<td>Doom (2016)</td>
+<td rowspan="2">Blood_Thunder</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 1:15:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-11T01:49:00Z</td>
+<td>Super Mario Bros.</td>
+<td rowspan="2">darbian, Kosmicd12, andrewg</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:35:00 </td>
+<td>Warpless</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-11T02:34:00Z</td>
+<td>Super Mario Bros.: The Lost Levels</td>
+<td rowspan="2">darbian, Kosmicd12, andrewg</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:12:00 </td>
+<td>Any% 8-4</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-11T02:56:00Z</td>
+<td>Super Mario Sunshine</td>
+<td rowspan="2">Bounceyboy, Vallu, PangaeaPanga, AverageTrey</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 1:25:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-11T04:31:00Z</td>
+<td>Final Fantasy</td>
+<td rowspan="2">feasel, Gyre</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 4:10:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-11T08:51:00Z</td>
+<td>Gauntlet</td>
+<td rowspan="2">feasel, Mithical9</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:20:00 </td>
+<td>Any% co-op</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-11T09:21:00Z</td>
+<td>Kabuki Quantum Fighter</td>
+<td rowspan="2">Mithical9</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:15:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-11T09:41:00Z</td>
+<td>Cobra Triangle</td>
+<td rowspan="2">ShiningDragoon</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:20:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-11T10:06:00Z</td>
+<td>The Krion Conquest</td>
+<td rowspan="2">badbrakes</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:20:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-11T10:31:00Z</td>
+<td>Street Fighter 2010: The Final Fight</td>
+<td rowspan="2">Spiriax</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:25:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-11T11:01:00Z</td>
+<td>River City Ransom</td>
+<td rowspan="2">yelsraek</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:10:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-11T11:16:00Z</td>
+<td>Moon Crystal</td>
+<td rowspan="2">jimmypoopins</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:12:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-11T11:33:00Z</td>
+<td>Little Samson</td>
+<td rowspan="2">Xdragon</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:25:00 </td>
+<td>All Stages Normal</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-11T12:03:00Z</td>
+<td>The Addams Family</td>
+<td rowspan="2">garbanzoguy</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:12:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-11T12:20:00Z</td>
+<td>Yume Penguin Monogatari</td>
+<td rowspan="2">Endy</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:12:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-11T12:37:00Z</td>
+<td>Gremlins 2</td>
+<td rowspan="2">Endy</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:10:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-11T12:52:00Z</td>
+<td>Trojan</td>
+<td rowspan="2">InfestedRiche</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:10:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-11T13:07:00Z</td>
+<td>Shinobi III: Return of the Ninja Master</td>
+<td rowspan="2">Keaur</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:30:00 </td>
+<td>Any%, Expert, 0 Kunai</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-11T13:47:00Z</td>
+<td>Bishi Bashi Special</td>
+<td rowspan="2">T3tsuya</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:13:00 </td>
+<td>Hyper Mode Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-11T14:10:00Z</td>
+<td>Crowtel</td>
+<td rowspan="2">theboyks</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:14:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-11T14:34:00Z</td>
+<td>Furi</td>
+<td rowspan="2">Studio</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:48:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-11T15:32:00Z</td>
+<td>JumpJet Rex</td>
+<td rowspan="2">PvtCb</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:20:00 </td>
+<td>Adventure Normal</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-11T16:02:00Z</td>
+<td>Blitz Breaker</td>
+<td rowspan="2">giygasblues</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:28:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-11T16:40:00Z</td>
+<td>Secrets Of Grindea</td>
+<td rowspan="2">Ivan, Mr_Weables</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:30:00 </td>
+<td>Arcade Mode Co-Op</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-11T17:20:00Z</td>
+<td>Hyper Light Drifter</td>
+<td rowspan="2">MunchaKoopas</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:40:00 </td>
+<td>New Game+ Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-11T18:10:00Z</td>
+<td>Ori and the Blind Forest: Definitive Edition</td>
+<td rowspan="2">Vulajin, sigma</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 1:16:00 </td>
+<td>Reverse Event Order vs &quot;0 XP&quot; bid war</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-11T19:36:00Z</td>
+<td>SETUP BLOCK 3</td>
+<td rowspan="2">Tech Crew</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:50:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-11T20:36:00Z</td>
+<td>Castlevania</td>
+<td rowspan="2">Cantaloupeme, Komrade</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:15:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-11T21:01:00Z</td>
+<td>Super Castlevania IV</td>
+<td rowspan="2">Furious Paul, JoeDamillio</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:40:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-11T21:51:00Z</td>
+<td>Castlevania: Rondo of Blood</td>
+<td rowspan="2">Skavenger216, Komrade</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:17:00 </td>
+<td>Maria (NG+)</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-11T22:18:00Z</td>
+<td>Castlevania: Portrait of Ruin</td>
+<td rowspan="2">romscout</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:40:00 </td>
+<td>Richter Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-11T23:08:00Z</td>
+<td>Mega Man Network Transmission</td>
+<td rowspan="2">soothingplumtea</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 1:07:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-12T00:25:00Z</td>
+<td>Mega Man X</td>
+<td rowspan="2">Domalix, Calebhart42, CrystalUnclear, Walrus_prime</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:40:00 </td>
+<td>100%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-12T01:15:00Z</td>
+<td>Mighty No. 9</td>
+<td rowspan="2">GreenZSaber</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 1:00:00 </td>
+<td>Any% (Beck, Normal)</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-12T02:25:00Z</td>
+<td>Halo 2</td>
+<td rowspan="2">Cryphon</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 1:50:00 </td>
+<td>Legendary</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-12T04:25:00Z</td>
+<td>Batman: Arkham City</td>
+<td rowspan="2">BubblesDelFuego</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 1:33:00 </td>
+<td>Any% (No Catwoman)</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-12T06:08:00Z</td>
+<td>Batman Forever</td>
+<td rowspan="2">PJ, Klaige</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:50:00 </td>
+<td>Any% Co-op</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-12T07:08:00Z</td>
+<td>Timecop</td>
+<td rowspan="2">Omnigamer</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:27:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-12T07:40:00Z</td>
+<td>Cool World</td>
+<td rowspan="2">Mecha Richter</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:11:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-12T07:56:00Z</td>
+<td>The Adventures of Rocky and Bullwinkle and Friends</td>
+<td rowspan="2">authorblues</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:30:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-12T08:31:00Z</td>
+<td>Dragon&#039;s Lair</td>
+<td rowspan="2">SCXCR</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:18:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-12T08:54:00Z</td>
+<td>A Nightmare on Elm Street</td>
+<td rowspan="2">Skavenger216, feasel, JamEvil, Cantaloupeme</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:26:00 </td>
+<td>4-Player Co-op</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-12T09:30:00Z</td>
+<td>Cheetahmen (Action 52)</td>
+<td rowspan="2">huey</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:09:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-12T09:44:00Z</td>
+<td>King of Kings: The Early Years</td>
+<td rowspan="2">Linkums</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:08:00 </td>
+<td>Jesus and the Temple (Normal)</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-12T09:57:00Z</td>
+<td>T&amp;C 2: Thrilla&#039;s Surfari</td>
+<td rowspan="2">WhiteHat94</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:16:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-12T10:18:00Z</td>
+<td>Wayne&#039;s World</td>
+<td rowspan="2">WhiteHat94</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:10:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-12T10:33:00Z</td>
+<td>Big Nose the Caveman</td>
+<td rowspan="2">LackAttack24</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:28:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-12T11:06:00Z</td>
+<td>Donkey Kong 5: The Journey of Over Time and Space</td>
+<td rowspan="2">theboyks</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:10:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-12T11:26:00Z</td>
+<td>Catechumen</td>
+<td rowspan="2">peaches_</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:30:00 </td>
+<td>Any% Fledgling</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-12T12:06:00Z</td>
+<td>WolfQuest</td>
+<td rowspan="2">Brossentia</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:22:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-12T12:33:00Z</td>
+<td>Cornerstone: The Song of Tyrim</td>
+<td rowspan="2">DrTChops</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:35:00 </td>
+<td>Any% No Credits Skip</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-12T13:13:00Z</td>
+<td>Turok: Dinosaur Hunter</td>
+<td rowspan="2">Bawkbasoup</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:40:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-12T13:58:00Z</td>
+<td>Left 4 Dead 1</td>
+<td rowspan="2">mr.deagle, The Master</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 1:10:00 </td>
+<td>Original Campaigns Co-op</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-12T15:18:00Z</td>
+<td>007: Nightfire</td>
+<td rowspan="2">Ian Kies</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:50:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-12T16:18:00Z</td>
+<td>Trauma Center: New Blood</td>
+<td rowspan="2">Irisjoker, Slurpeeninja</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 1:50:00 </td>
+<td>Co-Op Any% Normal</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-12T18:18:00Z</td>
+<td>The Legend of Korra</td>
+<td rowspan="2">DolphinDasher</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:42:00 </td>
+<td>New Game+ Extreme</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-12T19:10:00Z</td>
+<td>Sonic Advance 2</td>
+<td rowspan="2">Kirbymastah</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:32:00 </td>
+<td>Sonic</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-12T19:52:00Z</td>
+<td>Sonic R</td>
+<td rowspan="2">Keverage</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:19:00 </td>
+<td>100% (No OoB)</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-12T20:21:00Z</td>
+<td>Sonic Adventure 2: Battle</td>
+<td rowspan="2">Seraphim1313</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:45:00 </td>
+<td>Dark Story vs Hero Story bid war</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-12T21:16:00Z</td>
+<td>SETUP BLOCK 4</td>
+<td rowspan="2">Tech Crew</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:50:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-12T22:16:00Z</td>
+<td>Mystery Game Tournament</td>
+<td rowspan="2"></td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 1:10:00 </td>
+<td>blind races</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-12T23:36:00Z</td>
+<td>Kirby&#039;s Dream Land 3</td>
+<td rowspan="2">swordsmankirby, suzuribaco</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 1:40:00 </td>
+<td>Best Ending (Co-op)</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-13T01:26:00Z</td>
+<td>The Legend of Zelda: A Link to the Past</td>
+<td rowspan="2">Andy, BluntBunny, JoeDamillio, Xelna</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 1:30:00 </td>
+<td>Any% No Major Glitches</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-13T03:06:00Z</td>
+<td>Paper Mario: The Thousand-Year Door</td>
+<td rowspan="2">Almo, Sjorec</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 3:30:00 </td>
+<td>Japanese Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-13T06:46:00Z</td>
+<td>The Legend of Dark Witch - Episode 2</td>
+<td rowspan="2">Crippe</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:30:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-13T07:26:00Z</td>
+<td>Grief Syndrome</td>
+<td rowspan="2">PX_</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:22:00 </td>
+<td>Any% 1 Player Co-op</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-13T07:53:00Z</td>
+<td>Refunct</td>
+<td rowspan="2">097Aceofspades</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:05:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-13T08:03:00Z</td>
+<td>La-Mulana Remake</td>
+<td rowspan="2">RaindropDry</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 1:50:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-13T09:58:00Z</td>
+<td>Titan Souls</td>
+<td rowspan="2">Zic3</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:22:00 </td>
+<td>100% All Bosses</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-13T10:25:00Z</td>
+<td>Bleed</td>
+<td rowspan="2">Studio</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:20:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-13T10:50:00Z</td>
+<td>Flywrench</td>
+<td rowspan="2">killingpepsi, SsupNerds</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:35:00 </td>
+<td>Any% Normal Mode</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-13T11:35:00Z</td>
+<td>Snailiad</td>
+<td rowspan="2">Bismuth</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:10:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-13T11:50:00Z</td>
+<td>Human: Fall Flat</td>
+<td rowspan="2">Bullets</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:12:00 </td>
+<td>Any% 1.0</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-13T12:07:00Z</td>
+<td>Action Henk</td>
+<td rowspan="2">badBlackShark</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:20:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-13T12:32:00Z</td>
+<td>Woolfe: The Red Hood Diaries</td>
+<td rowspan="2">RandomPinkBunny</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:25:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-13T13:02:00Z</td>
+<td>DuckTales</td>
+<td rowspan="2">Endy, garadas21</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:09:00 </td>
+<td>Any% Easy</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-13T13:21:00Z</td>
+<td>Star Wars: Shadows of the Empire</td>
+<td rowspan="2">glasnonck</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:55:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-13T14:26:00Z</td>
+<td>Super Star Wars: Return of the Jedi</td>
+<td rowspan="2">Striker</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:45:00 </td>
+<td>Any% Jedi</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-13T15:21:00Z</td>
+<td>Metal Slug 3</td>
+<td rowspan="2">Jackafur</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:35:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-13T16:06:00Z</td>
+<td>Contra</td>
+<td rowspan="2">TheMexicanRunner, Toad22484</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:12:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-13T16:28:00Z</td>
+<td>Super C</td>
+<td rowspan="2">Toad22484</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:18:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-13T16:51:00Z</td>
+<td>Contra 4</td>
+<td rowspan="2">Mr. K</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:35:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-13T17:36:00Z</td>
+<td>SETUP BLOCK 5</td>
+<td rowspan="2">Tech Crew</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:50:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-13T18:36:00Z</td>
+<td>Crash Bandicoot 2: Cortex Strikes Back</td>
+<td rowspan="2">SwordofSeals</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 1:25:00 </td>
+<td>100%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-13T20:11:00Z</td>
+<td>Crash Team Racing</td>
+<td rowspan="2">Natty</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:57:00 </td>
+<td>Any% Warpless</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-13T21:13:00Z</td>
+<td>Sly Cooper and the Thievius Raccoonus</td>
+<td rowspan="2">tHmCS</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 1:05:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-13T22:28:00Z</td>
+<td>Jak and Daxter: The Precursor Legacy</td>
+<td rowspan="2">headstrong1290</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:40:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-13T23:18:00Z</td>
+<td>Ratchet &amp; Clank: Going Commando</td>
+<td rowspan="2">Xem, Skitz</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:40:00 </td>
+<td>NG+ No IMG</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-14T00:08:00Z</td>
+<td>Kirby Super Star</td>
+<td rowspan="2">Countdown42, usedpizza, zzzhonki, suzuribaco</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 1:20:00 </td>
+<td>100%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-14T01:38:00Z</td>
+<td>Not Another Needle Game</td>
+<td rowspan="2">Stinkycheeseone890</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:40:00 </td>
+<td>Bad Ending</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-14T02:28:00Z</td>
+<td>Donkey Kong Country Trilogy Relay</td>
+<td rowspan="2">Eazinn, V0oid, Nocturne_, Fathlo23, Silent Wolf, Supreme, Kanis999, waffle42, suzuribaco</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 2:31:00 </td>
+<td>Trilogy Relay</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-14T05:09:00Z</td>
+<td>Grand Theft Auto: Vice City</td>
+<td rowspan="2">KZ_FREW</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 1:05:00 </td>
+<td>Any% no ACE</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-14T06:24:00Z</td>
+<td>Super Mario 3D Land</td>
+<td rowspan="2">Kosmicd12</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 1:05:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-14T07:39:00Z</td>
+<td>The Legend of Zelda: The Minish Cap</td>
+<td rowspan="2">DbX</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 2:10:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-14T09:59:00Z</td>
+<td>Fire Emblem: Blazing Sword</td>
+<td rowspan="2">Kirbymastah</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:05:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 1:35:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-14T11:39:00Z</td>
+<td>Disney&#039;s Extreme Skate Adventure</td>
+<td rowspan="2">Six</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:23:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-14T12:12:00Z</td>
+<td>Pitfall: the Mayan Adventure</td>
+<td rowspan="2">Le Hulk</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:15:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-14T12:37:00Z</td>
+<td>Tiny Toon Adventures</td>
+<td rowspan="2">garadas21</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:16:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-14T13:03:00Z</td>
+<td>Tom and Jerry</td>
+<td rowspan="2">R3DninjaJOSH</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:15:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-14T13:28:00Z</td>
+<td>Darkwing Duck</td>
+<td rowspan="2">TheMexicanRunner</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:15:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-14T13:53:00Z</td>
+<td>SpongeBob SquarePants: Battle for Bikini Bottom</td>
+<td rowspan="2">SHiFT</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 1:10:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-14T15:13:00Z</td>
+<td>Super Mario Galaxy 2</td>
+<td rowspan="2">Vallu</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 3:15:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-14T18:38:00Z</td>
+<td>Super Dram World</td>
+<td rowspan="2">grandpoobear</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:45:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-14T19:33:00Z</td>
+<td>SETUP BLOCK 6</td>
+<td rowspan="2">Tech Crew</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:50:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-14T20:33:00Z</td>
+<td>TASBot plays a mystery game</td>
+<td rowspan="2">dwangoAC</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:15:00 </td>
+<td>By micro500, dwangoAC and the rest of the team</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-14T20:58:00Z</td>
+<td>TASBot plays Donkey Kong Country</td>
+<td rowspan="2">dwangoAC</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 0:20:00 </td>
+<td>By p4plus2, Ilari, micro500, Ownasaurus &amp; dwangoAC</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-14T21:28:00Z</td>
+<td>Dark Souls 3</td>
+<td rowspan="2">BubblesDelFuego</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 1:02:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-14T22:40:00Z</td>
+<td>The Legend of Zelda: The Wind Waker HD</td>
+<td rowspan="2">Linkus7</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 4:00:00 </td>
+<td>Any%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-15T02:50:00Z</td>
+<td>Super Metroid</td>
+<td rowspan="2">zoast, Ivan, Behemoth87, WildAnaconda69</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 1:20:00 </td>
+<td>100%</td>
+</tr>
+<tr>
+<td class="start-time text-right">2017-01-15T04:20:00Z</td>
+<td>Undertale</td>
+<td rowspan="2">TGH</td>
+<td rowspan="2" class="visible-lg text-center"> <i class="fa fa-clock-o text-gdq-red" aria-hidden="true"></i> 0:10:00 </td>
+</tr>
+<tr class="second-row">
+<td class="text-right "> <i class="fa fa-clock-o" aria-hidden="true"></i> 1:45:00 </td>
+<td>True Pacifist Ending</td>
+</tr>
+<tr style="font-weight: bold">
+<td class="start-time text-right">2017-01-15T06:15:00Z</td>
+<td>Finale!</td>
+<td>Everyone still awake</td>
+</tr>
+</tbody>
+</table>
+<script type="text/javascript">
+        $(document).ready(function () {
+            var dayBreak = null;
+            var firstBreak = true;
+
+            $("#offset-detected").text(' (detected as UTC' + moment().format('Z') + ')');
+
+            $('tbody .start-time').each(function (index) {
+
+
+
+                runTimestamp = moment($(this).html());
+                runTime = new moment(runTimestamp);
+
+                if ($(this).parent().hasClass('second-row')){
+                    firstBreak = false;
+                }
+                else {
+                    firstBreak = true;
+                }
+
+
+
+                if (dayBreak != runTime.date()) {
+
+                    dayBreak = runTime.date(); // Get the day of the month for the day rows
+
+                    if (firstBreak != true) {
+
+                        $(this).parent().next('tr').before('<tr class="day-split" >' +
+                                                '<td colspan="20">'
+                                                + runTime.format('dddd, MMMM Do ') + '</td></tr>');
+                    }
+                    else {
+                        $(this).parent().before('<tr class="day-split" >' +
+                                                           '<td colspan="20">'
+                                                           + runTime.format('dddd, MMMM Do ') + '</td></tr>');
+                    }
+
+
+                }
+
+
+                $(this).html(runTime.format('LT'));
+            });
+        });
+
+    </script>
+<br/><br/>
+<div id="foot" class="text-center">
+<a href="#top"><i class="fa fa-chevron-circle-up text-gdq-white fa-2x" style="padding-top: 5px"></i></a>
+<p style="padding-top: 10px"><a id="battle" href="#" onclick="document.getElementById('battlevideo').play();">
+Many more battle scenes will soon be available!</a>
+</p>
+<br/><br/>
+</div>
+</div>
+</div>
+</body>
+</html>
