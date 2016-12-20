@@ -1,5 +1,5 @@
 CREATE TABLE agdq_timeseries(
-    time timestamp PRIMARY KEY,
+    time timestamp with time zone PRIMARY KEY,
     num_tweets integer,
     num_chats integer,
     num_emotes integer,
