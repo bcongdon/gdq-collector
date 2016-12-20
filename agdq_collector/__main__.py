@@ -2,8 +2,8 @@ from DonationClient import DonationClient
 from ScheduleClient import ScheduleClient
 from TwitterClient import TwitterClient
 import settings
+import utils
 from apscheduler.schedulers.blocking import BlockingScheduler
-import datetime
 import psycopg2
 
 import logging
@@ -29,7 +29,8 @@ def results_to_psql(tweets, chats, emotes, donators, donations, max_don):
     SQL = ("INSERT into agdq_timeseries (time, num_tweets, num_chats, "
            "    num_emotes, num_donations, total_donations, max_donation) "
            "VALUES (%s, %s, %s, %s, %s, %s, %s);")
-    data = (datetime.datetime.now(), tweets, chats, emotes, donators, donations, max_don)
+    data = (utils.get_truncated_time(), tweets, chats, emotes, donators,
+            donations, max_don)
     cur.execute(SQL, data)
     conn.commit()
 
@@ -49,8 +50,8 @@ def update_schedule_psql(sched):
 def refresh_timeseries():
     curr_d = donations.scrape()
     tweets = twitter.num_tweets()
-    results_to_psql(tweets, 0, 0, curr_d.total_donators, curr_d.total_donations,
-                    curr_d.max_donation)
+    results_to_psql(tweets, 0, 0, curr_d.total_donators,
+                    curr_d.total_donations, curr_d.max_donation)
 
 
 def refresh_schedule():
