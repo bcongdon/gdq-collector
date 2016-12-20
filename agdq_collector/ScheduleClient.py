@@ -6,6 +6,7 @@ import json
 ScheduleItem = namedtuple('ScheduleItem', ['title', 'duration', 'runner',
                           'start_time'])
 
+
 class ScheduleClient:
     def __init__(self, url):
         self.url = url
@@ -35,7 +36,9 @@ class ScheduleClient:
             }
             games.append(game)
         blacklist = ['Pre-Show', 'Setup Block', 'Finale']
-        games = [x for x in games if not any(x['title'].startswith(b) for b in blacklist)]
+        games = [x for x in games if
+                 not any(x['title'].lower().startswith(b.lower())
+                         for b in blacklist)]
         return [ScheduleItem(title=x['title'],
                              duration=x['duration'],
                              runner=x['runner'],
