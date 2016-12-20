@@ -1,5 +1,7 @@
 from DonationClient import DonationClient
 from ScheduleClient import ScheduleClient
+from TwitterClient import TwitterClient
+import settings
 from apscheduler.schedulers.blocking import BlockingScheduler
 import datetime
 import psycopg2
@@ -11,6 +13,8 @@ logger = logging.getLogger('agdq_collector')
 # Setup clients
 donations = DonationClient('https://gamesdonequick.com/tracker/index/agdq2017')
 schedule = ScheduleClient('https://gamesdonequick.com/schedule')
+twitter = TwitterClient(tags=settings.twitter_tags)
+twitter.auth()
 
 # Setup db connection
 conn = psycopg2.connect(host='localhost')
@@ -44,7 +48,8 @@ def update_schedule_psql(sched):
 
 def refresh_timeseries():
     curr_d = donations.scrape()
-    results_to_psql(0, 0, 0, curr_d.total_donators, curr_d.total_donations,
+    tweets = twitter.num_tweets()
+    results_to_psql(tweets, 0, 0, curr_d.total_donators, curr_d.total_donations,
                     curr_d.max_donation)
 
 
@@ -54,8 +59,7 @@ def refresh_schedule():
 
 
 if __name__ == '__main__':
-    refresh_schedule()
-    refresh_timeseries()
+    twitter.start()
 
     # Add refresh job to scheduler
     scheduler = BlockingScheduler()

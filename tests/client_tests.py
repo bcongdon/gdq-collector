@@ -1,6 +1,7 @@
 from unittest import TestCase
 from agdq_collector.DonationClient import DonationClient
 from agdq_collector.ScheduleClient import ScheduleClient
+from agdq_collector.TwitterClient import TwitterClient
 
 
 class DonationClientTests(TestCase):
@@ -31,3 +32,17 @@ class ScheduleClientTests(TestCase):
         json_res = self.client.scrape_to_json()
         with open('tests/data/agdq_schedule.json', 'r') as f:
             assert json_res == f.read()
+
+
+class TwitterClientTests(TestCase):
+    def test_counter(self):
+        c = TwitterClient()
+        c._increment_tweet_counter()
+        assert c.num_tweets() == 1
+        assert c.num_tweets() == 0
+
+
+    def test_needs_auth(self):
+        c = TwitterClient()
+        with self.assertRaises(RuntimeError):
+            c.start()
