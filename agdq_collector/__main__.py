@@ -16,6 +16,7 @@ schedule = ScheduleClient('https://gamesdonequick.com/schedule')
 conn = psycopg2.connect(host='localhost')
 cur = conn.cursor()
 
+
 def results_to_psql(tweets, chats, emotes, donators, donations, max_don):
     """
     Takes results of refresh and inserts them into a new row in the
@@ -33,7 +34,8 @@ def update_schedule_psql(sched):
     SQL = ("INSERT INTO agdq_schedule (name, start_time, duration, runners) "
            "VALUES (%s, %s, %s, %s) "
            "ON CONFLICT (name) DO UPDATE SET "
-           "(start_time, duration, runners) =(excluded.start_time, excluded.duration, excluded.runners)")
+           "(start_time, duration, runners) = "
+           "(excluded.start_time, excluded.duration, excluded.runners)")
     for entry in sched:
         data = (entry.title, entry.start_time, entry.duration, entry.runner)
         cur.execute(SQL, data)
@@ -55,11 +57,11 @@ if __name__ == '__main__':
     refresh_schedule()
     refresh_timeseries()
 
-    # # Add refresh job to scheduler
-    # scheduler = BlockingScheduler()
-    # scheduler.add_job(refresh_timeseries, trigger='interval', minutes=1)
-    # scheduler.add_job(refresh_schedule, trigger='interval', minutes=10)
+    # Add refresh job to scheduler
+    scheduler = BlockingScheduler()
+    scheduler.add_job(refresh_timeseries, trigger='interval', minutes=1)
+    scheduler.add_job(refresh_schedule, trigger='interval', minutes=10)
 
-    # # Run scheduler
-    # logger.info("Starting Scheduler")
-    # scheduler.start()
+    # Run scheduler
+    logger.info("Starting Scheduler")
+    scheduler.start()
