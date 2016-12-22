@@ -1,7 +1,7 @@
 postgres = {
     "host": "",
     "port": "",
-    "db": "",
+    "dbname": "",
     "user": "",
-    "pass": ""
+    "password": ""
 }
