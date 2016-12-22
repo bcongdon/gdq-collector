@@ -3,6 +3,7 @@ from ScheduleClient import ScheduleClient
 from TwitterClient import TwitterClient
 import settings
 import utils
+import credentials
 from apscheduler.schedulers.blocking import BlockingScheduler
 import psycopg2
 
@@ -17,7 +18,7 @@ twitter = TwitterClient(tags=settings.twitter_tags)
 twitter.auth()
 
 # Setup db connection
-conn = psycopg2.connect(host='localhost')
+conn = psycopg2.connect(**credentials.postgres)
 cur = conn.cursor()
 
 
