@@ -6,6 +6,7 @@ import utils
 import credentials
 from apscheduler.schedulers.blocking import BlockingScheduler
 import psycopg2
+import sys
 
 import logging
 logging.basicConfig(level='INFO')
@@ -70,4 +71,9 @@ if __name__ == '__main__':
 
     # Run scheduler
     logger.info("Starting Scheduler")
-    scheduler.start()
+    try:
+        scheduler.start()
+    except KeyboardInterrupt:
+        logger.info('Got SIGTERM! Terminating...')
+        scheduler.shutdown(wait=False)
+        sys.exit(0)
