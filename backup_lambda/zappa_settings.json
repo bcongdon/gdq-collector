@@ -1,0 +1,13 @@
+{
+    "dev": {
+        "app_function": "service.handler", 
+        "s3_bucket": "agdq-zappa-deployments",
+        "aws_region": "us-east-1",
+        "events": [
+            {
+                "function": "service.handler",
+                "expression": "rate(1 minute)"
+            }
+        ]
+    }
+}
