@@ -3,6 +3,8 @@ import psycopg2
 from credentials import postgres as p_creds
 import dateutil.parser
 import json
+from flask import Flask, request
+app = Flask(__name__)
 
 conn = psycopg2.connect(**p_creds)
 cur = conn.cursor()
@@ -14,8 +16,9 @@ SQL = ("SELECT row_to_json(r) FROM "
        "    LIMIT 60) r;")
 
 
-def handler(event, context):
-    d = event.get('since')
+@app.route('recentEvents')
+def most_recent():
+    d = request.args.get('since')
     ts = dateutil.parser.parse(d)
     cur.execute(SQL, (ts,))
     data = cur.fetchall()
