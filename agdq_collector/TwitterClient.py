@@ -3,6 +3,7 @@ from credentials import twitter
 import logging
 logger = logging.getLogger(__name__)
 
+
 class HashtagStreamListener(tweepy.StreamListener):
     def __init__(self, handler):
         self.handler = handler

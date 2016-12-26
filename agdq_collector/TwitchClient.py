@@ -17,6 +17,14 @@ class TwitchClient(irc.client.SimpleIRCClient):
                      password=credentials.twitch['oauth'])
         self.connection.join(self._to_irc_chan(settings.twitch_channel))
 
+    def process(self):
+        """
+        Needed if not using TwitchClient as the main event loop carrier.
+        Allows the IRC client to process new data / events.
+        Should be called regularly to allow PINGs to be responded to
+        """
+        self.reactor.process_once()
+
     def _to_irc_chan(self, chan):
         return chan if chan.startswith('#') else '#' + chan
 
@@ -31,7 +39,13 @@ class TwitchClient(irc.client.SimpleIRCClient):
         self._message_count = 0
         return t
 
+    def get_emote_count(self):
+        t = self._emote_count
+        self._emote_count = 0
+        return t
+
     def on_pubmsg(self, connection, event):
+        # TODO: Hook up emotes
         logger.debug(event.arguments[0])
         print event
         self._message_count += 1
@@ -41,6 +55,7 @@ class TwitchClient(irc.client.SimpleIRCClient):
         pass
 
     def _get_channel_id(self, chan):
+        """ Gets the numeric channel id of a channel by displayname """
         if not self._channel_id:
             headers = {
                 "Accept": "application/vnd.twitchtv.v5+json",
@@ -55,6 +70,7 @@ class TwitchClient(irc.client.SimpleIRCClient):
         return self._channel_id
 
     def get_num_viewers(self):
+        """ Queries the TwitchAPI for current number of viewers of channel """
         headers = {
             "Accept": "application/vnd.twitchtv.v5+json",
             "Client-ID": credentials.twitch['clientid'],
@@ -63,7 +79,7 @@ class TwitchClient(irc.client.SimpleIRCClient):
         url += self._get_channel_id(self._to_url_chan(settings.twitch_channel))
         req = requests.get(url, headers=headers)
         res = req.json()
-        if 'stream' in res:
+        if 'stream' in res and res['stream']:
             return res['stream']['viewers']
 
 
