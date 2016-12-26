@@ -12,3 +12,9 @@ postgres = {
     "user": "",
     "password": ""
 }
+
+twitch = {
+    "nick": "",
+    "oauth": "",
+    "clientid": ""
+}
