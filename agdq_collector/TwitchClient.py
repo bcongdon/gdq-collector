@@ -47,7 +47,6 @@ class TwitchClient(irc.client.SimpleIRCClient):
     def on_pubmsg(self, connection, event):
         # TODO: Hook up emotes
         logger.debug(event.arguments[0])
-        print event
         self._message_count += 1
 
     def on_disconnect(self, connection, event):
