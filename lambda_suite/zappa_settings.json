@@ -1,6 +1,29 @@
 {
     "dev": {
         "app_function": "api.app", 
+        "s3_bucket": "agdq-dev-zappa-deployments",
+        "aws_region": "us-east-1",
+        "events": [
+            {
+                "function": "cache_databases.schedule_handler",
+                "expression": "rate(10 minutes)"
+            },
+            {
+                "function": "cache_databases.timeseries_handler",
+                "expression": "rate(5 minutes)"
+            }
+        ],
+        "keep_warm": false,
+        "vpc_config": {
+            "SubnetIds": ["subnet-af33aef4", "subnet-ce20bae3"],
+            "SecurityGroupIds": ["sg-838683fe"]
+        },
+        "environment_variables": {
+            "S3_CACHE_BUCKET": "agdq-2017-dev"
+        }
+    },
+    "prod": {
+        "app_function": "api.app", 
         "s3_bucket": "agdq-zappa-deployments",
         "aws_region": "us-east-1",
         "events": [
@@ -19,6 +42,9 @@
             "SecurityGroupIds": ["sg-838683fe"]
         },
         "domain": "api.gdqstat.us",
-        "lets_encrypt_key": "s3://agdq-2017-secrets/account.key"
+        "lets_encrypt_key": "s3://agdq-2017-secrets/account.key",
+        "environment_variables": {
+            "S3_CACHE_BUCKET": "storage.api.gdqstat.us"
+        }
     }
 }

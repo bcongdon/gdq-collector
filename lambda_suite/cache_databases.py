@@ -4,8 +4,9 @@ from credentials import postgres as p_creds
 import json
 import boto3
 from utils import minify
+import os
 
-BUCKET = 'storage.api.gdqstat.us'
+BUCKET = os.environ.get('S3_CACHE_BUCKET')
 s3 = boto3.resource('s3')
 
 conn = psycopg2.connect(**p_creds)
