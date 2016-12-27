@@ -2,7 +2,7 @@
 import psycopg2
 from credentials import postgres as p_creds
 import dateutil.parser
-import json
+from utils import minify
 from flask import Flask, request, jsonify
 app = Flask(__name__)
 
@@ -29,4 +29,4 @@ def most_recent():
     else:
         cur.execute(SQL_unfiltered)
     data = cur.fetchall()
-    return jsonify(map(lambda x: x[0], data))
+    return jsonify(minify(map(lambda x: x[0], data)))
