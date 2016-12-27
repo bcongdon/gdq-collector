@@ -5,11 +5,11 @@ import json
 import boto3
 
 
-BUCKET = 'gdqstatus'
+BUCKET = 'agdq-2017'
+s3 = boto3.resource('s3')
 
 conn = psycopg2.connect(**p_creds)
 cur = conn.cursor()
-s3 = boto3.resource('s3')
 
 
 def refresh_timeseries():
@@ -19,7 +19,6 @@ def refresh_timeseries():
     data_json = json.dumps(map(lambda x: x[0], data))
 
     s3.Bucket(BUCKET).put_object(Key='latest.json', Body=data_json)
-    return data_json
 
 
 def refresh_schedule():
@@ -31,6 +30,9 @@ def refresh_schedule():
     s3.Bucket(BUCKET).put_object(Key='schedule.json', Body=data_json)
 
 
-def handler(event, context):
+def schedule_handler(event, context):
     refresh_schedule()
+
+
+def timeseries_handler(event, context):
     refresh_timeseries()
