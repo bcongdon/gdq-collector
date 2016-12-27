@@ -74,7 +74,10 @@ if __name__ == '__main__':
         help='Disable Twitter (to avoid rate limiting while debugging')
     parser.add_argument(
         '-v', '--verbose', action='store_true', default=False,
-        help="Raise log level to DEBUG for debugging purposes")
+        help='Raise log level to DEBUG for debugging purposes')
+    parser.add_argument(
+        '--sched', action='store_true', default=False,
+        help='Run schedule scrape on startup')
 
     args = parser.parse_args()
 
@@ -82,6 +85,10 @@ if __name__ == '__main__':
     if not args.notwitter:
         twitter.auth()
         twitter.start()
+
+    # Run schedule scrape immediately if requested
+    if args.sched:
+        refresh_schedule()
 
     # Setup logging to correct log level
     level = 'DEBUG' if args.verbose else 'INFO'
