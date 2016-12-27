@@ -7,14 +7,14 @@ logger = logging.getLogger(__name__)
 class HashtagStreamListener(tweepy.StreamListener):
     def __init__(self, handler):
         self.handler = handler
+        tweepy.StreamListener.__init__(self)
 
     def on_status(self, status):
+        logger.debug("Received tweet: %s" % status.text)
         self.handler._increment_tweet_counter()
 
     def on_error(self, status_code):
         logger.warn("Error with status code: %s" % status_code)
-        self.handler._setup_stream()
-        return False
 
 
 class TwitterClient:
@@ -43,6 +43,7 @@ class TwitterClient:
         self._setup_stream()
 
     def _setup_stream(self):
+        logger.info("Starting twitter steam")
         if not self.api:
             raise RuntimeError("Client not authenticated!")
         s_listener = HashtagStreamListener(self)
