@@ -23,18 +23,16 @@ conn = psycopg2.connect(**credentials.postgres)
 cur = conn.cursor()
 
 
-def results_to_psql(tweets, viewers, chats, emotes, donators, donations,
-                    max_don):
+def results_to_psql(tweets, viewers, chats, emotes, donators, donations):
     '''
     Takes results of refresh and inserts them into a new row in the
     timeseries database
     '''
     SQL = ("INSERT into agdq_timeseries (time, num_viewers, num_tweets, "
-           "    num_chats, num_emotes, num_donations, total_donations, "
-           "    max_donation) "
-           "VALUES (%s, %s, %s, %s, %s, %s, %s, %s);")
+           "    num_chats, num_emotes, num_donations, total_donations) "
+           "VALUES (%s, %s, %s, %s, %s, %s, %s);")
     data = (utils.get_truncated_time(), viewers, tweets, chats, emotes,
-            donators, donations, max_don)
+            donators, donations)
     cur.execute(SQL, data)
     conn.commit()
 
@@ -59,7 +57,7 @@ def refresh_timeseries():
     viewers = twitch.get_num_viewers()
     chats, emotes = twitch.get_message_count(), twitch.get_emote_count()
     results_to_psql(tweets, viewers, chats, emotes, curr_d.total_donators,
-                    curr_d.total_donations, curr_d.max_donation)
+                    curr_d.total_donations)
 
 
 def refresh_schedule():
