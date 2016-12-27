@@ -5,7 +5,7 @@ import json
 import boto3
 
 
-BUCKET = 'agdq-2017'
+BUCKET = 'storage.api.gdqstat.us'
 s3 = boto3.resource('s3')
 
 conn = psycopg2.connect(**p_creds)

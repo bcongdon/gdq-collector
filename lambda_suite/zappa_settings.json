@@ -17,6 +17,8 @@
         "vpc_config": {
             "SubnetIds": ["subnet-af33aef4", "subnet-ce20bae3"],
             "SecurityGroupIds": ["sg-838683fe"]
-        }
+        },
+        "domain": "api.gdqstat.us",
+        "lets_encrypt_key": "s3://agdq-2017-secrets/account.key"
     }
 }
