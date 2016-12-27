@@ -11,6 +11,7 @@ class TwitchClient(irc.client.SimpleIRCClient):
         self._message_count = 0
         self._emote_count = 0
         self._channel_id = None
+        self._emotes = self._get_emote_list()
         irc.client.SimpleIRCClient.__init__(self)
         self.connect(settings.twitch_host, settings.twitch_port,
                      nickname=credentials.twitch['nick'],
@@ -31,28 +32,6 @@ class TwitchClient(irc.client.SimpleIRCClient):
     def _to_url_chan(self, chan):
         return chan[1:] if chan.startswith('#') else chan
 
-    def on_join(self, c, e):
-        logger.info("Connected to %s" % e.target)
-
-    def get_message_count(self):
-        t = self._message_count
-        self._message_count = 0
-        return t
-
-    def get_emote_count(self):
-        t = self._emote_count
-        self._emote_count = 0
-        return t
-
-    def on_pubmsg(self, connection, event):
-        # TODO: Hook up emotes
-        logger.debug(event.arguments[0])
-        self._message_count += 1
-
-    def on_disconnect(self, connection, event):
-        # TODO: Setup reconnection
-        pass
-
     def _get_channel_id(self, chan):
         """ Gets the numeric channel id of a channel by displayname """
         if not self._channel_id:
@@ -67,6 +46,36 @@ class TwitchClient(irc.client.SimpleIRCClient):
                              })
             self._channel_id = r.json()['users'][0]['_id']
         return self._channel_id
+
+    def _get_emote_list(self):
+        r = requests.get("https://api.twitch.tv/kraken/chat/emoticon_images")
+        return set(map(lambda x: x['code'], r.json()['emoticons']))
+
+    def _num_emotes(self, s):
+        return sum(1 for w in s.split(' ') if w in self._emotes)
+
+    def on_join(self, c, e):
+        logger.info("Connected to %s" % e.target)
+
+    def get_message_count(self):
+        t = self._message_count
+        self._message_count = 0
+        return t
+
+    def get_emote_count(self):
+        t = self._emote_count
+        self._emote_count = 0
+        return t
+
+    def on_pubmsg(self, connection, event):
+        msg = event.arguments[0]
+        logger.debug(msg + "; {} emotes".format(self._num_emotes(msg)))
+        self._message_count += 1
+        self._emote_count += self._num_emotes(msg)
+
+    def on_disconnect(self, connection, event):
+        # TODO: Setup reconnection
+        pass
 
     def get_num_viewers(self):
         """ Queries the TwitchAPI for current number of viewers of channel """

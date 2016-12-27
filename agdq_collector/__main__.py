@@ -7,10 +7,10 @@ import utils
 import credentials
 from apscheduler.schedulers.background import BackgroundScheduler
 import psycopg2
-import sys
+import os
 
 import logging
-logging.basicConfig(level='INFO')
+logging.basicConfig(level='DEBUG')
 logger = logging.getLogger('agdq_collector')
 
 # Setup clients
@@ -74,8 +74,6 @@ if __name__ == '__main__':
     scheduler = BackgroundScheduler()
     scheduler.add_job(refresh_timeseries, trigger='interval', minutes=1)
     scheduler.add_job(refresh_schedule, trigger='interval', minutes=10)
-    # Needed to maintain IRC event loop
-    # scheduler.add_job(twitch.process, trigger='interval', seconds=1)
 
     # Run scheduler
     logger.info("Starting Scheduler")
@@ -85,4 +83,4 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         logger.info('Got SIGTERM! Terminating...')
         scheduler.shutdown(wait=False)
-        sys.exit(0)
+        os._exit(0)
