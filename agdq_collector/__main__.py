@@ -8,16 +8,14 @@ import credentials
 from apscheduler.schedulers.background import BackgroundScheduler
 import psycopg2
 import os
-
+import argparse
 import logging
-logging.basicConfig(level='DEBUG')
 logger = logging.getLogger('agdq_collector')
 
 # Setup clients
 donations = DonationClient('https://gamesdonequick.com/tracker/index/agdq2017')
 schedule = ScheduleClient('https://gamesdonequick.com/schedule')
 twitter = TwitterClient(tags=settings.twitter_tags)
-twitter.auth()
 twitch = TwitchClient()
 
 # Setup db connection
@@ -27,10 +25,10 @@ cur = conn.cursor()
 
 def results_to_psql(tweets, viewers, chats, emotes, donators, donations,
                     max_don):
-    """
+    '''
     Takes results of refresh and inserts them into a new row in the
     timeseries database
-    """
+    '''
     SQL = ("INSERT into agdq_timeseries (time, num_viewers, num_tweets, "
            "    num_chats, num_emotes, num_donations, total_donations, "
            "    max_donation) "
@@ -42,6 +40,7 @@ def results_to_psql(tweets, viewers, chats, emotes, donators, donations,
 
 
 def update_schedule_psql(sched):
+    ''' Inserts updated schedule into db '''
     SQL = ("INSERT INTO agdq_schedule (name, start_time, duration, runners) "
            "VALUES (%s, %s, %s, %s) "
            "ON CONFLICT (name) DO UPDATE SET "
@@ -54,6 +53,7 @@ def update_schedule_psql(sched):
 
 
 def refresh_timeseries():
+    ''' Polls clients for new stat data and inserts timeseries entry to db '''
     curr_d = donations.scrape()
     tweets = twitter.num_tweets()
     viewers = twitch.get_num_viewers()
@@ -63,14 +63,36 @@ def refresh_timeseries():
 
 
 def refresh_schedule():
+    ''' Scrapes schedule and pushes new version to Postgres '''
     sched = schedule.scrape()
     update_schedule_psql(sched)
 
 
 if __name__ == '__main__':
-    twitter.start()
+    parser = argparse.ArgumentParser(
+        description="Startup the GDQStatus Collection Service")
+    parser.add_argument(
+        '--notwitter', action='store_true', default=False,
+        help='Disable Twitter (to avoid rate limiting while debugging')
+    parser.add_argument(
+        '-v', '--verbose', action='store_true', default=False,
+        help="Raise log level to DEBUG for debugging purposes")
 
-    # Add refresh job to scheduler
+    args = parser.parse_args()
+
+    # Setup Twitter if not disabled
+    if not args.notwitter:
+        twitter.auth()
+        twitter.start()
+
+    # Setup logging to correct log level
+    level = 'DEBUG' if args.verbose else 'INFO'
+    logging.basicConfig(level=level)
+
+    # Setup connection to twitch IRC channel
+    twitch.connect()
+
+    # Add refresh jobs to scheduler
     scheduler = BackgroundScheduler()
     scheduler.add_job(refresh_timeseries, trigger='interval', minutes=1)
     scheduler.add_job(refresh_schedule, trigger='interval', minutes=10)

@@ -11,11 +11,14 @@ class TwitchClient(irc.client.SimpleIRCClient):
         self._message_count = 0
         self._emote_count = 0
         self._channel_id = None
-        self._emotes = self._get_emote_list()
         irc.client.SimpleIRCClient.__init__(self)
-        self.connect(settings.twitch_host, settings.twitch_port,
-                     nickname=credentials.twitch['nick'],
-                     password=credentials.twitch['oauth'])
+
+    def connect(self):
+        self._emotes = self._get_emote_list()
+        irc.client.SimpleIRCClient.connect(
+            self, settings.twitch_host, settings.twitch_port,
+            nickname=credentials.twitch['nick'],
+            password=credentials.twitch['oauth'])
         self.connection.join(self._to_irc_chan(settings.twitch_channel))
 
     def process(self):
