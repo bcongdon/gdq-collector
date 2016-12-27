@@ -25,7 +25,7 @@ def refresh_schedule():
     SQL = "SELECT row_to_json(r) FROM (SELECT * FROM agdq_schedule) r;"
     cur.execute(SQL)
     data = cur.fetchall()
-    data_json = json.dumps(minify(map(lambda x: x[0], data)))
+    data_json = json.dumps(map(lambda x: x[0], data))
 
     s3.Bucket(BUCKET).put_object(Key='schedule.json', Body=data_json)
 
