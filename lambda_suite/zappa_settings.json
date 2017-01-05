@@ -3,6 +3,7 @@
         "app_function": "api.app", 
         "s3_bucket": "agdq-dev-zappa-deployments",
         "aws_region": "us-east-1",
+        "cors": true,
         "events": [
             {
                 "function": "cache_databases.schedule_handler",
@@ -26,6 +27,7 @@
         "app_function": "api.app", 
         "s3_bucket": "agdq-zappa-deployments",
         "aws_region": "us-east-1",
+        "cors": true,
         "events": [
             {
                 "function": "cache_databases.schedule_handler",

@@ -20,6 +20,7 @@ def results_to_psql(time, tweets, viewers, chats, emotes, donators, donations):
     data = (time, viewers, tweets, chats, emotes,
             donators, donations)
     cur.execute(SQL, data)
+    conn.commit()
 
 if __name__ == '__main__':
     with open('sgdq-2016.json') as f:
@@ -31,7 +32,6 @@ if __name__ == '__main__':
         new_t = start_time + timedelta(microseconds=1000*(int(t) - first_t))
         try:
             results_to_psql(new_t, d['t'], d['v'], d['c'], d['e'],
-                            d['d'], d['m'], 0)
-        except:
-            pass
-    conn.commit()
+                            d['d'], d['m'])
+        except Exception as e:
+            print e
