@@ -16,6 +16,9 @@ class HashtagStreamListener(tweepy.StreamListener):
     def on_error(self, status_code):
         logger.warn("Error with status code: %s" % status_code)
 
+    def on_connect(self):
+        logger.info("Connected to stream.")
+
 
 class TwitterClient:
     def __init__(self, tags=[]):
