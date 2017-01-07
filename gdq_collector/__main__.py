@@ -9,6 +9,8 @@ from apscheduler.schedulers.background import BackgroundScheduler
 import psycopg2
 import os
 import argparse
+from datetime import datetime
+import watchtower
 import logging
 logger = logging.getLogger('gdq_collector')
 
@@ -78,6 +80,9 @@ if __name__ == '__main__':
     parser.add_argument(
         '--sched', action='store_true', default=False,
         help='Run schedule scrape on startup')
+    parser.add_argument(
+        '--cloudwatch', action='store_true', default=False,
+        help='Add the CloudWatch logging handler to push logs to AWS.')
 
     args = parser.parse_args()
 
@@ -86,13 +91,16 @@ if __name__ == '__main__':
         twitter.auth()
         twitter.start()
 
-    # Run schedule scrape immediately if requested
-    if args.sched:
-        refresh_schedule()
-
     # Setup logging to correct log level
     level = 'DEBUG' if args.verbose else 'INFO'
     logging.basicConfig(level=level)
+
+    # Setup CloudWatch handler if requested
+    if args.cloudwatch:
+        logger.addHandler(watchtower.CloudWatchLogHandler())
+        logging.getLogger('apscheduler').addHandler(
+            watchtower.CloudWatchLogHandler()
+        )
 
     # Setup connection to twitch IRC channel
     twitch.connect()
@@ -101,6 +109,10 @@ if __name__ == '__main__':
     scheduler = BackgroundScheduler()
     scheduler.add_job(refresh_timeseries, trigger='interval', minutes=1)
     scheduler.add_job(refresh_schedule, trigger='interval', minutes=10)
+
+    # Run schedule scrape immediately if requested
+    if args.sched:
+        scheduler.add_job(refresh_schedule, next_run_time=datetime.now())
 
     # Run scheduler
     logger.info("Starting Scheduler")
