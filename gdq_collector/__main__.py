@@ -10,7 +10,7 @@ import psycopg2
 import os
 import argparse
 import logging
-logger = logging.getLogger('agdq_collector')
+logger = logging.getLogger('gdq_collector')
 
 # Setup clients
 donations = DonationClient('https://gamesdonequick.com/tracker/index/agdq2017')
@@ -28,7 +28,7 @@ def results_to_psql(tweets, viewers, chats, emotes, donators, donations):
     Takes results of refresh and inserts them into a new row in the
     timeseries database
     '''
-    SQL = ("INSERT into agdq_timeseries (time, num_viewers, num_tweets, "
+    SQL = ("INSERT into gdq_timeseries (time, num_viewers, num_tweets, "
            "    num_chats, num_emotes, num_donations, total_donations) "
            "VALUES (%s, %s, %s, %s, %s, %s, %s);")
     data = (utils.get_truncated_time(), viewers, tweets, chats, emotes,
@@ -39,7 +39,7 @@ def results_to_psql(tweets, viewers, chats, emotes, donators, donations):
 
 def update_schedule_psql(sched):
     ''' Inserts updated schedule into db '''
-    SQL = ("INSERT INTO agdq_schedule (name, start_time, duration, runners) "
+    SQL = ("INSERT INTO gdq_schedule (name, start_time, duration, runners) "
            "VALUES (%s, %s, %s, %s) "
            "ON CONFLICT (name) DO UPDATE SET "
            "(start_time, duration, runners) = "

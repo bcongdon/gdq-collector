@@ -14,7 +14,7 @@ def results_to_psql(time, tweets, viewers, chats, emotes, donators, donations):
     Takes results of refresh and inserts them into a new row in the
     timeseries database
     '''
-    SQL = ("INSERT into agdq_timeseries (time, num_viewers, num_tweets, "
+    SQL = ("INSERT into gdq_timeseries (time, num_viewers, num_tweets, "
            "    num_chats, num_emotes, num_donations, total_donations) "
            "VALUES (%s, %s, %s, %s, %s, %s, %s);")
     data = (time, viewers, tweets, chats, emotes,

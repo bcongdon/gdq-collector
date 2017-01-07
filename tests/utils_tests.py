@@ -1,4 +1,4 @@
-from agdq_collector import utils
+from gdq_collector import utils
 import pytz
 
 

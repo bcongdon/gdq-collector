@@ -1,7 +1,7 @@
 from unittest import TestCase
-from agdq_collector.DonationClient import DonationClient
-from agdq_collector.ScheduleClient import ScheduleClient
-from agdq_collector.TwitterClient import TwitterClient
+from gdq_collector.DonationClient import DonationClient
+from gdq_collector.ScheduleClient import ScheduleClient
+from gdq_collector.TwitterClient import TwitterClient
 
 
 class DonationClientTests(TestCase):

@@ -14,7 +14,7 @@ cur = conn.cursor()
 
 
 def refresh_timeseries():
-    SQL = "SELECT row_to_json(r) FROM (SELECT * FROM agdq_timeseries) r;"
+    SQL = "SELECT row_to_json(r) FROM (SELECT * FROM gdq_timeseries) r;"
     cur.execute(SQL)
     data = cur.fetchall()
     data_json = json.dumps(minify(map(lambda x: x[0], data)))
@@ -23,7 +23,7 @@ def refresh_timeseries():
 
 
 def refresh_schedule():
-    SQL = "SELECT row_to_json(r) FROM (SELECT * FROM agdq_schedule) r;"
+    SQL = "SELECT row_to_json(r) FROM (SELECT * FROM gdq_schedule) r;"
     cur.execute(SQL)
     data = cur.fetchall()
     data_json = json.dumps(map(lambda x: x[0], data))
