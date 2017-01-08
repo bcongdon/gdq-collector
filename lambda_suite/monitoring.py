@@ -6,7 +6,7 @@ import boto3
 import logging
 logger = logging.getLogger(__name__)
 
-api_endpoint = 'https://wlh6r92oac.execute-api.us-east-1.amazonaws.com/dev'
+api_endpoint = 'https://api.gdqstat.us'
 resouce_map = {v: k for k, v in minify_keys.items()}
 del resouce_map['time']
 alarm_msg = 'Alarms triggered on: '
