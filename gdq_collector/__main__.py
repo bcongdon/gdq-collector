@@ -60,12 +60,14 @@ def refresh_timeseries():
     chats, emotes = twitch.get_message_count(), twitch.get_emote_count()
     results_to_psql(tweets, viewers, chats, emotes, curr_d.total_donators,
                     curr_d.total_donations)
+    logger.info("Refreshed time series data")
 
 
 def refresh_schedule():
     ''' Scrapes schedule and pushes new version to Postgres '''
     sched = schedule.scrape()
     update_schedule_psql(sched)
+    logger.info("Refreshed schedule data")
 
 
 if __name__ == '__main__':
@@ -86,14 +88,16 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
+    # Setup logging to correct log level
+    level = 'DEBUG' if args.verbose else 'INFO'
+    logging.basicConfig(level=level)
+
     # Setup Twitter if not disabled
     if not args.notwitter:
         twitter.auth()
         twitter.start()
-
-    # Setup logging to correct log level
-    level = 'DEBUG' if args.verbose else 'INFO'
-    logging.basicConfig(level=level)
+    else:
+        logger.info("Not starting TwitterClient")
 
     # Setup CloudWatch handler if requested
     if args.cloudwatch:

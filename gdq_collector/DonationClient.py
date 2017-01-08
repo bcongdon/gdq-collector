@@ -2,6 +2,8 @@ import requests
 import re
 from bs4 import BeautifulSoup
 from collections import namedtuple
+import logging
+logger = logging.getLogger(__name__)
 
 
 DonationResult = namedtuple('DonationResult', ['total_donations',
@@ -37,6 +39,8 @@ class DonationClient:
                         totals[3]).group(1).replace(',', ''))
         avg_don = float(DonationClient.avg_re.search(
                         totals[3]).group(1).replace(',', ''))
+
+        logger.info("Successfully scraped donation page")
 
         return DonationResult(total_donations=tot_mon,
                               total_donators=tot_don,

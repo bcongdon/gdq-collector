@@ -2,6 +2,9 @@ import requests
 from bs4 import BeautifulSoup
 from collections import namedtuple
 import json
+import logging
+logger = logging.getLogger(__name__)
+
 
 ScheduleItem = namedtuple('ScheduleItem', ['title', 'duration', 'runner',
                           'start_time'])
@@ -12,7 +15,11 @@ class ScheduleClient:
         self.url = url
 
     def _get_page(self):
-        return requests.get(self.url).text
+        try:
+            return requests.get(self.url).text
+        except Exception as e:
+            logger.error("Unable to get Schedule page."
+                         "Error: %s" % str(e))
 
     def scrape(self):
         table = BeautifulSoup(self._get_page(), 'html.parser').find('tbody')
@@ -39,6 +46,9 @@ class ScheduleClient:
         games = [x for x in games if
                  not any(x['title'].lower().startswith(b.lower())
                          for b in blacklist)]
+
+        logger.info("Successfully scraped schedule")
+
         return [ScheduleItem(title=x['title'],
                              duration=x['duration'],
                              runner=x['runner'],

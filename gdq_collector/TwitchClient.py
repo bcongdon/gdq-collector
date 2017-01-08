@@ -19,6 +19,7 @@ class TwitchClient(irc.client.SimpleIRCClient):
             self, settings.twitch_host, settings.twitch_port,
             nickname=credentials.twitch['nick'],
             password=credentials.twitch['oauth'])
+        logger.info("Connected to IRC server: %s" % settings.twitch_host)
         self.connection.join(self._to_irc_chan(settings.twitch_channel))
 
     def process(self):
@@ -51,14 +52,25 @@ class TwitchClient(irc.client.SimpleIRCClient):
         return self._channel_id
 
     def _get_emote_list(self):
-        r = requests.get("https://api.twitch.tv/kraken/chat/emoticon_images")
-        return set(map(lambda x: x['code'], r.json()['emoticons']))
+        headers = {
+            "Accept": "application/vnd.twitchtv.v5+json",
+            "Client-ID": credentials.twitch['clientid'],
+        }
+        r = requests.get("https://api.twitch.tv/kraken/chat/emoticon_images",
+                         headers=headers)
+        r_data = r.json()
+        if 'emoticons' in r_data:
+            logger.info("Downloaded emoticon list successfully.")
+            return set(map(lambda x: x['code'], r_data['emoticons']))
+        else:
+            logger.error("Unable to download emoji list for Twitch!")
+            return []
 
     def _num_emotes(self, s):
         return sum(1 for w in s.split(' ') if w in self._emotes)
 
     def on_join(self, c, e):
-        logger.info("Connected to %s" % e.target)
+        logger.info("Joined channel: %s" % e.target)
 
     def get_message_count(self):
         t = self._message_count
@@ -78,6 +90,7 @@ class TwitchClient(irc.client.SimpleIRCClient):
 
     def on_disconnect(self, connection, event):
         # TODO: Setup reconnection
+        logger.error("Disconnected from twitch chat.")
         pass
 
     def get_num_viewers(self):
@@ -91,7 +104,13 @@ class TwitchClient(irc.client.SimpleIRCClient):
         req = requests.get(url, headers=headers)
         res = req.json()
         if 'stream' in res and res['stream']:
-            return res['stream']['viewers']
+            viewers = res['stream']['viewers']
+            logger.info("Downloaded viewer info. "
+                        "Currently viewers: %s" % viewers)
+            return viewers
+        else:
+            logger.warn("Unable to get number of viewers. "
+                        "Possible that stream is offline.")
 
 
 if __name__ == '__main__':
