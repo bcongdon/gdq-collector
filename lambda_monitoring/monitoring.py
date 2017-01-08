@@ -1,5 +1,4 @@
 import requests
-from utils import minify_keys
 from dateutil.parser import parse
 from credentials import sns_arn
 import boto3
@@ -7,8 +6,15 @@ import logging
 logger = logging.getLogger(__name__)
 
 api_endpoint = 'https://api.gdqstat.us'
-resouce_map = {v: k for k, v in minify_keys.items()}
-del resouce_map['time']
+resouce_map = {
+    'e': 'num_emotes',
+    'm': 'total_donations',
+    'd': 'num_donations',
+    'c': 'num_chats',
+    't': 'num_tweets',
+    'v': 'num_viewers'
+}
+
 alarm_msg = 'Alarms triggered on: '
 
 
@@ -21,11 +27,13 @@ def send_alarm(message):
     logger.warn("Sent alarm: \"{}\"".format(message))
 
 
-def health_check():
+def health_check(event, context):
+    logger.debug("Starting connection")
     recent_url = api_endpoint + '/recentEvents'
-    r = requests.get(recent_url)
+    r = requests.get(recent_url, timeout=5, verify=False)
     if r.status_code != 200:
         send_alarm("Got status code {} from API".format(r.status_code))
+        return
     try:
         data = r.json()
     except:
@@ -46,6 +54,6 @@ def health_check():
         logger.info("Did health check. Nothing to report.")
 
 
-if __name__ == '__main__':
-    logging.basicConfig(level='INFO')
-    health_check()
+# if __name__ == '__main__':
+#     logging.basicConfig(level='INFO')
+#     health_check(None, None)

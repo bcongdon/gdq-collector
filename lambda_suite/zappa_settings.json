@@ -12,10 +12,6 @@
             {
                 "function": "cache_databases.timeseries_handler",
                 "expression": "rate(5 minutes)"
-            },
-            {
-                "function": "monitoring.health_check",
-                "expression": "rate(5 minutes)"
             }
         ],
         "keep_warm": false,
@@ -39,10 +35,6 @@
             },
             {
                 "function": "cache_databases.timeseries_handler",
-                "expression": "rate(5 minutes)"
-            },
-            {
-                "function": "monitoring.health_check",
                 "expression": "rate(5 minutes)"
             }
         ],

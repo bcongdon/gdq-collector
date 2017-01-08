@@ -5,5 +5,3 @@ postgres = {
     "user": "",
     "password": ""
 }
-
-sns_arn = ''
