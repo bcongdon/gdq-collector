@@ -14,6 +14,7 @@ class TwitchClient(irc.client.SimpleIRCClient):
         irc.client.SimpleIRCClient.__init__(self)
 
     def connect(self):
+        logger.info("Attempting to connect to IRC server.")
         self._emotes = self._get_emote_list()
         irc.client.SimpleIRCClient.connect(
             self, settings.twitch_host, settings.twitch_port,
@@ -89,9 +90,8 @@ class TwitchClient(irc.client.SimpleIRCClient):
         self._emote_count += self._num_emotes(msg)
 
     def on_disconnect(self, connection, event):
-        # TODO: Setup reconnection
-        logger.error("Disconnected from twitch chat.")
-        pass
+        logger.error("Disconnected from twitch chat. Attempting reconnection")
+        self.connect()
 
     def get_num_viewers(self):
         """ Queries the TwitchAPI for current number of viewers of channel """
