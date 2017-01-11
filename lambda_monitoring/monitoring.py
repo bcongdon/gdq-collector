@@ -1,7 +1,9 @@
 import requests
 from dateutil.parser import parse
+from datetime import timedelta, datetime
 from credentials import sns_arn
 import boto3
+import pytz
 import logging
 logger = logging.getLogger(__name__)
 
@@ -40,6 +42,10 @@ def health_check(event, context):
         send_alarm("API sent bad JSON")
     for d in data:
         d['time'] = parse(d['time'])
+    max_time = max(d['time'] for d in data)
+    if (max_time + timedelta(minutes=3) <
+            datetime.utcnow().replace(tzinfo=pytz.utc)):
+        send_alarm("API serving stale data! (Or collector has halted)")
     data = sorted(data, key=lambda x: x['time'], reverse=True)
     alarms = []
     for k in resouce_map:
