@@ -35,8 +35,12 @@ def results_to_psql(tweets, viewers, chats, emotes, donators, donations):
            "VALUES (%s, %s, %s, %s, %s, %s, %s);")
     data = (utils.get_truncated_time(), viewers, tweets, chats, emotes,
             donators, donations)
-    cur.execute(SQL, data)
-    conn.commit()
+    try:
+        cur.execute(SQL, data)
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        logger.error(e)
 
 
 def update_schedule_psql(sched):
@@ -46,10 +50,16 @@ def update_schedule_psql(sched):
            "ON CONFLICT (name) DO UPDATE SET "
            "(start_time, duration, runners) = "
            "(excluded.start_time, excluded.duration, excluded.runners)")
-    for entry in sched:
-        data = (entry.title, entry.start_time, entry.duration, entry.runner)
-        cur.execute(SQL, data)
-    conn.commit()
+
+    try:
+        for entry in sched:
+            data = (entry.title, entry.start_time, entry.duration,
+                    entry.runner)
+            cur.execute(SQL, data)
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        logger.error(e)
 
 
 def refresh_timeseries():

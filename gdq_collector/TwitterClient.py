@@ -39,6 +39,7 @@ class TwitterClient:
         counter
         '''
         t = self.curr_tweets
+        logger.info("Reporting received %s tweets." % t)
         self.curr_tweets = 0
         return t
 

@@ -41,6 +41,8 @@ class DonationClient:
                         totals[3]).group(1).replace(',', ''))
 
         logger.info("Successfully scraped donation page")
+        logger.info("Total donations: %s" % tot_mon)
+        logger.info("Total donators: %s" % tot_don)
 
         return DonationResult(total_donations=tot_mon,
                               total_donators=tot_don,
