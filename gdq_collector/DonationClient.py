@@ -8,6 +8,7 @@ logger = logging.getLogger(__name__)
 
 DonationResult = namedtuple('DonationResult', ['total_donations',
                             'total_donators', 'max_donation', 'avg_donation'])
+DonationResult.__new__.__defaults__ = (None,) * len(DonationResult._fields)
 
 
 class DonationClient:

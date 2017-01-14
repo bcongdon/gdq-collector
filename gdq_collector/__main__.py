@@ -1,4 +1,4 @@
-from DonationClient import DonationClient
+from DonationClient import DonationClient, DonationResult
 from ScheduleClient import ScheduleClient
 from TwitterClient import TwitterClient
 from TwitchClient import TwitchClient
@@ -64,7 +64,7 @@ def update_schedule_psql(sched):
 
 def refresh_timeseries():
     ''' Polls clients for new stat data and inserts timeseries entry to db '''
-    curr_d = donations.scrape()
+    curr_d = utils.try_execute(donations.scrape, DonationResult())
     tweets = twitter.num_tweets()
     viewers = twitch.get_num_viewers()
     chats, emotes = twitch.get_message_count(), twitch.get_emote_count()
