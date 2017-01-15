@@ -49,3 +49,7 @@ class DonationClient:
                               total_donators=tot_don,
                               max_donation=max_don,
                               avg_donation=avg_don)
+
+if __name__ == '__main__':
+    print DonationClient('https://gamesdonequick.com/tracker/index/agdq2017').scrape()
+    print DonationResult()

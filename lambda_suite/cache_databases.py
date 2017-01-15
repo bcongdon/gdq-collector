@@ -37,3 +37,9 @@ def schedule_handler(event, context):
 
 def timeseries_handler(event, context):
     refresh_timeseries()
+
+
+if __name__ == '__main__':
+    BUCKET = 'storage.api.gdqstat.us'
+    refresh_timeseries()
+    refresh_schedule()
