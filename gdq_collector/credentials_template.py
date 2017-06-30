@@ -13,6 +13,8 @@ postgres = {
     "password": ""
 }
 
+# Use this site to generate oauth token:
+# https://twitchapps.com/tmi/
 twitch = {
     "nick": "",
     "oauth": "",
