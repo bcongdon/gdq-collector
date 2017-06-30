@@ -17,7 +17,7 @@ Both Lambda applications use [Zappa](https://github.com/Miserlou/Zappa) for depl
 
 ### Architecture Diagram
 
-![aws_setup](aws_diagram.svg)
+![aws_setup](aws_diagram.png)
 
 
 ## Building / Running
