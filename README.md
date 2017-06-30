@@ -15,6 +15,11 @@
 
 Both Lambda applications use [Zappa](https://github.com/Miserlou/Zappa) for deployment.
 
+### Architecture Diagram
+
+![aws_setup](aws_diagram.svg)
+
+
 ## Building / Running
 
 ### gdq_collector
