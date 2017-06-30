@@ -19,6 +19,8 @@ Both Lambda applications use [Zappa](https://github.com/Miserlou/Zappa) for depl
 
 ### gdq_collector
 
+*Note*: If you're running this on an Ubuntu EC2 instance, [bootstrap_aws.sh](bootstrap_aws.sh) will be more useful then the following bullet list for specific setup.
+
 1. Clone the repo and `cd` into the root project directory.
 2. Pull down the dependencies with `pip install -r requirements.txt --user`
     * You may wish to run `aws/install.sh`, as there will be necessary system dependencies to install some of the python packages.

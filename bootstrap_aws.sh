@@ -1,3 +1,6 @@
+# Designed to be run on ubuntu 16.04
+# NOTE: Do not run this as a script. Meant to be more an "operator's guide"
+
 # Install packages
 sudo apt-get update && sudo apt-get upgrade -y
 sudo apt-get install git postgresql postgresql-contrib libpq-dev build-essential python-pip -y
