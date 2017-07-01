@@ -1,7 +1,10 @@
 postgres = {
-    "host": "",
-    "port": "",
-    "dbname": "",
-    "user": "",
-    "password": ""
+    'host': '',
+    'port': '',
+    'dbname': '',
+    'user': '',
+    'password': ''
 }
+
+sns_arn = ''
+

@@ -15,7 +15,7 @@ import logging
 logger = logging.getLogger('gdq_collector')
 
 # Setup clients
-donations = DonationClient('https://gamesdonequick.com/tracker/index/agdq2017')
+donations = DonationClient('https://gamesdonequick.com/tracker/index/sgdq2017')
 schedule = ScheduleClient('https://gamesdonequick.com/schedule')
 twitter = TwitterClient(tags=settings.twitter_tags)
 twitch = TwitchClient()
@@ -111,10 +111,9 @@ if __name__ == '__main__':
 
     # Setup CloudWatch handler if requested
     if args.cloudwatch:
-        logger.addHandler(watchtower.CloudWatchLogHandler())
-        logging.getLogger('apscheduler').addHandler(
-            watchtower.CloudWatchLogHandler()
-        )
+        handler = watchtower.CloudWatchLogHandler()
+        logger.addHandler(handler)
+        logging.getLogger('apscheduler').addHandler(handler)
 
     # Setup connection to twitch IRC channel
     twitch.connect()

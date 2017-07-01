@@ -3,7 +3,7 @@
 
 # Install packages
 sudo apt-get update && sudo apt-get upgrade -y
-sudo apt-get install git postgresql postgresql-contrib libpq-dev build-essential python-pip -y
+sudo apt-get install git postgresql postgresql-contrib libpq-dev build-essential python-pip awscli -y
 
 # Setup postgres
 sudo service postgresql start
@@ -46,5 +46,5 @@ mv gdq_collector/credentials_template.py gdq_collector/credentials.py
 # Setup postgres tables
 psql < schema.sql
 
-# Change
-vim pg_hba.conf
+# Setup AWS credentials
+aws configure

@@ -18,7 +18,7 @@
                 "expression": "rate(10 minutes)"
             }
         ],
-        "keep_warm": false,
+        "debug": true,
         "vpc_config": {
             "SubnetIds": ["subnet-af33aef4", "subnet-ce20bae3"],
             "SecurityGroupIds": ["sg-838683fe"]
@@ -28,6 +28,7 @@
         }
     },
     "prod": {
+        "extends": "dev",
         "app_function": "api.app", 
         "s3_bucket": "agdq-zappa-deployments",
         "aws_region": "us-east-1",

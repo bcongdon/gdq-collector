@@ -32,14 +32,16 @@ def send_alarm(message):
 def health_check(event, context):
     logger.debug("Starting connection")
     recent_url = api_endpoint + '/recentEvents'
-    r = requests.get(recent_url, timeout=5, verify=False)
+    try:
+        r = requests.get(recent_url, timeout=5, verify=False)
+        data = r.json()
+    except Exception as e:
+        send_alarm("Something went wrong with the API request: {}".format(e))
+
     if r.status_code != 200:
         send_alarm("Got status code {} from API".format(r.status_code))
         return
-    try:
-        data = r.json()
-    except:
-        send_alarm("API sent bad JSON")
+
     for d in data:
         d['time'] = parse(d['time'])
     max_time = max(d['time'] for d in data)
