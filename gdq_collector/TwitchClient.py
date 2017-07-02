@@ -3,7 +3,9 @@ import settings
 import irc.client
 import requests
 import logging
+from datetime import datetime
 logger = logging.getLogger(__name__)
+MAX_CHATS_SAVED = 10000
 
 
 class TwitchClient(irc.client.SimpleIRCClient):
@@ -11,6 +13,7 @@ class TwitchClient(irc.client.SimpleIRCClient):
         self._message_count = 0
         self._emote_count = 0
         self._channel_id = None
+        self._chats = []
         irc.client.SimpleIRCClient.__init__(self)
 
     def connect(self):
@@ -83,11 +86,27 @@ class TwitchClient(irc.client.SimpleIRCClient):
         self._emote_count = 0
         return t
 
+    def get_chats(self):
+        c = self._chats
+        self._chats = []
+        return c
+
     def on_pubmsg(self, connection, event):
         msg = event.arguments[0]
-        logger.debug(msg + "; {} emotes".format(self._num_emotes(msg)))
-        self._message_count += 1
+        num_emotes = self._num_emotes(msg)
+        logger.debug(msg + "; {} emotes".format(num_emotes))
+        self._message_count += num_emotes
         self._emote_count += self._num_emotes(msg)
+
+        if len(self._chats) < MAX_CHATS_SAVED:
+            try:
+                self._chats.append({
+                    'user': event.source.split('!')[0],
+                    'content': msg,
+                    'created_at': datetime.utcnow()
+                })
+            except Exception as e:
+                logger.error('Error appending message: {}'.format(e))
 
     def on_disconnect(self, connection, event):
         logger.error("Disconnected from twitch chat. Attempting reconnection")

@@ -17,6 +17,7 @@ SQL_filtered = ("SELECT row_to_json(r) FROM "
                 "    ORDER BY time DESC "
                 "    LIMIT 60) r "
                 "    ORDER BY r.time ASC;")
+
 SQL_unfiltered = ("SELECT row_to_json(r) FROM "
                   "    (SELECT * FROM gdq_timeseries "
                   "    ORDER BY time DESC "

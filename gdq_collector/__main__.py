@@ -63,6 +63,9 @@ def update_schedule_psql(sched):
 
 
 def save_tweets(tweets):
+    if not len(tweets):
+        return
+
     record_template = ','.join(['%s'] * len(tweets))
     SQL = ("INSERT INTO gdq_tweets (id, created_at, content) "
            "VALUES {}".format(record_template))
@@ -75,19 +78,40 @@ def save_tweets(tweets):
         logger.error(e)
 
 
+def save_chats(chats):
+    if not len(chats):
+        return
+
+    record_template = ','.join(['%s'] * len(chats))
+    SQL = ("INSERT INTO gdq_chats (username, created_at, content) "
+           "VALUES {}".format(record_template))
+    chats_formatted = [(c['user'], c['created_at'], c['content'])
+                       for c in chats]
+    try:
+        cur.execute(SQL, chats_formatted)
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        logger.error(e)       
+
+
 def refresh_timeseries():
     ''' Polls clients for new stat data and inserts timeseries entry to db '''
     curr_d = utils.try_execute(donations.scrape, DonationResult())
     num_tweets = twitter.num_tweets()
-    tweets = twitter.get_tweets()
     viewers = twitch.get_num_viewers()
     chats, emotes = twitch.get_message_count(), twitch.get_emote_count()
     results_to_psql(num_tweets, viewers, chats, emotes, curr_d.total_donators,
                     curr_d.total_donations)
     logger.info("Refreshed time series data")
 
+    tweets = twitter.get_tweets()
     save_tweets(tweets)
     logger.info("Saved tweets")
+
+    chats = twitch.get_chats()
+    save_chats(chats)
+    logger.info("Saved Twitch chats")
 
 
 def refresh_schedule():

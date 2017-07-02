@@ -24,6 +24,6 @@ CREATE TABLE gdq_tweets(
 CREATE TABLE gdq_chats(
     id SERIAL PRIMARY KEY,
     content TEXT,
-    user TEXT
+    username TEXT,
     created_at TIMESTAMP
 );
