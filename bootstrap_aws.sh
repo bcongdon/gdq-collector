@@ -3,7 +3,7 @@
 
 # Install packages
 sudo apt-get update && sudo apt-get upgrade -y
-sudo apt-get install git postgresql postgresql-contrib libpq-dev build-essential python-pip awscli -y
+sudo apt-get install git postgresql postgresql-contrib libpq-dev build-essential python-pip awscli unzip libwww-perl libdatetime-perl -y
 
 # Setup postgres
 sudo service postgresql start
@@ -48,3 +48,15 @@ psql < schema.sql
 
 # Setup AWS credentials
 aws configure
+
+# Setup EC2 CloudWatch metrics for memory / disk space
+curl http://aws-cloudwatch.s3.amazonaws.com/downloads/CloudWatchMonitoringScripts-1.2.1.zip -O
+unzip CloudWatchMonitoringScripts-1.2.1.zip
+rm CloudWatchMonitoringScripts-1.2.1.zip
+cd aws-scripts-mon
+mv awscreds.template awscreds.conf
+cat <(crontab -l) <(echo "*/5 * * * * ~/aws-scripts-mon/mon-put-instance-data.pl --mem-used-incl-cache-buff --mem-util --disk-space-util --disk-space-avail --disk-space-used --disk-path=/ --from-cron"
+) | crontab -
+
+# Enter AWS credentials (can copy keys from ~/.aws/credentials)
+vim awscreds.conf
