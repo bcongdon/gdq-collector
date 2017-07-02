@@ -7,4 +7,3 @@ postgres = {
 }
 
 sns_arn = ''
-

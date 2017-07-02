@@ -1,8 +1,12 @@
 {
+    "base": {
+        "s3_bucket": "gdqstatus-zappa-deployments",
+        "aws_region": "us-east-1"
+    },
     "dev": {
+        "extends": "base",
         "app_function": "api.app", 
-        "s3_bucket": "agdq-dev-zappa-deployments",
-        "aws_region": "us-east-1",
+        "s3_bucket": "gdqstatus-dev-zappa-deployments",
         "cors": true,
         "events": [
             {
@@ -24,38 +28,28 @@
             "SecurityGroupIds": ["sg-838683fe"]
         },
         "environment_variables": {
-            "S3_CACHE_BUCKET": "agdq-2017-dev"
+            "S3_CACHE_BUCKET": "gdqstatus-storage-dev"
         }
     },
     "prod": {
         "extends": "dev",
         "app_function": "api.app", 
-        "s3_bucket": "agdq-zappa-deployments",
-        "aws_region": "us-east-1",
-        "cors": true,
-        "events": [
-            {
-                "function": "cache_databases.schedule_handler",
-                "expression": "rate(10 minutes)"
-            },
-            {
-                "function": "cache_databases.timeseries_handler",
-                "expression": "rate(5 minutes)"
-            },
-            {
-                "function": "kill_save_animals.refresh_kill_save_handler",
-                "expression": "rate(10 minutes)"
-            }
-        ],
-        "keep_warm": false,
-        "vpc_config": {
-            "SubnetIds": ["subnet-af33aef4", "subnet-ce20bae3"],
-            "SecurityGroupIds": ["sg-838683fe"]
-        },
+        "s3_bucket": "gdqstatus-zappa-deployments",
         "domain": "api.gdqstat.us",
-        "lets_encrypt_key": "s3://agdq-2017-secrets/account.key",
+        "certificate_arn": "arn:aws:acm:us-east-1:847166266056:certificate/e8aa2a0d-8595-43bf-a86b-dd603c5a8c1f",
+        "domain": "api.gdqstat.us",
         "environment_variables": {
             "S3_CACHE_BUCKET": "storage.api.gdqstat.us"
         }
+    },
+    "monitoring": {
+        "extends": "base",
+        "events": [
+            {
+                "function": "monitoring.health_check",
+                "expression": "rate(5 minutes)"
+            }
+        ],
+        "apigateway_enabled": false
     }
 }
