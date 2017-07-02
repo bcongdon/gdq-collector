@@ -17,7 +17,9 @@ CREATE TABLE gdq_schedule(
 
 CREATE TABLE gdq_tweets(
     id BIGINT PRIMARY KEY,
+    user_id BIGINT,
     created_at TIMESTAMP,
+    username TEXT,
     content TEXT
 );
 

@@ -67,9 +67,11 @@ def save_tweets(tweets):
         return
 
     record_template = ','.join(['%s'] * len(tweets))
-    SQL = ("INSERT INTO gdq_tweets (id, created_at, content) "
+    SQL = ("INSERT INTO gdq_tweets (id, created_at, content, "
+           "                        username, user_id) "
            "VALUES {}".format(record_template))
-    tweets_formatted = [(t.id, t.created_at, t.text) for t in tweets]
+    tweets_formatted = [(t.id, t.created_at, t.text, t.user.name, t.user.id)
+                        for t in tweets]
     try:
         cur.execute(SQL, tweets_formatted)
         conn.commit()
@@ -92,7 +94,7 @@ def save_chats(chats):
         conn.commit()
     except Exception as e:
         conn.rollback()
-        logger.error(e)       
+        logger.error(e)     
 
 
 def refresh_timeseries():
