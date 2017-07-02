@@ -62,15 +62,32 @@ def update_schedule_psql(sched):
         logger.error(e)
 
 
+def save_tweets(tweets):
+    record_template = ','.join(['%s'] * len(tweets))
+    SQL = ("INSERT INTO gdq_tweets (id, created_at, content) "
+           "VALUES {}".format(record_template))
+    tweets_formatted = [(t.id, t.created_at, t.text) for t in tweets]
+    try:
+        cur.execute(SQL, tweets_formatted)
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        logger.error(e)
+
+
 def refresh_timeseries():
     ''' Polls clients for new stat data and inserts timeseries entry to db '''
     curr_d = utils.try_execute(donations.scrape, DonationResult())
-    tweets = twitter.num_tweets()
+    num_tweets = twitter.num_tweets()
+    tweets = twitter.get_tweets()
     viewers = twitch.get_num_viewers()
     chats, emotes = twitch.get_message_count(), twitch.get_emote_count()
-    results_to_psql(tweets, viewers, chats, emotes, curr_d.total_donators,
+    results_to_psql(num_tweets, viewers, chats, emotes, curr_d.total_donators,
                     curr_d.total_donations)
     logger.info("Refreshed time series data")
+
+    save_tweets(tweets)
+    logger.info("Saved tweets")
 
 
 def refresh_schedule():

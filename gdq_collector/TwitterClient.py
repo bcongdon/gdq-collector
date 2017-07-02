@@ -2,6 +2,7 @@ import tweepy
 from credentials import twitter
 import logging
 logger = logging.getLogger(__name__)
+MAX_TWEETS_SAVED = 10000
 
 
 class HashtagStreamListener(tweepy.StreamListener):
@@ -12,6 +13,7 @@ class HashtagStreamListener(tweepy.StreamListener):
     def on_status(self, status):
         logger.debug("Received tweet: %s" % status.text)
         self.handler._increment_tweet_counter()
+        self.handler._save_tweet(status)
 
     def on_error(self, status_code):
         logger.warn("Error with status code: %s" % status_code)
@@ -24,6 +26,7 @@ class TwitterClient:
     def __init__(self, tags=[]):
         self.tags = tags
         self.curr_tweets = 0
+        self.tweets = []
         self.api = None
 
     def auth(self):
@@ -43,6 +46,14 @@ class TwitterClient:
         self.curr_tweets = 0
         return t
 
+    def get_tweets(self):
+        '''
+        Returns list of saved tweets
+        '''
+        t = self.tweets
+        self.tweets = []
+        return t
+
     def start(self):
         self._setup_stream()
 
@@ -56,3 +67,7 @@ class TwitterClient:
 
     def _increment_tweet_counter(self):
         self.curr_tweets += 1
+
+    def _save_tweet(self, tweet):
+        if len(self.tweets) < MAX_TWEETS_SAVED:
+            self.tweets.append(tweet)
