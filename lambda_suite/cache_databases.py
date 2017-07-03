@@ -10,6 +10,7 @@ BUCKET = os.environ.get('S3_CACHE_BUCKET')
 s3 = boto3.resource('s3')
 
 conn = psycopg2.connect(**p_creds)
+conn.set_session(readonly=True)
 cur = conn.cursor()
 
 

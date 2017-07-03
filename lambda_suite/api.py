@@ -9,6 +9,7 @@ app = Flask(__name__)
 CORS(app)
 
 conn = psycopg2.connect(**p_creds)
+conn.set_session(readonly=True)
 cur = conn.cursor()
 
 SQL_filtered = ("SELECT row_to_json(r) FROM "
