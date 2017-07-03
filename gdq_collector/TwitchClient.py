@@ -95,8 +95,8 @@ class TwitchClient(irc.client.SimpleIRCClient):
         msg = event.arguments[0]
         num_emotes = self._num_emotes(msg)
         logger.debug(msg + "; {} emotes".format(num_emotes))
-        self._message_count += num_emotes
-        self._emote_count += self._num_emotes(msg)
+        self._message_count += 1
+        self._emote_count += num_emotes
 
         if len(self._chats) < MAX_CHATS_SAVED:
             try:
