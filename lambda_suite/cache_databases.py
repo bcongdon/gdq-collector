@@ -90,5 +90,5 @@ if __name__ == '__main__':
     BUCKET = 'storage.api.gdqstat.us'
     # refresh_timeseries()
     # refresh_schedule()
-    refresh_chat_words()
-    refresh_chat_users()
+    # refresh_chat_words()
+    # refresh_chat_users()

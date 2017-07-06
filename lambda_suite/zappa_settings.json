@@ -24,11 +24,7 @@
             {
                 "function": "cache_databases.chat_users_handler",
                 "expression": "rate(60 minutes)"
-            },
-            // {
-            //     "function": "kill_save_animals.refresh_kill_save_handler",
-            //     "expression": "rate(10 minutes)"
-            // }
+            }
         ],
         "debug": true,
         "vpc_config": {
@@ -58,6 +54,17 @@
             {
                 "function": "monitoring.health_check",
                 "expression": "rate(5 minutes)"
+            }
+        ],
+        "apigateway_enabled": false
+    },
+    "animals": {
+        "extends": "base",
+        "debug": true,
+        "events": [
+            {
+                "function": "kill_save_animals.refresh_kill_save_handler",
+                "expression": "rate(1 minute)"
             }
         ],
         "apigateway_enabled": false

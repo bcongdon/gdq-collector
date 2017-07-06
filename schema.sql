@@ -29,3 +29,9 @@ CREATE TABLE gdq_chats(
     username TEXT,
     created_at TIMESTAMP
 );
+
+CREATE TABLE gdq_animals(
+    kill NUMERIC(20, 2),
+    save NUMERIC(20, 2),
+    time TIMESTAMP
+);
