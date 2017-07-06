@@ -2,6 +2,7 @@ from DonationClient import DonationClient, DonationResult
 from ScheduleClient import ScheduleClient
 from TwitterClient import TwitterClient
 from TwitchClient import TwitchClient
+from TrackerClient import TrackerClient
 import settings
 import utils
 import credentials
@@ -11,11 +12,14 @@ import os
 import argparse
 from datetime import datetime
 import watchtower
+from time import sleep
+import pytz
 import logging
 logger = logging.getLogger('gdq_collector')
 
 # Setup clients
 donations = DonationClient('https://gamesdonequick.com/tracker/index/sgdq2017')
+tracker = TrackerClient('https://gamesdonequick.com/tracker/donations/sgdq2017')
 schedule = ScheduleClient('https://gamesdonequick.com/schedule')
 twitter = TwitterClient(tags=settings.twitter_tags)
 twitch = TwitchClient()
@@ -94,7 +98,7 @@ def save_chats(chats):
         conn.commit()
     except Exception as e:
         conn.rollback()
-        logger.error(e)     
+        logger.error(e)
 
 
 def refresh_timeseries():
@@ -122,6 +126,56 @@ def refresh_schedule():
     update_schedule_psql(sched)
     logger.info("Refreshed schedule data")
 
+
+def refresh_tracker_donations():
+    SQL = ("INSERT INTO gdq_donations "
+           "  (donor_id, created_at, amount, donation_id, has_comment) "
+           "VALUES (%s, %s, %s, %s, %s) "
+           "ON CONFLICT DO NOTHING;")
+    SQL_check = ("SELECT created_at "
+                 "FROM gdq_donations "
+                 "ORDER BY created_at DESC LIMIT 1")
+    for idx, donation in enumerate(tracker.scrape()):
+        # Every 25 donations, check to see if we can bail early
+        if idx % 25 == 0:
+            cur.execute(SQL_check)
+            latest = cur.fetchone()[0]
+            latest = latest.replace(tzinfo=pytz.UTC)
+            (_, time, _, _, _) = donation
+            if time < latest:
+                message = ('Returning early from scraping donation pages. '
+                           'Found latest: %s, current donation is at %s.'
+                           .format(latest, time))
+                logger.info(message)
+                return
+        try:
+            cur.execute(SQL, donation)
+            conn.commit()
+        except Exception as e:
+            conn.rollback()
+            logger.error(e)
+
+
+def refresh_tracker_donation_messages():
+    SQL = ("SELECT donation_id "
+           "FROM gdq_donations "
+           "WHERE has_comment=True AND comment IS NULL;")
+    SQL_update = ("UPDATE gdq_donations "
+                  "SET comment=%s "
+                  "WHERE donation_id=%s;")
+    cur.execute(SQL)
+    for row in cur.fetchall():
+        donation_id = row[0]
+        message = tracker.scrape_donation_message(donation_id)
+        sleep(0.5)
+        try:
+            cur.execute(SQL_update, (message, donation_id))
+            conn.commit()
+            logger.info('Successfully scraped message for donation {}'
+                        .format(donation_id))
+        except Exception as e:
+            conn.rollback()
+            logger.error(e)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
@@ -165,6 +219,14 @@ if __name__ == '__main__':
     scheduler = BackgroundScheduler()
     scheduler.add_job(refresh_timeseries, trigger='interval', minutes=1)
     scheduler.add_job(refresh_schedule, trigger='interval', minutes=10)
+    scheduler.add_job(refresh_tracker_donations,
+                      trigger='interval',
+                      minutes=20,
+                      max_instances=1)
+    scheduler.add_job(refresh_tracker_donation_messages,
+                      trigger='interval',
+                      minutes=60,
+                      max_instances=1)
 
     # Run schedule scrape immediately if requested
     if args.sched:

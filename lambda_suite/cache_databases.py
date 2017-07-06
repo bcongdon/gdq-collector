@@ -62,6 +62,16 @@ def refresh_chat_users():
     s3.Bucket(BUCKET).put_object(Key='chat_users.json', Body=data_json)
 
 
+def refresh_kill_save():
+    SQL = ("SELECT row_to_json(r) FROM "
+           "(SELECT * FROM gdq_animals ORDER BY time ASC) r;")
+    cur.execute(SQL)
+    data = cur.fetchall()
+    data_json = json.dumps(map(lambda x: dict(user=x[0], count=x[1]), data))
+
+    s3.Bucket(BUCKET).put_object(Key='chat_users.json', Body=data_json)
+
+
 def execute_safe(func):
     try:
         func()
@@ -84,6 +94,10 @@ def schedule_handler(event, context):
 
 def timeseries_handler(event, context):
     execute_safe(refresh_timeseries)
+
+
+def animals_handler(event, context):
+    execute_safe(refresh_kill_save)
 
 
 if __name__ == '__main__':

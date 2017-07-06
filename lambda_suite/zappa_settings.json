@@ -1,36 +1,18 @@
 {
     "base": {
         "s3_bucket": "gdqstatus-zappa-deployments",
-        "aws_region": "us-east-1"
+        "aws_region": "us-east-1",
+        "vpc_config": {
+            "SubnetIds": ["subnet-af33aef4", "subnet-ce20bae3"],
+            "SecurityGroupIds": ["sg-838683fe"]
+        }
     },
     "dev": {
         "extends": "base",
         "app_function": "api.app", 
         "s3_bucket": "gdqstatus-dev-zappa-deployments",
         "cors": true,
-        "events": [
-            {
-                "function": "cache_databases.schedule_handler",
-                "expression": "rate(10 minutes)"
-            },
-            {
-                "function": "cache_databases.timeseries_handler",
-                "expression": "rate(5 minutes)"
-            },
-            {
-                "function": "cache_databases.chat_words_handler",
-                "expression": "rate(60 minutes)"
-            },
-            {
-                "function": "cache_databases.chat_users_handler",
-                "expression": "rate(60 minutes)"
-            }
-        ],
         "debug": true,
-        "vpc_config": {
-            "SubnetIds": ["subnet-af33aef4", "subnet-ce20bae3"],
-            "SecurityGroupIds": ["sg-838683fe"]
-        },
         "environment_variables": {
             "S3_CACHE_BUCKET": "gdqstatus-storage-dev"
         }
@@ -47,6 +29,35 @@
         },
         "cache_cluster_enabled": true,
         "cache_cluster_ttl": 60
+    },
+    "cache_databases": {
+        "extends": "dev",
+        "events": [
+            {
+                "function": "cache_databases.schedule_handler",
+                "expression": "rate(10 minutes)"
+            },
+            {
+                "function": "cache_databases.timeseries_handler",
+                "expression": "rate(5 minutes)"
+            },
+            {
+                "function": "cache_databases.chat_words_handler",
+                "expression": "rate(60 minutes)"
+            },
+            {
+                "function": "cache_databases.chat_users_handler",
+                "expression": "rate(60 minutes)"
+            },
+            {
+                "function": "cache_databases.animals_handler",
+                "expression": "rate(60 minutes)"
+            }
+        ],
+        "environment_variables": {
+            "S3_CACHE_BUCKET": "storage.api.gdqstat.us"
+        },
+        "apigateway_enabled": false
     },
     "monitoring": {
         "extends": "base",
