@@ -144,7 +144,7 @@ def refresh_tracker_donations():
             (_, time, _, _, _) = donation
             if time < latest:
                 message = ('Returning early from scraping donation pages. '
-                           'Found latest: %s, current donation is at %s.'
+                           'Found latest: {}, current donation is at {}.'
                            .format(latest, time))
                 logger.info(message)
                 return
@@ -184,11 +184,14 @@ if __name__ == '__main__':
         '--notwitter', action='store_true', default=False,
         help='Disable Twitter (to avoid rate limiting while debugging')
     parser.add_argument(
+        '--nodonations', action='store_true', default=False,
+        help='Disable scraping donations')
+    parser.add_argument(
         '-v', '--verbose', action='store_true', default=False,
         help='Raise log level to DEBUG for debugging purposes')
     parser.add_argument(
-        '--sched', action='store_true', default=False,
-        help='Run schedule scrape on startup')
+        '--refresh', action='store_true', default=False,
+        help='Run scrape operations on startup')
     parser.add_argument(
         '--cloudwatch', action='store_true', default=False,
         help='Add the CloudWatch logging handler to push logs to AWS.')
@@ -219,18 +222,26 @@ if __name__ == '__main__':
     scheduler = BackgroundScheduler()
     scheduler.add_job(refresh_timeseries, trigger='interval', minutes=1)
     scheduler.add_job(refresh_schedule, trigger='interval', minutes=10)
-    scheduler.add_job(refresh_tracker_donations,
-                      trigger='interval',
-                      minutes=20,
-                      max_instances=1)
-    scheduler.add_job(refresh_tracker_donation_messages,
-                      trigger='interval',
-                      minutes=60,
-                      max_instances=1)
+
+    if not args.nodonations:
+        scheduler.add_job(refresh_tracker_donations,
+                          trigger='interval',
+                          minutes=20,
+                          max_instances=1)
+        scheduler.add_job(refresh_tracker_donation_messages,
+                          trigger='interval',
+                          minutes=60,
+                          max_instances=1)
 
     # Run schedule scrape immediately if requested
-    if args.sched:
+    if args.refresh:
         scheduler.add_job(refresh_schedule, next_run_time=datetime.now())
+
+        if not args.nodonations:
+            scheduler.add_job(refresh_tracker_donations,
+                              next_run_time=datetime.now())
+            scheduler.add_job(refresh_tracker_donation_messages,
+                              next_run_time=datetime.now())
 
     # Run scheduler
     logger.info("Starting Scheduler")

@@ -56,12 +56,12 @@ class TrackerClient:
         initial_page = self._get_donation_page(10000)
         soup = BeautifulSoup(initial_page, "html.parser")
         max_page = self._determine_page_num(soup)
-        for page_num in range(1, -1, -1):
+        for page_num in range(1, max_page + 1):
             page_data = self._get_donation_page(page_num)
             soup = BeautifulSoup(page_data, "html.parser")
 
             page_results = self._scrape_page(soup)
-            for result in reversed(page_results):
+            for result in page_results:
                 yield result
             logger.info("Scraped page: %s" % page_num)
             sleep(1)
