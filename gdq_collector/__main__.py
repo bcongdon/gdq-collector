@@ -135,13 +135,13 @@ def refresh_tracker_donations():
     SQL_check = ("SELECT created_at "
                  "FROM gdq_donations "
                  "ORDER BY created_at DESC LIMIT 1")
+    cur.execute(SQL_check)
+    latest = cur.fetchone()[0]
+    latest = latest.replace(tzinfo=pytz.UTC)
     for idx, donation in enumerate(tracker.scrape()):
         # Every 25 donations, check to see if we can bail early
         if idx % 25 == 0:
-            cur.execute(SQL_check)
-            latest = cur.fetchone()[0]
-            latest = latest.replace(tzinfo=pytz.UTC)
-            (_, time, _, _, _) = donation
+                        (_, time, _, _, _) = donation
             if time < latest:
                 message = ('Returning early from scraping donation pages. '
                            'Found latest: {}, current donation is at {}.'
