@@ -43,14 +43,22 @@
             },
             {
                 "function": "cache_databases.chat_words_handler",
-                "expression": "rate(60 minutes)"
+                "expression": "rate(30 minutes)"
             },
             {
                 "function": "cache_databases.chat_users_handler",
-                "expression": "rate(60 minutes)"
+                "expression": "rate(30 minutes)"
             },
             {
                 "function": "cache_databases.animals_handler",
+                "expression": "rate(5 minutes)"
+            },
+            {
+                "function": "cache_databases.donation_stats_handler",
+                "expression": "rate(60 minutes)"
+            },
+            {
+                "function": "cache_databases.donation_words_handler",
                 "expression": "rate(60 minutes)"
             }
         ],

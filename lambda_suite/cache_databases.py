@@ -107,6 +107,23 @@ def refresh_donation_stats():
     s3.Bucket(BUCKET).put_object(Key='donation_stats.json', Body=data)
 
 
+def refresh_donation_words():
+    SQL = """
+        SELECT word, nentry AS entries FROM
+            ts_stat('SELECT to_tsvector(''simple_english'',
+                gdq_donations.comment)
+            FROM gdq_donations
+            WHERE comment IS NOT NULL')
+        WHERE character_length(word) > 2
+        ORDER BY entries DESC
+        LIMIT 50;
+    """
+    cur.execute(SQL)
+    words = cur.fetchall()
+    json_data = json.dumps(map(lambda x: dict(word=x[0], entries=x[1]), words))
+    s3.Bucket(BUCKET).put_object(Key='donation_words.json', Body=json_data)
+
+
 def execute_safe(func):
     try:
         func()
@@ -139,10 +156,15 @@ def donation_stats_handler(event, context):
     execute_safe(refresh_donation_stats)
 
 
+def donation_words_handler(event, context):
+    execute_safe(refresh_donation_words)
+
+
 if __name__ == '__main__':
     BUCKET = 'storage.api.gdqstat.us'
     # refresh_timeseries()
     # refresh_schedule()
     # refresh_chat_words()
     # refresh_chat_users()
-    refresh_donation_stats()
+    # refresh_donation_stats()
+    # refresh_donation_words()
