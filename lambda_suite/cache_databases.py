@@ -77,6 +77,10 @@ def refresh_donation_stats():
            "median(amount), avg(amount) "
            "FROM gdq_donations GROUP BY has_comment "
            "ORDER BY has_comment;")
+    SQL_overall = """
+        SELECT COUNT(*), sum(amount), median(amount), avg(amount)
+        FROM gdq_donations;
+    """
     SQL_median_timeseries = (
         "SELECT "
         "date_trunc('hour', created_at - interval '1 minute') as time,"
@@ -88,6 +92,8 @@ def refresh_donation_stats():
     )
     cur.execute(SQL)
     stats = cur.fetchall()
+    cur.execute(SQL_overall)
+    overall = cur.fetchall()
     cur.execute(SQL_median_timeseries)
     medians = cur.fetchall()
 
@@ -101,9 +107,18 @@ def refresh_donation_stats():
     def medians_formatter(x):
         return dict(time=str(x[0]), median=float(x[1]))
 
+    def overall_formatter(x):
+        return dict(count=int(x[0]),
+                    sum=float(x[1]),
+                    median=float(x[2]),
+                    avg=float(x[3]))
+
     stats_list = map(stats_formatter, stats)
     medians_list = map(medians_formatter, medians)
-    data = json.dumps(dict(stats=stats_list, medians=medians_list))
+    overall_list = map(overall_formatter, overall)
+    data = json.dumps(dict(comment_stats=stats_list,
+                           medians=medians_list,
+                           overall=overall_list))
     s3.Bucket(BUCKET).put_object(Key='donation_stats.json', Body=data)
 
 
