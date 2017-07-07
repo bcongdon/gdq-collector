@@ -129,8 +129,9 @@ def refresh_schedule():
 
 def refresh_tracker_donations():
     SQL = ("INSERT INTO gdq_donations "
-           "  (donor_id, created_at, amount, donation_id, has_comment) "
-           "VALUES (%s, %s, %s, %s, %s) "
+           "  (donor_id, created_at, amount, donation_id, "
+           "   has_comment, donor_name) "
+           "VALUES (%s, %s, %s, %s, %s, %s) "
            "ON CONFLICT DO NOTHING;")
     SQL_check = ("SELECT created_at "
                  "FROM gdq_donations "
@@ -141,7 +142,7 @@ def refresh_tracker_donations():
     for idx, donation in enumerate(tracker.scrape()):
         # Every 50 donations, check to see if we can bail early
         if idx % 50 == 0:
-            (_, time, _, _, _) = donation
+            (_, time, _, _, _, _) = donation
             if time < latest:
                 message = ('Returning early from scraping donation pages. '
                            'Found latest: {}, current donation is at {}.'

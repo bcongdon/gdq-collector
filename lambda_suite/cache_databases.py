@@ -139,6 +139,32 @@ def refresh_donation_words():
     s3.Bucket(BUCKET).put_object(Key='donation_words.json', Body=json_data)
 
 
+def refresh_top_donors():
+    SQL_frequent = """
+    SELECT donor_name, COUNT(*) count
+    FROM gdq_donations
+    WHERE donor_name IS NOT NULL
+    GROUP BY donor_id, donor_name
+    ORDER BY count DESC LIMIT 50;
+    """
+
+    SQL_generous = """
+    SELECT donor_name, ceiling(SUM(amount)) total
+    FROM gdq_donations
+    WHERE donor_name IS NOT NULL
+    GROUP BY donor_id, donor_name
+    ORDER BY total DESC LIMIT 50;
+    """
+
+    cur.execute(SQL_frequent)
+    frequent = map(lambda x: dict(name=x[0], count=x[1]), cur.fetchall())
+    cur.execute(SQL_generous)
+    generous = map(lambda x: dict(name=x[0], total=x[1]), cur.fetchall())
+
+    json_data = json.dumps(dict(frequent=frequent, generous=generous))
+    s3.Bucket(BUCKET).put_object(Key='top_donors.json', Body=json_data)
+
+
 def execute_safe(func):
     try:
         func()
@@ -175,6 +201,10 @@ def donation_words_handler(event, context):
     execute_safe(refresh_donation_words)
 
 
+def top_donors_handler(event, context):
+    execute_safe(refresh_top_donors)
+
+
 if __name__ == '__main__':
     BUCKET = 'storage.api.gdqstat.us'
     # refresh_timeseries()
@@ -183,3 +213,4 @@ if __name__ == '__main__':
     # refresh_chat_users()
     # refresh_donation_stats()
     # refresh_donation_words()
+    # refresh_top_donors()

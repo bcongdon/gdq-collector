@@ -19,7 +19,6 @@ Flask-Cors==3.0.2
 funcsigs==1.0.2
 future==0.16.0
 futures==3.1.1
-gdq-collector==0.1
 hjson==2.0.7
 idna==2.5
 inflect==0.2.5

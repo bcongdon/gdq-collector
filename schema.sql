@@ -39,6 +39,7 @@ CREATE TABLE gdq_animals(
 CREATE TABLE gdq_donations(
     created_at TIMESTAMP,
     donation_id BIGINT PRIMARY KEY,
+    donor_name TEXT,
     amount NUMERIC(20, 2),
     donor_id BIGINT,
     has_comment BOOLEAN,

@@ -23,6 +23,9 @@ class TrackerClient:
     def _get_donation(self, donation_id):
         return requests.get('https://gamesdonequick.com/tracker/donation/{}'.format(donation_id)).text
 
+    def _get_donor(self, donor_id):
+        return requests.get('https://gamesdonequick.com/tracker/donor/{}'.format(donor_id)).text
+
     def _determine_page_num(self, soup):
         page_num = soup.find('form').find_all('label')[1].text.split(' ')[-1]
         return int(page_num)
@@ -32,9 +35,11 @@ class TrackerClient:
         for row in soup.find_all('tr')[1:]:
             name_el, time_el, amount_el, comment_el = row.find_all('td')
 
-            donor = None
+            donor_id = None
+            name = None
             if name_el.find('a', href=True):
                 donor = name_el.find('a', href=True)['href'].split('/')[3]
+                name = name_el.find('a', href=True).text.strip()
 
             time = parse(time_el.text)
 
@@ -45,11 +50,12 @@ class TrackerClient:
                 donation_id = int(amount_el.find('a')['href'].split('/')[-1])
 
             has_comment = comment_el.text.strip() == 'Yes'
-            results.append((donor,
+            results.append((donor_id,
                             time,
                             amount,
                             donation_id,
-                            has_comment))
+                            has_comment,
+                            name))
         return results
 
     def scrape(self):
@@ -69,9 +75,17 @@ class TrackerClient:
     def scrape_donation_message(self, donation_id):
         page = self._get_donation(donation_id)
         soup = BeautifulSoup(page, "html.parser")
-        return soup.find('td').text.strip()
+        if soup.find('td'):
+            return soup.find('td').text.strip()
+
+    def get_donor_name(self, donor_id):
+        page = self._get_donor(donor_id)
+        soup = BeautifulSoup(page, "html.parser")
+        if soup.find('h2'):
+            return soup.find('h2').contents[0].strip()
 
 
 if __name__ == '__main__':
-    print list(TrackerClient('https://gamesdonequick.com/tracker/donations/sgdq2017').scrape())
+    # print list(TrackerClient('https://gamesdonequick.com/tracker/donations/sgdq2017').scrape())
+    # print TrackerClient('').get_donor_name(847)
     # print TrackerClient('https://gamesdonequick.com/tracker/donation/').scrape_donation_message(358572)
