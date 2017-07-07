@@ -60,6 +60,10 @@
             {
                 "function": "cache_databases.donation_words_handler",
                 "expression": "rate(60 minutes)"
+            },
+            {
+                "function": "cache_databases.top_donors_handler",
+                "expression": "rate(60 minutes)"
             }
         ],
         "environment_variables": {

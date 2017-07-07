@@ -136,7 +136,7 @@ def refresh_donation_stats():
                     avg=float(x[3]))
 
     stats_list = map(comment_formatter, stats)
-    anonymous_list = map(anonymous_formatter, stats)
+    anonymous_list = map(anonymous_formatter, anonymous)
     medians_list = map(medians_formatter, medians)
     overall_list = map(overall_formatter, overall)
     data = json.dumps(dict(comment_stats=stats_list,
