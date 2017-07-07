@@ -85,7 +85,7 @@ class TrackerClient:
             return soup.find('h2').contents[0].strip()
 
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
     # print list(TrackerClient('https://gamesdonequick.com/tracker/donations/sgdq2017').scrape())
     # print TrackerClient('').get_donor_name(847)
     # print TrackerClient('https://gamesdonequick.com/tracker/donation/').scrape_donation_message(358572)

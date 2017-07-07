@@ -26,8 +26,6 @@ twitch = TwitchClient()
 
 # Setup db connection
 conn = psycopg2.connect(**credentials.postgres)
-cur = conn.cursor()
-
 
 def results_to_psql(tweets, viewers, chats, emotes, donators, donations):
     '''
@@ -40,6 +38,7 @@ def results_to_psql(tweets, viewers, chats, emotes, donators, donations):
     data = (utils.get_truncated_time(), viewers, tweets, chats, emotes,
             donators, donations)
     try:
+        cur = conn.cursor()
         cur.execute(SQL, data)
         conn.commit()
     except Exception as e:
@@ -59,6 +58,7 @@ def update_schedule_psql(sched):
         for entry in sched:
             data = (entry.title, entry.start_time, entry.duration,
                     entry.runner)
+            cur = conn.cursor()
             cur.execute(SQL, data)
         conn.commit()
     except Exception as e:
@@ -77,6 +77,7 @@ def save_tweets(tweets):
     tweets_formatted = [(t.id, t.created_at, t.text, t.user.name, t.user.id)
                         for t in tweets]
     try:
+        cur = conn.cursor()
         cur.execute(SQL, tweets_formatted)
         conn.commit()
     except Exception as e:
@@ -94,6 +95,7 @@ def save_chats(chats):
     chats_formatted = [(c['user'], c['created_at'], c['content'])
                        for c in chats]
     try:
+        cur = conn.cursor()
         cur.execute(SQL, chats_formatted)
         conn.commit()
     except Exception as e:
@@ -135,7 +137,9 @@ def refresh_tracker_donations():
            "ON CONFLICT DO NOTHING;")
     SQL_check = ("SELECT created_at "
                  "FROM gdq_donations "
-                 "ORDER BY created_at DESC LIMIT 1")
+                 "ORDER BY created_at DESC "
+                 "LIMIT 1;")
+    cur = conn.cursor()
     cur.execute(SQL_check)
     latest = cur.fetchone()[0]
     latest = latest.replace(tzinfo=pytz.UTC)
@@ -164,6 +168,7 @@ def refresh_tracker_donation_messages():
     SQL_update = ("UPDATE gdq_donations "
                   "SET comment=%s "
                   "WHERE donation_id=%s;")
+    cur = conn.cursor()
     cur.execute(SQL)
     for row in cur.fetchall():
         donation_id = row[0]

@@ -157,9 +157,9 @@ def refresh_top_donors():
     """
 
     cur.execute(SQL_frequent)
-    frequent = map(lambda x: dict(name=x[0], count=x[1]), cur.fetchall())
+    frequent = map(lambda x: dict(name=x[0], count=int(x[1])), cur.fetchall())
     cur.execute(SQL_generous)
-    generous = map(lambda x: dict(name=x[0], total=x[1]), cur.fetchall())
+    generous = map(lambda x: dict(name=x[0], total=int(x[1])), cur.fetchall())
 
     json_data = json.dumps(dict(frequent=frequent, generous=generous))
     s3.Bucket(BUCKET).put_object(Key='top_donors.json', Body=json_data)
