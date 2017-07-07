@@ -139,9 +139,9 @@ def refresh_tracker_donations():
     latest = cur.fetchone()[0]
     latest = latest.replace(tzinfo=pytz.UTC)
     for idx, donation in enumerate(tracker.scrape()):
-        # Every 25 donations, check to see if we can bail early
-        if idx % 25 == 0:
-                        (_, time, _, _, _) = donation
+        # Every 50 donations, check to see if we can bail early
+        if idx % 50 == 0:
+            (_, time, _, _, _) = donation
             if time < latest:
                 message = ('Returning early from scraping donation pages. '
                            'Found latest: {}, current donation is at {}.'

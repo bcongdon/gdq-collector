@@ -72,6 +72,41 @@ def refresh_kill_save():
     s3.Bucket(BUCKET).put_object(Key='chat_users.json', Body=data_json)
 
 
+def refresh_donation_stats():
+    SQL = ("SELECT has_comment, COUNT(*), sum(amount), "
+           "median(amount), avg(amount) "
+           "FROM gdq_donations GROUP BY has_comment "
+           "ORDER BY has_comment;")
+    SQL_median_timeseries = (
+        "SELECT "
+        "date_trunc('hour', created_at - interval '1 minute') as time,"
+        "median(amount)"
+        "FROM gdq_donations "
+        "WHERE created_at >= '2017-07-02' "
+        "GROUP BY date_trunc('hour', created_at - interval '1 minute') "
+        "ORDER BY time;"
+    )
+    cur.execute(SQL)
+    stats = cur.fetchall()
+    cur.execute(SQL_median_timeseries)
+    medians = cur.fetchall()
+
+    def stats_formatter(x):
+        return dict(has_comment=x[0],
+                    count=int(x[1]),
+                    sum=float(x[2]),
+                    median=float(x[3]),
+                    avg=float(x[4]))
+
+    def medians_formatter(x):
+        return dict(time=str(x[0]), median=float(x[1]))
+
+    stats_list = map(stats_formatter, stats)
+    medians_list = map(medians_formatter, medians)
+    data = json.dumps(dict(stats=stats_list, medians=medians_list))
+    s3.Bucket(BUCKET).put_object(Key='donation_stats.json', Body=data)
+
+
 def execute_safe(func):
     try:
         func()
@@ -100,9 +135,14 @@ def animals_handler(event, context):
     execute_safe(refresh_kill_save)
 
 
+def donation_stats_handler(event, context):
+    execute_safe(refresh_donation_stats)
+
+
 if __name__ == '__main__':
     BUCKET = 'storage.api.gdqstat.us'
     # refresh_timeseries()
     # refresh_schedule()
     # refresh_chat_words()
     # refresh_chat_users()
+    refresh_donation_stats()
