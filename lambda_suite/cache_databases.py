@@ -77,10 +77,19 @@ def refresh_donation_stats():
            "median(amount), avg(amount) "
            "FROM gdq_donations GROUP BY has_comment "
            "ORDER BY has_comment;")
+
     SQL_overall = """
         SELECT COUNT(*), sum(amount), median(amount), avg(amount)
         FROM gdq_donations;
     """
+
+    SQL_anonymous = """
+        SELECT (donor_id IS NULL) anonymous,
+            COUNT(*), SUM(amount), median(amount), avg(amount)
+        FROM gdq_donations GROUP BY anonymous
+        ORDER BY anonymous DESC;
+    """
+
     SQL_median_timeseries = (
         "SELECT "
         "date_trunc('hour', created_at - interval '1 minute') as time,"
@@ -90,15 +99,28 @@ def refresh_donation_stats():
         "GROUP BY date_trunc('hour', created_at - interval '1 minute') "
         "ORDER BY time;"
     )
+
     cur.execute(SQL)
     stats = cur.fetchall()
+
+    cur.execute(SQL_anonymous)
+    anonymous = cur.fetchall()
+
     cur.execute(SQL_overall)
     overall = cur.fetchall()
+
     cur.execute(SQL_median_timeseries)
     medians = cur.fetchall()
 
-    def stats_formatter(x):
+    def comment_formatter(x):
         return dict(has_comment=x[0],
+                    count=int(x[1]),
+                    sum=float(x[2]),
+                    median=float(x[3]),
+                    avg=float(x[4]))
+
+    def anonymous_formatter(x):
+        return dict(anonymous=x[0],
                     count=int(x[1]),
                     sum=float(x[2]),
                     median=float(x[3]),
@@ -113,12 +135,14 @@ def refresh_donation_stats():
                     median=float(x[2]),
                     avg=float(x[3]))
 
-    stats_list = map(stats_formatter, stats)
+    stats_list = map(comment_formatter, stats)
+    anonymous_list = map(anonymous_formatter, stats)
     medians_list = map(medians_formatter, medians)
     overall_list = map(overall_formatter, overall)
     data = json.dumps(dict(comment_stats=stats_list,
                            medians=medians_list,
-                           overall=overall_list))
+                           overall=overall_list,
+                           anonymous=anonymous_list))
     s3.Bucket(BUCKET).put_object(Key='donation_stats.json', Body=data)
 
 
