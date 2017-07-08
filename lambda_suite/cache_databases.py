@@ -67,7 +67,7 @@ def refresh_kill_save():
            "(SELECT * FROM gdq_animals ORDER BY time ASC) r;")
     cur.execute(SQL)
     data = cur.fetchall()
-    data_json = json.dumps(map(lambda x: dict(user=x[0], count=x[1]), data))
+    data_json = json.dumps(map(lambda x: x[0], data))
 
     s3.Bucket(BUCKET).put_object(Key='kill_save_animals.json', Body=data_json)
 
@@ -189,6 +189,51 @@ def refresh_top_donors():
     s3.Bucket(BUCKET).put_object(Key='top_donors.json', Body=json_data)
 
 
+def refresh_game_stats():
+    SQL = """
+    SELECT * FROM (
+        SELECT name,
+            (SELECT MAX(num_viewers)
+                FROM gdq_timeseries
+                WHERE time >= start_time
+                AND time <= (start_time + duration)) max_viewers,
+            (SELECT median(amount)
+                FROM gdq_donations
+                WHERE created_at >= start_time
+                AND created_at <= (start_time + duration)) median_donation,
+            (SELECT MAX(total_donations) - MIN(total_donations)
+                FROM gdq_timeseries
+                WHERE time >= start_time
+                AND time <= (start_time + duration)) donations,
+            (SELECT MAX(total_donations) - MIN(total_donations)
+                FROM gdq_timeseries WHERE time >= start_time
+                AND time <= (start_time + duration))
+                    / (EXTRACT(EPOCH FROM duration) / 60)
+                donations_per_min,
+            (SELECT SUM(num_chats)
+                FROM gdq_timeseries
+                WHERE time >= start_time
+                AND time <= (start_time + duration)) num_chats
+        FROM gdq_schedule
+        ) game_stats
+    WHERE max_viewers IS NOT NULL;
+    """
+    cur.execute(SQL)
+    games = cur.fetchall()
+
+    def games_formatter(x):
+        return dict(name=x[0],
+                    max_viewers=int(x[1]),
+                    median_donation=float(x[2]),
+                    total_donations=float(x[3]),
+                    donations_per_min=float(x[4]),
+                    num_chats=int(x[5]))
+
+    games_data = map(games_formatter, games)
+    json_data = json.dumps(games_data)
+    s3.Bucket(BUCKET).put_object(Key='games_stats.json', Body=json_data)
+
+
 def execute_safe(func):
     try:
         func()
@@ -229,12 +274,18 @@ def top_donors_handler(event, context):
     execute_safe(refresh_top_donors)
 
 
+def games_stats_handler(event, context):
+    execute_safe(refresh_game_stats)
+
+
 if __name__ == '__main__':
     BUCKET = 'storage.api.gdqstat.us'
     # refresh_timeseries()
     # refresh_schedule()
     # refresh_chat_words()
     # refresh_chat_users()
+    # refresh_kill_save()
     # refresh_donation_stats()
     # refresh_donation_words()
     # refresh_top_donors()
+    # refresh_game_stats()

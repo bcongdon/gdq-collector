@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
-from dateutil.parser import parse
-from datetime import timedelta
 import requests
-import json
 from bs4 import BeautifulSoup
 import logging
 import os
@@ -57,19 +54,3 @@ def refresh_kill_save_data():
         logger.error(e)
         conn.rollback()
         raise e
-
-
-def cache_kill_save_data():
-    # TODO
-    pass
-    # kill_save_json = json.dumps(kill_save_ts)
-    # s3.Bucket(BUCKET).put_object(Key='killVsSave.json', Body=kill_save_json)
-
-
-def refresh_kill_save_handler(event, context):
-    refresh_kill_save_data()
-
-
-if __name__ == '__main__':
-    BUCKET = 'storage.api.gdqstat.us'
-    # refresh_kill_save_data()
