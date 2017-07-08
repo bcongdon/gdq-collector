@@ -69,7 +69,7 @@ def refresh_kill_save():
     data = cur.fetchall()
     data_json = json.dumps(map(lambda x: dict(user=x[0], count=x[1]), data))
 
-    s3.Bucket(BUCKET).put_object(Key='chat_users.json', Body=data_json)
+    s3.Bucket(BUCKET).put_object(Key='kill_save_animals.json', Body=data_json)
 
 
 def refresh_donation_stats():
