@@ -38,7 +38,7 @@ class TrackerClient:
             donor_id = None
             name = None
             if name_el.find('a', href=True):
-                donor = name_el.find('a', href=True)['href'].split('/')[3]
+                donor_id = name_el.find('a', href=True)['href'].split('/')[3]
                 name = name_el.find('a', href=True).text.strip()
 
             time = parse(time_el.text)
