@@ -45,3 +45,37 @@ CREATE TABLE gdq_donations(
     has_comment BOOLEAN,
     comment TEXT
 );
+
+# Custom Aggregations
+
+# Median from https://wiki.postgresql.org/wiki/Aggregate_Median
+CREATE OR REPLACE FUNCTION _final_median(NUMERIC[])
+   RETURNS NUMERIC AS
+$$
+   SELECT AVG(val)
+   FROM (
+     SELECT val
+     FROM unnest($1) val
+     ORDER BY 1
+     LIMIT  2 - MOD(array_upper($1, 1), 2)
+     OFFSET CEIL(array_upper($1, 1) / 2.0) - 1
+   ) sub;
+$$
+LANGUAGE 'sql' IMMUTABLE;
+ 
+CREATE AGGREGATE median(NUMERIC) (
+  SFUNC=array_append,
+  STYPE=NUMERIC[],
+  FINALFUNC=_final_median,
+  INITCOND='{}'
+);
+
+# Custom search dictionary settings from https://stackoverflow.com/a/42063785/2421634
+CREATE TEXT SEARCH DICTIONARY simple_english
+   (TEMPLATE = pg_catalog.simple, STOPWORDS = english);
+
+CREATE TEXT SEARCH CONFIGURATION simple_english
+   (copy = english);
+ALTER TEXT SEARCH CONFIGURATION simple_english
+   ALTER MAPPING FOR asciihword, asciiword, hword, hword_asciipart, hword_part, word
+   WITH simple_english;
