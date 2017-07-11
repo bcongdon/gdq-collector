@@ -26,9 +26,7 @@
         "domain": "api.gdqstat.us",
         "environment_variables": {
             "S3_CACHE_BUCKET": "storage.api.gdqstat.us"
-        },
-        "cache_cluster_enabled": true,
-        "cache_cluster_ttl": 60
+        }
     },
     "cache_databases": {
         "extends": "dev",

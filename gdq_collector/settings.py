@@ -1,5 +1,17 @@
-twitter_tags = ['sgdq2017', 'gamesdonequick.com', 'sgdq', 'gamesdonequick',
+TWITTER_TAGS = ['sgdq2017', 'gamesdonequick.com', 'sgdq', 'gamesdonequick',
                 'awesome games done quick', 'games done quick', 'gdq']
-twitch_channel = 'gamesdonequick'
-twitch_host = "irc.twitch.tv"
-twitch_port = 6667
+TWITCH_CHANNEL = 'gamesdonequick'
+TWITCH_HOST = "irc.twitch.tv"
+TWITCH_PORT = 6667
+
+# Update this value to change the current event:
+EVENT_SHORTHAND = 'sgdq2017'
+
+# The following should stay pretty stable between events
+DONATION_URL = ('https://gamesdonequick.com/tracker/index/{}'
+                .format(EVENT_SHORTHAND))
+SCHEDULE_URL = 'https://gamesdonequick.com/schedule'
+DONATION_INDEX_URL = ('https://gamesdonequick.com/tracker/donations/{}'
+                      .format(EVENT_SHORTHAND))
+DONATION_DETAIL_URL = 'https://gamesdonequick.com/tracker/donation'
+DONOR_URL = 'https://gamesdonequick.com/tracker/donor'

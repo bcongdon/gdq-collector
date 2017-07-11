@@ -2,6 +2,7 @@ import requests
 import re
 from bs4 import BeautifulSoup
 from collections import namedtuple
+from settings import DONATION_INDEX_URL
 import logging
 logger = logging.getLogger(__name__)
 
@@ -17,12 +18,9 @@ class DonationClient:
     max_re = re.compile(r'\$(.+)/')
     avg_re = re.compile(r'/\$(.+)')
 
-    def __init__(self, donation_url):
-        self.url = donation_url
-
     def _get_page(self):
         ''' Explicit get_page function to allow mocking in tests '''
-        return requests.get(self.url).text
+        return requests.get(DONATION_INDEX_URL).text
 
     def scrape(self):
         '''
@@ -51,5 +49,5 @@ class DonationClient:
                               avg_donation=avg_don)
 
 if __name__ == '__main__':
-    print DonationClient('https://gamesdonequick.com/tracker/index/sgdq2017').scrape()
+    print DonationClient().scrape()
     print DonationResult()

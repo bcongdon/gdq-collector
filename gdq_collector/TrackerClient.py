@@ -3,6 +3,7 @@ import re
 from bs4 import BeautifulSoup
 from time import sleep
 from dateutil.parser import parse
+from settings import DONATION_INDEX_URL, DONATION_DETAIL_URL, DONOR_URL
 import logging
 logger = logging.getLogger(__name__)
 
@@ -13,18 +14,17 @@ class TrackerClient:
     max_re = re.compile(r'\$(.+)/')
     avg_re = re.compile(r'/\$(.+)')
 
-    def __init__(self, donation_url):
-        self.url = donation_url
-
     def _get_donation_page(self, page_num):
         ''' Explicit get_page function to allow mocking in tests '''
-        return requests.get(self.url + '?page={}'.format(page_num)).text
+        page_url = '{}/?page={}'.format(DONATION_INDEX_URL, page_num)
+        return requests.get(page_url).text
 
     def _get_donation(self, donation_id):
-        return requests.get('https://gamesdonequick.com/tracker/donation/{}'.format(donation_id)).text
+        donation_url = '{}/{}'.format(DONATION_DETAIL_URL, donation_id)
+        return requests.get(donation_url).text
 
     def _get_donor(self, donor_id):
-        return requests.get('https://gamesdonequick.com/tracker/donor/{}'.format(donor_id)).text
+        return requests.get('{}/{}'.format(DONOR_URL, donor_id)).text
 
     def _determine_page_num(self, soup):
         page_num = soup.find('form').find_all('label')[1].text.split(' ')[-1]

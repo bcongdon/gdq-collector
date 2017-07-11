@@ -18,14 +18,15 @@ import logging
 logger = logging.getLogger('gdq_collector')
 
 # Setup clients
-donations = DonationClient('https://gamesdonequick.com/tracker/index/sgdq2017')
-tracker = TrackerClient('https://gamesdonequick.com/tracker/donations/sgdq2017')
-schedule = ScheduleClient('https://gamesdonequick.com/schedule')
-twitter = TwitterClient(tags=settings.twitter_tags)
+donations = DonationClient()
+tracker = TrackerClient()
+schedule = ScheduleClient()
+twitter = TwitterClient(tags=settings.TWITTER_TAGS)
 twitch = TwitchClient()
 
 # Setup db connection
 conn = psycopg2.connect(**credentials.postgres)
+
 
 def results_to_psql(tweets, viewers, chats, emotes, donators, donations):
     '''

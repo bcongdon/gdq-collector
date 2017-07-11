@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from collections import namedtuple
 import json
+from settings import SCHEDULE_URL
 import logging
 logger = logging.getLogger(__name__)
 
@@ -11,8 +12,8 @@ ScheduleItem = namedtuple('ScheduleItem', ['title', 'duration', 'runner',
 
 
 class ScheduleClient:
-    def __init__(self, url):
-        self.url = url
+    def __init__(self):
+        self.url = SCHEDULE_URL
 
     def _get_page(self):
         try:

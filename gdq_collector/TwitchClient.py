@@ -20,11 +20,11 @@ class TwitchClient(irc.client.SimpleIRCClient):
         logger.info("Attempting to connect to IRC server.")
         self._emotes = self._get_emote_list()
         irc.client.SimpleIRCClient.connect(
-            self, settings.twitch_host, settings.twitch_port,
+            self, settings.TWITCH_HOST, settings.TWITCH_PORT,
             nickname=credentials.twitch['nick'],
             password=credentials.twitch['oauth'])
-        logger.info("Connected to IRC server: %s" % settings.twitch_host)
-        self.connection.join(self._to_irc_chan(settings.twitch_channel))
+        logger.info("Connected to IRC server: %s" % settings.TWITCH_HOST)
+        self.connection.join(self._to_irc_chan(settings.TWITCH_CHANNEL))
 
     def process(self):
         """
@@ -119,7 +119,7 @@ class TwitchClient(irc.client.SimpleIRCClient):
             "Client-ID": credentials.twitch['clientid'],
         }
         url = "https://api.twitch.tv/kraken/streams/"
-        url += self._get_channel_id(self._to_url_chan(settings.twitch_channel))
+        url += self._get_channel_id(self._to_url_chan(settings.TWITCH_CHANNEL))
         req = requests.get(url, headers=headers)
         res = req.json()
         if 'stream' in res and res['stream']:
