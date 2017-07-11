@@ -78,16 +78,5 @@
             }
         ],
         "apigateway_enabled": false
-    },
-    "animals": {
-        "extends": "base",
-        "debug": true,
-        "events": [
-            {
-                "function": "kill_save_animals.refresh_kill_save_handler",
-                "expression": "rate(1 minute)"
-            }
-        ],
-        "apigateway_enabled": false
     }
 }
