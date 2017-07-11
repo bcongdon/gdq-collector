@@ -33,9 +33,12 @@ def results_to_psql(tweets, viewers, chats, emotes, donators, donations):
     Takes results of refresh and inserts them into a new row in the
     timeseries database
     '''
-    SQL = ("INSERT into gdq_timeseries (time, num_viewers, num_tweets, "
-           "    num_chats, num_emotes, num_donations, total_donations) "
-           "VALUES (%s, %s, %s, %s, %s, %s, %s);")
+    SQL = '''
+        INSERT into gdq_timeseries (time, num_viewers, num_tweets,
+            num_chats, num_emotes, num_donations, total_donations)
+        VALUES (%s, %s, %s, %s, %s, %s, %s);
+    '''
+
     data = (utils.get_truncated_time(), viewers, tweets, chats, emotes,
             donators, donations)
     try:
@@ -49,11 +52,13 @@ def results_to_psql(tweets, viewers, chats, emotes, donators, donations):
 
 def update_schedule_psql(sched):
     ''' Inserts updated schedule into db '''
-    SQL = ("INSERT INTO gdq_schedule (name, start_time, duration, runners) "
-           "VALUES (%s, %s, %s, %s) "
-           "ON CONFLICT (name) DO UPDATE SET "
-           "(start_time, duration, runners) = "
-           "(excluded.start_time, excluded.duration, excluded.runners)")
+    SQL = '''
+        INSERT INTO gdq_schedule (name, start_time, duration, runners)
+        VALUES (%s, %s, %s, %s)
+        ON CONFLICT (name) DO UPDATE SET
+           (start_time, duration, runners) =
+           (excluded.start_time, excluded.duration, excluded.runners);
+    '''
 
     try:
         for entry in sched:
@@ -72,14 +77,17 @@ def save_tweets(tweets):
         return
 
     record_template = ','.join(['%s'] * len(tweets))
-    SQL = ("INSERT INTO gdq_tweets (id, created_at, content, "
-           "                        username, user_id) "
-           "VALUES {}".format(record_template))
+    SQL = '''
+        INSERT INTO gdq_tweets
+            (id, created_at, content, username, user_id)
+        VALUES {}
+    '''
+
     tweets_formatted = [(t.id, t.created_at, t.text, t.user.name, t.user.id)
                         for t in tweets]
     try:
         cur = conn.cursor()
-        cur.execute(SQL, tweets_formatted)
+        cur.execute(SQL.format(record_template), tweets_formatted)
         conn.commit()
     except Exception as e:
         conn.rollback()
@@ -91,13 +99,16 @@ def save_chats(chats):
         return
 
     record_template = ','.join(['%s'] * len(chats))
-    SQL = ("INSERT INTO gdq_chats (username, created_at, content) "
-           "VALUES {}".format(record_template))
+    SQL = '''
+        INSERT INTO gdq_chats (username, created_at, content)
+        VALUES {}
+    '''
+
     chats_formatted = [(c['user'], c['created_at'], c['content'])
                        for c in chats]
     try:
         cur = conn.cursor()
-        cur.execute(SQL, chats_formatted)
+        cur.execute(SQL.format(record_template), chats_formatted)
         conn.commit()
     except Exception as e:
         conn.rollback()
@@ -131,15 +142,20 @@ def refresh_schedule():
 
 
 def refresh_tracker_donations():
-    SQL = ("INSERT INTO gdq_donations "
-           "  (donor_id, created_at, amount, donation_id, "
-           "   has_comment, donor_name) "
-           "VALUES (%s, %s, %s, %s, %s, %s) "
-           "ON CONFLICT DO NOTHING;")
-    SQL_check = ("SELECT created_at "
-                 "FROM gdq_donations "
-                 "ORDER BY created_at DESC "
-                 "LIMIT 1;")
+    SQL = '''
+        INSERT INTO gdq_donations
+           (donor_id, created_at, amount, donation_id, has_comment, donor_name)
+        VALUES (%s, %s, %s, %s, %s, %s)
+        ON CONFLICT DO NOTHING;
+    '''
+
+    SQL_check = '''
+        SELECT created_at
+        FROM gdq_donations
+        ORDER BY created_at DESC
+        LIMIT 1;
+    '''
+
     cur = conn.cursor()
     cur.execute(SQL_check)
     latest = cur.fetchone()[0]
@@ -163,12 +179,18 @@ def refresh_tracker_donations():
 
 
 def refresh_tracker_donation_messages():
-    SQL = ("SELECT donation_id "
-           "FROM gdq_donations "
-           "WHERE has_comment=True AND comment IS NULL;")
-    SQL_update = ("UPDATE gdq_donations "
-                  "SET comment=%s "
-                  "WHERE donation_id=%s;")
+    SQL = '''
+        SELECT donation_id
+        FROM gdq_donations
+        WHERE has_comment=True AND comment IS NULL;
+    '''
+
+    SQL_update = '''
+        UPDATE gdq_donations
+        SET comment=%s
+        WHERE donation_id=%s;
+    '''
+
     cur = conn.cursor()
     cur.execute(SQL)
     for row in cur.fetchall():
