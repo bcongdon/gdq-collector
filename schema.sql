@@ -9,10 +9,13 @@ CREATE TABLE gdq_timeseries(
 );
 
 CREATE TABLE gdq_schedule(
-    name TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    category TEXT NOT NULL,
     start_time TIMESTAMP, 
     duration INTERVAL,
-    runners TEXT
+    runners TEXT,
+    id SERIAL,
+    PRIMARY KEY(name, category)
 );
 
 CREATE TABLE gdq_tweets(
@@ -46,9 +49,10 @@ CREATE TABLE gdq_donations(
     comment TEXT
 );
 
-# Custom Aggregations
+/* Custom Aggregations 
+ * Median from https://wiki.postgresql.org/wiki/Aggregate_Median
+ * */
 
-# Median from https://wiki.postgresql.org/wiki/Aggregate_Median
 CREATE OR REPLACE FUNCTION _final_median(NUMERIC[])
    RETURNS NUMERIC AS
 $$
@@ -70,7 +74,7 @@ CREATE AGGREGATE median(NUMERIC) (
   INITCOND='{}'
 );
 
-# Custom search dictionary settings from https://stackoverflow.com/a/42063785/2421634
+/* Custom search dictionary settings from https://stackoverflow.com/a/42063785/2421634 */
 CREATE TEXT SEARCH DICTIONARY simple_english
    (TEMPLATE = pg_catalog.simple, STOPWORDS = english);
 

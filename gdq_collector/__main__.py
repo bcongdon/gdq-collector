@@ -52,20 +52,33 @@ def results_to_psql(tweets, viewers, chats, emotes, donators, donations):
 
 def update_schedule_psql(sched):
     ''' Inserts updated schedule into db '''
-    SQL = '''
-        INSERT INTO gdq_schedule (name, start_time, duration, runners)
-        VALUES (%s, %s, %s, %s)
-        ON CONFLICT (name) DO UPDATE SET
+    SQL_upsert = '''
+        INSERT INTO gdq_schedule
+            (name, start_time, duration, runners, category)
+        VALUES (%s, %s, %s, %s, %s)
+        ON CONFLICT (name, category) DO UPDATE SET
            (start_time, duration, runners) =
-           (excluded.start_time, excluded.duration, excluded.runners);
+           (excluded.start_time, excluded.duration, excluded.runners)
+        RETURNING id;
+    '''
+
+    SQL_drop_old = '''
+        DELETE FROM gdq_schedule
+        WHERE NOT (id = ANY (%s));
     '''
 
     try:
+        game_ids = []
         for entry in sched:
             data = (entry.title, entry.start_time, entry.duration,
-                    entry.runner)
+                    entry.runner, entry.category)
             cur = conn.cursor()
-            cur.execute(SQL, data)
+            cur.execute(SQL_upsert, data)
+            game = cur.fetchone()
+            # Append returned game id
+            game_ids.append(game[0])
+        # Drop games that weren't created or updated
+        cur.execute(SQL_drop_old, (game_ids,))
         conn.commit()
     except Exception as e:
         conn.rollback()

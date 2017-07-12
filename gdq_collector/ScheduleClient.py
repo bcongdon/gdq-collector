@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 
 ScheduleItem = namedtuple('ScheduleItem', ['title', 'duration', 'runner',
-                          'start_time'])
+                          'start_time', 'category'])
 
 
 class ScheduleClient:
@@ -32,28 +32,25 @@ class ScheduleClient:
             duration = 0
             if second_row:
                 duration = second_row.findNext('td').text.strip()
+                category = second_row.find_all('td')[1].text.strip()
             runner_text = row.find('td', attrs={'rowspan': 2})
             runner = runner_text.text.strip() if runner_text else ""
             start_time_text = row.find('td', attrs={'class': "start-time"})
             start_time = start_time_text.text if start_time_text else ""
-            game = {
-                'title': row.find('td', attrs={'class': None}).text,
-                'duration': duration,
-                'runner': runner,
-                'start_time': start_time,
-            }
+            title = row.find('td', attrs={'class': None}).text
+            game = ScheduleItem(title=title,
+                                duration=duration,
+                                runner=runner,
+                                start_time=start_time,
+                                category=category)
             games.append(game)
         blacklist = ['Pre-Show', 'Setup Block', 'Finale']
         games = [x for x in games if
-                 not any(x['title'].lower().startswith(b.lower())
+                 not any(x.title.lower().startswith(b.lower())
                          for b in blacklist)]
-
         logger.info("Successfully scraped schedule")
+        return games
 
-        return [ScheduleItem(title=x['title'],
-                             duration=x['duration'],
-                             runner=x['runner'],
-                             start_time=x['start_time']) for x in games]
 
     def scrape_to_json(self):
         res = self.scrape()
