@@ -51,7 +51,6 @@ class ScheduleClient:
         logger.info("Successfully scraped schedule")
         return games
 
-
     def scrape_to_json(self):
         res = self.scrape()
         return json.dumps([dict(x._asdict()) for x in res])

@@ -134,4 +134,4 @@ class TwitchClient(irc.client.SimpleIRCClient):
 
 if __name__ == '__main__':
     t = TwitchClient()
-    print t.get_num_viewers()
+    print(t.get_num_viewers())

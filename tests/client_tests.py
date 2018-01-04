@@ -41,7 +41,6 @@ class TwitterClientTests(TestCase):
         assert c.num_tweets() == 1
         assert c.num_tweets() == 0
 
-
     def test_needs_auth(self):
         c = TwitterClient()
         with self.assertRaises(RuntimeError):

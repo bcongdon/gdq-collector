@@ -48,6 +48,7 @@ class DonationClient:
                               max_donation=max_don,
                               avg_donation=avg_don)
 
+
 if __name__ == '__main__':
-    print DonationClient().scrape()
-    print DonationResult()
+    print(DonationClient().scrape())
+    print(DonationResult())

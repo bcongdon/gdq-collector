@@ -11,15 +11,18 @@ class HashtagStreamListener(tweepy.StreamListener):
         tweepy.StreamListener.__init__(self)
 
     def on_status(self, status):
-        logger.debug("Received tweet: %s" % status.text)
+        logger.debug("Received tweet: {}".format(status.text))
         self.handler._increment_tweet_counter()
         self.handler._save_tweet(status)
 
     def on_error(self, status_code):
-        logger.warn("Error with status code: %s" % status_code)
+        logger.warn("Error with status code: {}".format(status_code))
 
     def on_connect(self):
         logger.info("Connected to stream.")
+
+    def on_exception(self, e):
+        logger.error("Unhandled exception: {}".format(e))
 
 
 class TwitterClient:
@@ -42,13 +45,14 @@ class TwitterClient:
         counter
         '''
         t = self.curr_tweets
-        logger.info("Reporting received %s tweets." % t)
+        logger.info("Reporting received {} tweets.".format(t))
         self.curr_tweets = 0
         return t
 
     def get_tweets(self):
         '''
-        Returns list of saved tweets
+        Returns list of buffered tweets
+        Resets buffer after returning result
         '''
         t = self.tweets
         self.tweets = []

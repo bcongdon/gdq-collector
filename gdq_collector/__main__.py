@@ -219,6 +219,7 @@ def refresh_tracker_donation_messages():
             conn.rollback()
             logger.error(e)
 
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description="Startup the GDQStatus Collection Service")
