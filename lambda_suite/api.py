@@ -41,5 +41,6 @@ def most_recent():
     data = cur.fetchall()
     return jsonify(minify(map(lambda x: x[0], data)))
 
+
 if __name__ == '__main__':
     app.run()
