@@ -1,11 +1,9 @@
-from DonationClient import DonationClient, DonationResult
-from ScheduleClient import ScheduleClient
-from TwitterClient import TwitterClient
-from TwitchClient import TwitchClient
-from TrackerClient import TrackerClient
-import settings
-import utils
-import credentials
+from .DonationClient import DonationClient, DonationResult
+from .ScheduleClient import ScheduleClient
+from .TwitterClient import TwitterClient
+from .TwitchClient import TwitchClient
+from .TrackerClient import TrackerClient
+from . import utils, credentials, settings
 from apscheduler.schedulers.background import BackgroundScheduler
 import psycopg2
 import os

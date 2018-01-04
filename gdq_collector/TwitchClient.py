@@ -1,5 +1,4 @@
-import credentials
-import settings
+from . import settings, credentials
 import irc.client
 import requests
 import logging

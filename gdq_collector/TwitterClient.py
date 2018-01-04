@@ -1,5 +1,5 @@
 import tweepy
-from credentials import twitter
+from .credentials import twitter
 import logging
 logger = logging.getLogger(__name__)
 MAX_TWEETS_SAVED = 10000

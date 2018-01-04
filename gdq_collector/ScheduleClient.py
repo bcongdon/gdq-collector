@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from collections import namedtuple
 import json
-from settings import SCHEDULE_URL
+from .settings import SCHEDULE_URL
 import logging
 logger = logging.getLogger(__name__)
 

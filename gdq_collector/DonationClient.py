@@ -2,7 +2,7 @@ import requests
 import re
 from bs4 import BeautifulSoup
 from collections import namedtuple
-from settings import DONATION_INDEX_URL
+from .settings import DONATION_INDEX_URL
 import logging
 logger = logging.getLogger(__name__)
 

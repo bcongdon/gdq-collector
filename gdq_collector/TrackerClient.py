@@ -3,7 +3,7 @@ import re
 from bs4 import BeautifulSoup
 from time import sleep
 from dateutil.parser import parse
-from settings import DONATION_INDEX_URL, DONATION_DETAIL_URL, DONOR_URL
+from .settings import DONATION_INDEX_URL, DONATION_DETAIL_URL, DONOR_URL
 import logging
 logger = logging.getLogger(__name__)
 
