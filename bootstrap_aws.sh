@@ -2,8 +2,8 @@
 # NOTE: Do not run this as a script. Meant to be more an "operator's guide"
 
 # Install packages
-sudo apt-get update && sudo apt-get upgrade -y
-sudo apt-get install git postgresql postgresql-contrib libpq-dev build-essential python-pip awscli unzip libwww-perl libdatetime-perl -y
+sudo apt-get update -y && sudo apt-get upgrade -y
+sudo apt-get install git postgresql postgresql-contrib libpq-dev build-essential python3-pip awscli unzip libwww-perl libdatetime-perl -y
 
 # Setup postgres
 sudo service postgresql start
@@ -24,12 +24,9 @@ exit
 sudo /etc/init.d/postgresql restart
 
 # Setup gdqstatus user
-sudo useradd gdqstatus
+sudo useradd -m gdqstatus
 sudo usermod -aG sudo gdqstatus
 sudo passwd gdqstatus
-sudo mkdir /home/gdqstatus
-sudo chown -R gdqstatus /home/gdqstatus
-sudo cp ~/.bashrc /home/gdqstatus
 
 # Setup gdqstatus database
 sudo su - gdqstatus
@@ -39,8 +36,15 @@ createdb gdqstatus -U gdqstatus
 git clone https://github.com/bcongdon/gdq-collector
 cd gdq-collector
 
+
+# Setup pip to work in low-memory environment
+mkdir -p ~/.config/pip
+echo -e "[global]\nno-cache-dir = true" > ~/.config/pip/pip.conf
+
 # Install dependencies
-pip install -r requirements.txt --user --no-cache-dir
+pip3 install pipenv
+pipenv --three
+pipenv install
 mv gdq_collector/credentials_template.py gdq_collector/credentials.py
 
 # Setup postgres tables
@@ -50,6 +54,7 @@ psql < schema.sql
 aws configure
 
 # Setup EC2 CloudWatch metrics for memory / disk space
+cd ~
 curl http://aws-cloudwatch.s3.amazonaws.com/downloads/CloudWatchMonitoringScripts-1.2.1.zip -O
 unzip CloudWatchMonitoringScripts-1.2.1.zip
 rm CloudWatchMonitoringScripts-1.2.1.zip
