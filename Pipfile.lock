@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "7d60a7b15f3fe6911d9a1847239f2389c6cdac2986aee053b549820f89562f52"
+            "sha256": "990c05f57ed979ec34197990e41e6b15f914afc69726c90e775699d6d7ff4f4b"
         },
         "host-environment-markers": {
             "implementation_name": "cpython",
@@ -195,10 +195,10 @@
         },
         "jaraco.logging": {
             "hashes": [
-                "sha256:2bba4e361d17e99253398d7dc7385adb50db94b4d20ee3d99bcf78964ddf350d",
-                "sha256:05c8922640cd22e7c6cb71068ef494a227b61ae8a0cd43b28ab1fa08ef4f7cd3"
+                "sha256:2223de2f518db1b3945004b443f72670b4eb844479c6f493f1a7bee791cb386e",
+                "sha256:e4eac879927ecb2065c0631d2c8bb36c16138c5085c57db055bdfee2fdb709a8"
             ],
-            "version": "==1.5"
+            "version": "==1.5.1"
         },
         "jaraco.stream": {
             "hashes": [

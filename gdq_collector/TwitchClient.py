@@ -2,6 +2,7 @@ from . import settings, credentials
 import irc.client
 import requests
 import logging
+from time import sleep
 from datetime import datetime
 logger = logging.getLogger(__name__)
 MAX_CHATS_SAVED = 10000
@@ -13,11 +14,21 @@ class TwitchClient(irc.client.SimpleIRCClient):
         self._emote_count = 0
         self._channel_id = None
         self._chats = []
+        self._exponential_backoff = 0
         irc.client.SimpleIRCClient.__init__(self)
 
     def connect(self):
-        logger.info("Attempting to connect to IRC server.")
+        if self._exponential_backoff > 0:
+            logger.info("Backing off on IRC join for {} sec".format(
+                        self._exponential_backoff))
+            sleep(self._exponential_backoff)
+            self._exponential_backoff *= 2
+        else:
+            self._exponential_backoff = 1
+
         self._emotes = self._get_emote_list()
+
+        logger.info("Attempting to connect to IRC server.")
         irc.client.SimpleIRCClient.connect(
             self, settings.TWITCH_HOST, settings.TWITCH_PORT,
             nickname=credentials.twitch['nick'],
@@ -55,6 +66,7 @@ class TwitchClient(irc.client.SimpleIRCClient):
         return self._channel_id
 
     def _get_emote_list(self):
+        logger.info("Fetching emote list")
         headers = {
             "Accept": "application/vnd.twitchtv.v5+json",
             "Client-ID": credentials.twitch['clientid'],
@@ -74,6 +86,9 @@ class TwitchClient(irc.client.SimpleIRCClient):
 
     def on_join(self, c, e):
         logger.info("Joined channel: %s" % e.target)
+
+        # Reset exponential backoff on successful join
+        self._exponential_backoff = 0
 
     def get_message_count(self):
         t = self._message_count

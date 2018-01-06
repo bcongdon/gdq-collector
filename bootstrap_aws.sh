@@ -4,6 +4,7 @@
 # Install packages
 sudo apt-get update -y && sudo apt-get upgrade -y
 sudo apt-get install git postgresql postgresql-contrib libpq-dev build-essential python3-pip awscli unzip libwww-perl libdatetime-perl -y
+sudo pip3 install pipenv
 
 # Setup postgres
 sudo service postgresql start
@@ -13,11 +14,9 @@ sudo su - postgres
 # Setup gdq postgres:
 createuser gdqstatus --createdb --password
 
-# Need to change ident -> md5
-# Need to add line 'local all postgres peer' to top of file
-vim /etc/postgresql/9.5/main/pg_hba.conf
-
-# Need to set "listen_addresses = '*'"
+# Add the following lines:
+#   local all gdqstatus md5
+#   host all gdqstatus 0.0.0.0/0 md5
 vim /etc/postgresql/9.5/main/postgresql.conf
 
 exit
@@ -42,7 +41,6 @@ mkdir -p ~/.config/pip
 echo -e "[global]\nno-cache-dir = true" > ~/.config/pip/pip.conf
 
 # Install dependencies
-pip3 install pipenv
 pipenv --three
 pipenv install
 mv gdq_collector/credentials_template.py gdq_collector/credentials.py

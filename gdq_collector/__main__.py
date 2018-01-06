@@ -8,6 +8,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 import psycopg2
 import os
 import argparse
+from datetime import MINYEAR
 from datetime import datetime
 import watchtower
 from time import sleep
@@ -169,16 +170,17 @@ def refresh_tracker_donations():
 
     cur = conn.cursor()
     cur.execute(SQL_check)
-    latest = cur.fetchone()[0]
-    latest = latest.replace(tzinfo=pytz.UTC)
+    latest_row = cur.fetchone()
+    latest_time = latest_row[0] if latest_row else datetime(MINYEAR, 1, 1)
+    latest_time = latest_time.replace(tzinfo=pytz.UTC)
     for idx, donation in enumerate(tracker.scrape()):
         # Every 50 donations, check to see if we can bail early
         if idx % 50 == 0:
             (_, time, _, _, _, _) = donation
-            if time < latest:
+            if time < latest_time:
                 message = ('Returning early from scraping donation pages. '
                            'Found latest: {}, current donation is at {}.'
-                           .format(latest, time))
+                           .format(latest_time, time))
                 logger.info(message)
                 return
         try:
@@ -223,7 +225,7 @@ if __name__ == '__main__':
         description="Startup the GDQStatus Collection Service")
     parser.add_argument(
         '--notwitter', action='store_true', default=False,
-        help='Disable Twitter (to avoid rate limiting while debugging')
+        help='Disable Twitter (to avoid rate limiting while debugging)')
     parser.add_argument(
         '--nodonations', action='store_true', default=False,
         help='Disable scraping donations')
