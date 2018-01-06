@@ -16,7 +16,7 @@ class TrackerClient:
 
     def _get_donation_page(self, page_num):
         ''' Explicit get_page function to allow mocking in tests '''
-        page_url = '{}/?page={}'.format(DONATION_INDEX_URL, page_num)
+        page_url = '{}?page={}'.format(DONATION_INDEX_URL, page_num)
         return requests.get(page_url).text
 
     def _get_donation(self, donation_id):
@@ -86,6 +86,6 @@ class TrackerClient:
 
 
 # if __name__ == '__main__':
-#     print(list(TrackerClient('https://gamesdonequick.com/tracker/donations/sgdq2017').scrape()))
-#     print(TrackerClient('').get_donor_name(847))
-#     print(TrackerClient('https://gamesdonequick.com/tracker/donation/').scrape_donation_message(358572))
+#     print(list(TrackerClient().scrape()))
+#     print(TrackerClient().get_donor_name(847))
+#     print(TrackerClient().scrape_donation_message(358572))
