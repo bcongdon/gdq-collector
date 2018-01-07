@@ -36,13 +36,21 @@
         "extends": "base",
         "events": [
             {
+                "function": "cache_databases.timeseries_handler",
+                "expression": "rate(5 minutes)"
+            },
+            // {
+            //     "function": "cache_databases.animals_handler",
+            //     "expression": "rate(5 minutes)"
+            // },
+            {
                 "function": "cache_databases.schedule_handler",
                 "expression": "rate(10 minutes)"
             },
             {
-                "function": "cache_databases.timeseries_handler",
-                "expression": "rate(5 minutes)"
-            },
+                "function": "cache_databases.games_stats_handler",
+                "expression": "rate(30 minutes)"
+            }
             {
                 "function": "cache_databases.chat_words_handler",
                 "expression": "rate(30 minutes)"
@@ -50,10 +58,6 @@
             {
                 "function": "cache_databases.chat_users_handler",
                 "expression": "rate(30 minutes)"
-            },
-            {
-                "function": "cache_databases.animals_handler",
-                "expression": "rate(5 minutes)"
             },
             {
                 "function": "cache_databases.donation_stats_handler",
