@@ -16,7 +16,23 @@ conn.set_session(readonly=True)
 cur = conn.cursor()
 
 
+def rollback_on_exception(func):
+    def executor(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except Exception as e:
+            logger.error(e)
+            conn.rollback()
+    return executor
+
+
+@rollback_on_exception
 def refresh_timeseries():
+    '''
+    Refreshes timeseries data S3 cache for use with the main graph
+    (i.e. viewers, chats, emotes, total donation number/amount)
+    '''
+
     SQL = '''
         SELECT row_to_json(r) r FROM
         (SELECT * FROM gdq_timeseries ORDER BY time ASC) r;
@@ -24,12 +40,18 @@ def refresh_timeseries():
 
     cur.execute(SQL)
     data = cur.fetchall()
-    data_json = json.dumps(minify(map(lambda x: x[0], data)))
+    data_json = json.dumps(minify([x[0] for x in data]))
 
     s3.Bucket(BUCKET).put_object(Key='latest.json', Body=data_json)
+    return data_json
 
 
+@rollback_on_exception
 def refresh_schedule():
+    '''
+    Refreshes livestream game schedule S3 cache
+    '''
+
     SQL = '''
         SELECT row_to_json(r) FROM
         (SELECT * FROM gdq_schedule ORDER BY start_time ASC) r;
@@ -37,12 +59,19 @@ def refresh_schedule():
 
     cur.execute(SQL)
     data = cur.fetchall()
-    data_json = json.dumps(map(lambda x: x[0], data))
+    data_json = json.dumps([x[0] for x in data])
 
     s3.Bucket(BUCKET).put_object(Key='schedule.json', Body=data_json)
+    return data_json
 
 
+@rollback_on_exception
 def refresh_chat_words():
+    '''
+    Refreshes the S3 cache of words used in chat
+    Lists the top 50 used "words" in chat by frequency
+    '''
+
     SQL = '''
         SELECT COUNT(*) c, unnest(regexp_matches(content, '\w+')) word
         FROM gdq_chats
@@ -53,12 +82,19 @@ def refresh_chat_words():
 
     cur.execute(SQL)
     data = cur.fetchall()
-    data_json = json.dumps(map(lambda x: dict(count=x[0], word=x[1]), data))
+    data_json = json.dumps([dict(count=x[0], word=x[1]) for x in data])
 
     s3.Bucket(BUCKET).put_object(Key='chat_words.json', Body=data_json)
+    return data_json
 
 
+@rollback_on_exception
 def refresh_chat_users():
+    '''
+    Refreshes the S3 cache of Twitch chat users
+    Lists the top 50 most prolific chat users by message frequency
+    '''
+
     SQL = '''
         SELECT username, COUNT(*) chat_count
         FROM gdq_chats
@@ -69,11 +105,13 @@ def refresh_chat_users():
 
     cur.execute(SQL)
     data = cur.fetchall()
-    data_json = json.dumps(map(lambda x: dict(user=x[0], count=x[1]), data))
+    data_json = json.dumps([dict(user=x[0], count=x[1]) for x in data])
 
     s3.Bucket(BUCKET).put_object(Key='chat_users.json', Body=data_json)
+    return data_json
 
 
+@rollback_on_exception
 def refresh_kill_save():
     SQL = '''
         SELECT row_to_json(r) FROM
@@ -82,11 +120,12 @@ def refresh_kill_save():
 
     cur.execute(SQL)
     data = cur.fetchall()
-    data_json = json.dumps(map(lambda x: x[0], data))
+    data_json = json.dumps(minify([x[0] for x in data]))
 
     s3.Bucket(BUCKET).put_object(Key='kill_save_animals.json', Body=data_json)
 
 
+@rollback_on_exception
 def refresh_donation_stats():
     SQL = '''
         SELECT has_comment, COUNT(*), sum(amount),
@@ -151,17 +190,19 @@ def refresh_donation_stats():
                     median=float(x[2]),
                     avg=float(x[3]))
 
-    stats_list = map(comment_formatter, stats)
-    anonymous_list = map(anonymous_formatter, anonymous)
-    medians_list = map(medians_formatter, medians)
-    overall_list = map(overall_formatter, overall)
+    stats_list = [comment_formatter(x) for x in stats]
+    anonymous_list = [anonymous_formatter(x) for x in anonymous]
+    medians_list = [medians_formatter(x) for x in medians]
+    overall_list = [overall_formatter(x) for x in overall]
     data = json.dumps(dict(comment_stats=stats_list,
                            medians=medians_list,
                            overall=overall_list,
                            anonymous=anonymous_list))
     s3.Bucket(BUCKET).put_object(Key='donation_stats.json', Body=data)
+    return data
 
 
+@rollback_on_exception
 def refresh_donation_words():
     SQL = '''
         SELECT word, nentry AS entries FROM
@@ -175,10 +216,11 @@ def refresh_donation_words():
     '''
     cur.execute(SQL)
     words = cur.fetchall()
-    json_data = json.dumps(map(lambda x: dict(word=x[0], entries=x[1]), words))
+    json_data = json.dumps([dict(word=x[0], entries=x[1]) for x in words])
     s3.Bucket(BUCKET).put_object(Key='donation_words.json', Body=json_data)
 
 
+@rollback_on_exception
 def refresh_top_donors():
     SQL_frequent = '''
         SELECT donor_name, COUNT(*) count
@@ -197,14 +239,17 @@ def refresh_top_donors():
     '''
 
     cur.execute(SQL_frequent)
-    frequent = map(lambda x: dict(name=x[0], count=int(x[1])), cur.fetchall())
+    frequent = [dict(name=x[0], count=int(x[1])) for x in cur.fetchall()]
+
     cur.execute(SQL_generous)
-    generous = map(lambda x: dict(name=x[0], total=int(x[1])), cur.fetchall())
+    generous = [dict(name=x[0], total=int(x[1])) for x in cur.fetchall()]
 
     json_data = json.dumps(dict(frequent=frequent, generous=generous))
     s3.Bucket(BUCKET).put_object(Key='top_donors.json', Body=json_data)
+    return json_data
 
 
+@rollback_on_exception
 def refresh_game_stats():
     SQL = '''
         SELECT * FROM (
@@ -245,53 +290,46 @@ def refresh_game_stats():
                     donations_per_min=float(x[4]),
                     num_chats=int(x[5]))
 
-    games_data = map(games_formatter, games)
+    games_data = [games_formatter(x) for x in games]
     json_data = json.dumps(games_data)
     s3.Bucket(BUCKET).put_object(Key='games_stats.json', Body=json_data)
-
-
-def execute_safe(func):
-    try:
-        func()
-    except Exception as e:
-        logger.error(e)
-        conn.rollback()
+    return json_data
 
 
 def chat_users_handler(event, context):
-    execute_safe(refresh_chat_users)
+    return refresh_chat_users()
 
 
 def chat_words_handler(event, context):
-    execute_safe(refresh_chat_words)
+    return refresh_chat_words()
 
 
 def schedule_handler(event, context):
-    execute_safe(refresh_schedule)
+    return refresh_schedule()
 
 
 def timeseries_handler(event, context):
-    execute_safe(refresh_timeseries)
+    return refresh_timeseries()
 
 
 def animals_handler(event, context):
-    execute_safe(refresh_kill_save)
+    return refresh_kill_save()
 
 
 def donation_stats_handler(event, context):
-    execute_safe(refresh_donation_stats)
+    return refresh_donation_stats()
 
 
 def donation_words_handler(event, context):
-    execute_safe(refresh_donation_words)
+    return refresh_donation_words()
 
 
 def top_donors_handler(event, context):
-    execute_safe(refresh_top_donors)
+    return refresh_top_donors()
 
 
 def games_stats_handler(event, context):
-    execute_safe(refresh_game_stats)
+    return refresh_game_stats()
 
 
 if __name__ == '__main__':

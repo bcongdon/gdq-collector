@@ -1,11 +1,15 @@
 {
     "base": {
-        "s3_bucket": "gdqstatus-zappa-deployments",
+        "project_name": "gdqstatus",
         "aws_region": "us-east-1",
         "vpc_config": {
             "SubnetIds": ["subnet-af33aef4", "subnet-ce20bae3"],
             "SecurityGroupIds": ["sg-838683fe"]
-        }
+        },
+        "tags": {
+            "project": "gdqstatus"
+        },
+        "runtime": "python3.6"
     },
     "dev": {
         "extends": "base",
@@ -21,15 +25,15 @@
         "extends": "dev",
         "app_function": "api.app", 
         "s3_bucket": "gdqstatus-zappa-deployments",
-        "domain": "api.gdqstat.us",
         "certificate_arn": "arn:aws:acm:us-east-1:847166266056:certificate/e8aa2a0d-8595-43bf-a86b-dd603c5a8c1f",
         "domain": "api.gdqstat.us",
+        "debug": false,
         "environment_variables": {
             "S3_CACHE_BUCKET": "storage.api.gdqstat.us"
         }
     },
     "cache_databases": {
-        "extends": "dev",
+        "extends": "base",
         "events": [
             {
                 "function": "cache_databases.schedule_handler",
@@ -67,6 +71,8 @@
         "environment_variables": {
             "S3_CACHE_BUCKET": "storage.api.gdqstat.us"
         },
+        "s3_bucket": "gdqstatus-zappa-deployments",
+        "debug": false,
         "apigateway_enabled": false
     },
     "monitoring": {

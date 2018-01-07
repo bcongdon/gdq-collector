@@ -42,5 +42,10 @@ def most_recent():
     return jsonify(minify(map(lambda x: x[0], data)))
 
 
+@app.route('/')
+def index():
+    return 'Hello there!'
+
+
 if __name__ == '__main__':
     app.run()

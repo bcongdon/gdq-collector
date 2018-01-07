@@ -1,3 +1,5 @@
+import six
+
 minify_keys = {
     'num_emotes': 'e',
     'total_donations': 'm',
@@ -10,7 +12,7 @@ minify_keys = {
 
 
 def minify(rows):
-    return [{minify_keys[k]: v for k, v in i.iteritems()} for i in rows]
+    return [{minify_keys[k]: v for k, v in six.iteritems(i)} for i in rows]
 
 
 if __name__ == '__main__':
