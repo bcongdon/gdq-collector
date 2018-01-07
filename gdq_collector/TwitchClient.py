@@ -5,7 +5,8 @@ import logging
 from time import sleep
 from datetime import datetime
 logger = logging.getLogger(__name__)
-MAX_CHATS_SAVED = 10000
+MAX_CHATS_SAVED = 100000
+CHAT_ENDPOINT = "https://api.twitch.tv/kraken/chat/emoticon_images"
 
 
 class TwitchClient(irc.client.SimpleIRCClient):
@@ -71,12 +72,21 @@ class TwitchClient(irc.client.SimpleIRCClient):
             "Accept": "application/vnd.twitchtv.v5+json",
             "Client-ID": credentials.twitch['clientid'],
         }
-        r = requests.get("https://api.twitch.tv/kraken/chat/emoticon_images",
-                         headers=headers)
-        r_data = r.json()
+
+        # Pull emote list from twitch
+        try:
+            r = requests.get(CHAT_ENDPOINT, headers=headers)
+            r_data = r.json()
+        except Exception as e:
+            logger.error(
+                "Unable to download emoji list for Twitch: {}".format(e)
+            )
+            return []
+
+        # Parse emotes out of the emote list
         if 'emoticons' in r_data:
             logger.info("Downloaded emoticon list successfully.")
-            return set(map(lambda x: x['code'], r_data['emoticons']))
+            return set([x['code'] for x in r_data['emoticons']])
         else:
             logger.error("Unable to download emoji list for Twitch!")
             return []
@@ -91,11 +101,17 @@ class TwitchClient(irc.client.SimpleIRCClient):
         self._exponential_backoff = 0
 
     def get_message_count(self):
+        '''
+        Returns the current number of counted chat messages
+        '''
         t = self._message_count
         self._message_count = 0
         return t
 
     def get_emote_count(self):
+        '''
+        Returns the current number of counted chat emotes
+        '''
         t = self._emote_count
         self._emote_count = 0
         return t

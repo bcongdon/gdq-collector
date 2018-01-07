@@ -13,10 +13,10 @@ DonationResult.__new__.__defaults__ = (None,) * len(DonationResult._fields)
 
 
 class DonationClient:
-    mon_re = re.compile(r'\$(\S+)')
-    don_re = re.compile(r'\((\d+)\)')
-    max_re = re.compile(r'\$(.+)/')
-    avg_re = re.compile(r'/\$(.+)')
+    total_donations_re = re.compile(r'\$(\S+)')
+    total_donators_re = re.compile(r'\((\d+)\)')
+    max_donation_re = re.compile(r'\$(.+)/')
+    avg_donation_re = re.compile(r'/\$(.+)')
 
     def _get_page(self):
         ''' Explicit get_page function to allow mocking in tests '''
@@ -30,13 +30,13 @@ class DonationClient:
 
         soup = BeautifulSoup(self._get_page(), "html.parser")
         totals = soup.find('small').text.strip().split('\n')
-        tot_mon = float(DonationClient.mon_re.search(
+        tot_mon = float(DonationClient.total_donations_re.search(
                         totals[1]).group(1).replace(',', ''))
-        tot_don = int(DonationClient.don_re.search(
+        tot_don = int(DonationClient.total_donators_re.search(
                         totals[1]).group(1))
-        max_don = float(DonationClient.max_re.search(
+        max_don = float(DonationClient.max_donation_re.search(
                         totals[3]).group(1).replace(',', ''))
-        avg_don = float(DonationClient.avg_re.search(
+        avg_don = float(DonationClient.avg_donation_re.search(
                         totals[3]).group(1).replace(',', ''))
 
         logger.info("Successfully scraped donation page")

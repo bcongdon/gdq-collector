@@ -9,11 +9,6 @@ logger = logging.getLogger(__name__)
 
 
 class TrackerClient:
-    mon_re = re.compile(r'\$(\S+)')
-    don_re = re.compile(r'\((\d+)\)')
-    max_re = re.compile(r'\$(.+)/')
-    avg_re = re.compile(r'/\$(.+)')
-
     def _get_donation_page(self, page_num):
         ''' Explicit get_page function to allow mocking in tests '''
         page_url = '{}?page={}'.format(DONATION_INDEX_URL, page_num)

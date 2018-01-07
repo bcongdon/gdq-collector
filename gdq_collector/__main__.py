@@ -171,8 +171,12 @@ def refresh_tracker_donations():
     cur = conn.cursor()
     cur.execute(SQL_check)
     latest_row = cur.fetchone()
+
+    # Find the latest time we have an donations
+    # If no entry exists, we need to scrape all donations
     latest_time = latest_row[0] if latest_row else datetime(MINYEAR, 1, 1)
     latest_time = latest_time.replace(tzinfo=pytz.UTC)
+
     for idx, donation in enumerate(tracker.scrape()):
         # Every 50 donations, check to see if we can bail early
         if idx % 50 == 0:
@@ -192,10 +196,12 @@ def refresh_tracker_donations():
 
 
 def refresh_tracker_donation_messages():
-    SQL = '''
+    SQL_find_donations_to_update = '''
         SELECT donation_id
         FROM gdq_donations
-        WHERE has_comment=True AND comment IS NULL;
+        WHERE has_comment=True
+            AND comment IS NULL
+            OR comment LIKE '%(Comment pending approval)%';
     '''
 
     SQL_update = '''
@@ -205,7 +211,7 @@ def refresh_tracker_donation_messages():
     '''
 
     cur = conn.cursor()
-    cur.execute(SQL)
+    cur.execute(SQL_find_donations_to_update)
     for row in cur.fetchall():
         donation_id = row[0]
         message = tracker.scrape_donation_message(donation_id)
