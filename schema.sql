@@ -14,6 +14,7 @@ CREATE TABLE gdq_schedule(
     start_time TIMESTAMP, 
     duration INTERVAL,
     runners TEXT,
+    host TEXT,
     id SERIAL,
     PRIMARY KEY(name, category)
 );

@@ -53,8 +53,8 @@ def update_schedule_psql(sched):
     ''' Inserts updated schedule into db '''
     SQL_upsert = '''
         INSERT INTO gdq_schedule
-            (name, start_time, duration, runners, category)
-        VALUES (%s, %s, %s, %s, %s)
+            (name, start_time, duration, runners, category, host)
+        VALUES (%s, %s, %s, %s, %s, %s)
         ON CONFLICT (name, category) DO UPDATE SET
            (start_time, duration, runners) =
            (excluded.start_time, excluded.duration, excluded.runners)
@@ -70,7 +70,7 @@ def update_schedule_psql(sched):
         game_ids = []
         for entry in sched:
             data = (entry.title, entry.start_time, entry.duration,
-                    entry.runner, entry.category)
+                    entry.runner, entry.category, entry.host)
             cur = conn.cursor()
             cur.execute(SQL_upsert, data)
             game = cur.fetchone()
