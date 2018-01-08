@@ -46,6 +46,7 @@ def refresh_timeseries():
     s3.Bucket(BUCKET).put_object(
         Key='latest.json',
         Body=data_json,
+        ContentType='application/json',
         Expires=datetime.utcnow() + timedelta(minutes=10))
     return data_json
 
@@ -68,6 +69,7 @@ def refresh_schedule():
     s3.Bucket(BUCKET).put_object(
         Key='schedule.json',
         Body=data_json,
+        ContentType='application/json',
         Expires=datetime.utcnow() + timedelta(minutes=10))
     return data_json
 
@@ -94,6 +96,7 @@ def refresh_chat_words():
     s3.Bucket(BUCKET).put_object(
         Key='chat_words.json',
         Body=data_json,
+        ContentType='application/json',
         Expires=datetime.utcnow() + timedelta(hours=1))
     return data_json
 
@@ -120,6 +123,7 @@ def refresh_chat_users():
     s3.Bucket(BUCKET).put_object(
         Key='chat_users.json',
         Body=data_json,
+        ContentType='application/json',
         Expires=datetime.utcnow() + timedelta(hours=1))
     return data_json
 
@@ -214,6 +218,7 @@ def refresh_donation_stats():
     s3.Bucket(BUCKET).put_object(
         Key='donation_stats.json',
         Body=data,
+        ContentType='application/json',
         Expires=datetime.utcnow() + timedelta(hours=1))
     return data
 
@@ -236,6 +241,7 @@ def refresh_donation_words():
     s3.Bucket(BUCKET).put_object(
         Key='donation_words.json',
         Body=json_data,
+        ContentType='application/json',
         Expires=datetime.utcnow() + timedelta(hours=1))
     return json_data
 
@@ -268,6 +274,7 @@ def refresh_top_donors():
     s3.Bucket(BUCKET).put_object(
         Key='top_donors.json',
         Body=json_data,
+        ContentType='application/json',
         Expires=datetime.utcnow() + timedelta(hours=1))
     return json_data
 
@@ -318,6 +325,7 @@ def refresh_game_stats():
     s3.Bucket(BUCKET).put_object(
         Key='games_stats.json',
         Body=json_data,
+        ContentType='application/json',
         Expires=datetime.utcnow() + timedelta(minutes=30))
     return json_data
 
