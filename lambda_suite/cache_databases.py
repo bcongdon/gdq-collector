@@ -5,6 +5,7 @@ import json
 import boto3
 from utils import minify
 import os
+from datetime import datetime, timedelta
 import logging
 logger = logging.getLogger(__name__)
 
@@ -42,7 +43,10 @@ def refresh_timeseries():
     data = cur.fetchall()
     data_json = json.dumps(minify([x[0] for x in data]))
 
-    s3.Bucket(BUCKET).put_object(Key='latest.json', Body=data_json)
+    s3.Bucket(BUCKET).put_object(
+        Key='latest.json',
+        Body=data_json,
+        Expires=datetime.utcnow() + timedelta(minutes=10))
     return data_json
 
 
@@ -61,7 +65,10 @@ def refresh_schedule():
     data = cur.fetchall()
     data_json = json.dumps([x[0] for x in data])
 
-    s3.Bucket(BUCKET).put_object(Key='schedule.json', Body=data_json)
+    s3.Bucket(BUCKET).put_object(
+        Key='schedule.json',
+        Body=data_json,
+        Expires=datetime.utcnow() + timedelta(minutes=10))
     return data_json
 
 
@@ -84,7 +91,10 @@ def refresh_chat_words():
     data = cur.fetchall()
     data_json = json.dumps([dict(count=x[0], word=x[1]) for x in data])
 
-    s3.Bucket(BUCKET).put_object(Key='chat_words.json', Body=data_json)
+    s3.Bucket(BUCKET).put_object(
+        Key='chat_words.json',
+        Body=data_json,
+        Expires=datetime.utcnow() + timedelta(hours=1))
     return data_json
 
 
@@ -107,22 +117,25 @@ def refresh_chat_users():
     data = cur.fetchall()
     data_json = json.dumps([dict(user=x[0], count=x[1]) for x in data])
 
-    s3.Bucket(BUCKET).put_object(Key='chat_users.json', Body=data_json)
+    s3.Bucket(BUCKET).put_object(
+        Key='chat_users.json',
+        Body=data_json,
+        Expires=datetime.utcnow() + timedelta(hours=1))
     return data_json
 
 
-@rollback_on_exception
-def refresh_kill_save():
-    SQL = '''
-        SELECT row_to_json(r) FROM
-        (SELECT * FROM gdq_animals ORDER BY time ASC) r;
-    '''
+# @rollback_on_exception
+# def refresh_kill_save():
+#     SQL = '''
+#         SELECT row_to_json(r) FROM
+#         (SELECT * FROM gdq_animals ORDER BY time ASC) r;
+#     '''
 
-    cur.execute(SQL)
-    data = cur.fetchall()
-    data_json = json.dumps(minify([x[0] for x in data]))
+#     cur.execute(SQL)
+#     data = cur.fetchall()
+#     data_json = json.dumps(minify([x[0] for x in data]))
 
-    s3.Bucket(BUCKET).put_object(Key='kill_save_animals.json', Body=data_json)
+#     s3.Bucket(BUCKET).put_object(Key='kill_save_animals.json', Body=data_json)
 
 
 @rollback_on_exception
@@ -198,7 +211,10 @@ def refresh_donation_stats():
                            medians=medians_list,
                            overall=overall_list,
                            anonymous=anonymous_list))
-    s3.Bucket(BUCKET).put_object(Key='donation_stats.json', Body=data)
+    s3.Bucket(BUCKET).put_object(
+        Key='donation_stats.json',
+        Body=data,
+        Expires=datetime.utcnow() + timedelta(hours=1))
     return data
 
 
@@ -217,7 +233,11 @@ def refresh_donation_words():
     cur.execute(SQL)
     words = cur.fetchall()
     json_data = json.dumps([dict(word=x[0], entries=x[1]) for x in words])
-    s3.Bucket(BUCKET).put_object(Key='donation_words.json', Body=json_data)
+    s3.Bucket(BUCKET).put_object(
+        Key='donation_words.json',
+        Body=json_data,
+        Expires=datetime.utcnow() + timedelta(hours=1))
+    return json_data
 
 
 @rollback_on_exception
@@ -245,7 +265,10 @@ def refresh_top_donors():
     generous = [dict(name=x[0], total=int(x[1])) for x in cur.fetchall()]
 
     json_data = json.dumps(dict(frequent=frequent, generous=generous))
-    s3.Bucket(BUCKET).put_object(Key='top_donors.json', Body=json_data)
+    s3.Bucket(BUCKET).put_object(
+        Key='top_donors.json',
+        Body=json_data,
+        Expires=datetime.utcnow() + timedelta(hours=1))
     return json_data
 
 
@@ -292,7 +315,10 @@ def refresh_game_stats():
 
     games_data = [games_formatter(x) for x in games]
     json_data = json.dumps(games_data)
-    s3.Bucket(BUCKET).put_object(Key='games_stats.json', Body=json_data)
+    s3.Bucket(BUCKET).put_object(
+        Key='games_stats.json',
+        Body=json_data,
+        Expires=datetime.utcnow() + timedelta(minutes=30))
     return json_data
 
 
@@ -312,8 +338,8 @@ def timeseries_handler(event, context):
     return refresh_timeseries()
 
 
-def animals_handler(event, context):
-    return refresh_kill_save()
+# def animals_handler(event, context):
+#     return refresh_kill_save()
 
 
 def donation_stats_handler(event, context):
@@ -338,7 +364,6 @@ if __name__ == '__main__':
     # refresh_schedule()
     # refresh_chat_words()
     # refresh_chat_users()
-    # refresh_kill_save()
     # refresh_donation_stats()
     # refresh_donation_words()
     # refresh_top_donors()
