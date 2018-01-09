@@ -80,7 +80,7 @@ class TwitterClient:
             logger.info(
                 "Backing off on setting up stream for {} seconds".format(
                     self._backoff))
-            sleep(self._backoff)
+            # sleep(self._backoff)
             self._backoff *= 2
         else:
             self._backoff = 1
