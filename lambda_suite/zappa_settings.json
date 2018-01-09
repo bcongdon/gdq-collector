@@ -81,6 +81,10 @@
     },
     "monitoring": {
         "extends": "base",
+        "vpc_config": {
+            "SubnetIds": [],
+            "SecurityGroupIds": []
+        },
         "events": [
             {
                 "function": "monitoring.health_check",

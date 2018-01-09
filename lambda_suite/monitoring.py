@@ -21,21 +21,23 @@ alarm_msg = 'Alarms triggered on: '
 
 
 def send_alarm(message):
+    logger.warn("Sending alarm: \"{}\"".format(message))
     client = boto3.client('sns')
     client.publish(
         TopicArn=sns_arn,
         Message=message
     )
-    logger.warn("Sent alarm: \"{}\"".format(message))
+    logger.warn("Sent alarm")
 
 
 def health_check(event, context):
-    logger.debug("Starting connection")
+    logger.info("Starting connection to API")
     recent_url = api_endpoint + '/recentEvents'
     try:
-        r = requests.get(recent_url, timeout=5, verify=False)
+        r = requests.get(recent_url, timeout=5)
         data = r.json()
     except Exception as e:
+        logger.info("API resulting in exception", e)
         send_alarm("Something went wrong with the API request: {}".format(e))
 
     if r.status_code != 200:
