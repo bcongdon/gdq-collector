@@ -1,6 +1,5 @@
 import tweepy
 from .credentials import twitter
-from time import sleep
 import logging
 logger = logging.getLogger(__name__)
 MAX_TWEETS_SAVED = 10000
@@ -9,7 +8,6 @@ MAX_TWEETS_SAVED = 10000
 class HashtagStreamListener(tweepy.StreamListener):
     def __init__(self, handler):
         self.handler = handler
-        self.failed = False
         tweepy.StreamListener.__init__(self)
 
     def on_status(self, status):
@@ -25,7 +23,6 @@ class HashtagStreamListener(tweepy.StreamListener):
 
     def on_exception(self, e):
         logger.error("Unhandled exception: {}".format(e))
-        self.failed = True
 
 
 class TwitterClient:
@@ -34,9 +31,6 @@ class TwitterClient:
         self.curr_tweets = 0
         self.tweets = []
         self.api = None
-        self._backoff = 0
-        self._listener = None
-        self._stream = None
 
     def auth(self):
         auth = tweepy.OAuthHandler(twitter['consumer_key'],
@@ -44,12 +38,6 @@ class TwitterClient:
         auth.set_access_token(twitter['access_token'],
                               twitter['access_token_secret'])
         self.api = tweepy.API(auth)
-
-    def _check_failed_stream(self):
-        if self._listener.failed:
-            self._setup_stream()
-        else:
-            self._backoff = 0
 
     def num_tweets(self):
         '''
@@ -59,7 +47,6 @@ class TwitterClient:
         t = self.curr_tweets
         logger.info("Reporting received {} tweets.".format(t))
         self.curr_tweets = 0
-        self._check_failed_stream()
         return t
 
     def get_tweets(self):
@@ -69,36 +56,18 @@ class TwitterClient:
         '''
         t = self.tweets
         self.tweets = []
-        self._check_failed_stream()
         return t
 
     def start(self):
         self._setup_stream()
 
     def _setup_stream(self):
-        if self._backoff > 0:
-            logger.info(
-                "Backing off on setting up stream for {} seconds".format(
-                    self._backoff))
-            # sleep(self._backoff)
-            self._backoff *= 2
-        else:
-            self._backoff = 1
-
-        if self._stream:
-            logger.info("Shutting down old stream")
-            try:
-                self._stream.disconnect()
-            except Exception as e:
-                logger.error("Encountered error shutting down stream", e)
-
-        logger.info("Starting twitter stream")
+        logger.info("Starting twitter steam")
         if not self.api:
             raise RuntimeError("Client not authenticated!")
         s_listener = HashtagStreamListener(self)
-        self._listener = s_listener
-        self._stream = tweepy.Stream(auth=self.api.auth, listener=s_listener)
-        self._stream.filter(track=self.tags, async=True)
+        stream = tweepy.Stream(auth=self.api.auth, listener=s_listener)
+        stream.filter(track=self.tags, async=True)
 
     def _increment_tweet_counter(self):
         self.curr_tweets += 1
