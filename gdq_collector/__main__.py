@@ -93,6 +93,7 @@ def save_tweets(tweets):
         INSERT INTO gdq_tweets
             (id, created_at, content, username, user_id)
         VALUES {}
+        ON CONFLICT DO NOTHING;
     '''
 
     tweets_formatted = [(t.id, t.created_at, t.text, t.user.name, t.user.id)
