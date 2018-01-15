@@ -1,11 +1,11 @@
 CREATE TABLE gdq_timeseries(
     time TIMESTAMP WITH TIME ZONE PRIMARY KEY,
-    num_viewers INTEGER DEFAULT -1,
-    num_tweets INTEGER DEFAULT -1,
-    num_chats INTEGER DEFAULT -1,
-    num_emotes INTEGER DEFAULT -1,
-    num_donations INTEGER DEFAULT -1,
-    total_donations NUMERIC(20, 2) DEFAULT -1
+    num_viewers INTEGER,
+    num_tweets INTEGER,
+    num_chats INTEGER,
+    num_emotes INTEGER,
+    num_donations INTEGER,
+    total_donations NUMERIC(20, 2)
 );
 
 CREATE TABLE gdq_schedule(
