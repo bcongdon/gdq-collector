@@ -18,7 +18,9 @@ class ScheduleClient:
 
     def _get_page(self):
         try:
-            return requests.get(self.url).text
+            req = requests.get(self.url)
+            req.raise_for_status()
+            return req.text
         except Exception as e:
             logger.error("Unable to get Schedule page."
                          "Error: %s" % str(e))

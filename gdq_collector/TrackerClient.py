@@ -1,5 +1,4 @@
 import requests
-import re
 from bs4 import BeautifulSoup
 from time import sleep
 from dateutil.parser import parse
@@ -12,14 +11,20 @@ class TrackerClient:
     def _get_donation_page(self, page_num):
         ''' Explicit get_page function to allow mocking in tests '''
         page_url = '{}?page={}'.format(DONATION_INDEX_URL, page_num)
-        return requests.get(page_url).text
+        req = requests.get(page_url)
+        req.raise_for_status()
+        return req.text
 
     def _get_donation(self, donation_id):
         donation_url = '{}/{}'.format(DONATION_DETAIL_URL, donation_id)
-        return requests.get(donation_url).text
+        req = requests.get(donation_url)
+        req.raise_for_status()
+        return req.text
 
     def _get_donor(self, donor_id):
-        return requests.get('{}/{}'.format(DONOR_URL, donor_id)).text
+        req = requests.get('{}/{}'.format(DONOR_URL, donor_id))
+        req.raise_for_status()
+        return req.text
 
     def _determine_page_num(self, soup):
         page_num = soup.find('form').find_all('label')[1].text.split(' ')[-1]
@@ -81,6 +86,6 @@ class TrackerClient:
 
 
 # if __name__ == '__main__':
-#     print(list(TrackerClient().scrape()))
+#     print(list(TrackerClient().scrape()))  # Danger!
 #     print(TrackerClient().get_donor_name(847))
 #     print(TrackerClient().scrape_donation_message(358572))

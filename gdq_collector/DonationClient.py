@@ -20,7 +20,9 @@ class DonationClient:
 
     def _get_page(self):
         ''' Explicit get_page function to allow mocking in tests '''
-        return requests.get(DONATION_INDEX_URL).text
+        req = requests.get(DONATION_INDEX_URL)
+        req.raise_for_status()
+        return req.text
 
     def scrape(self):
         '''

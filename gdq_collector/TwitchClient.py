@@ -63,6 +63,7 @@ class TwitchClient(irc.client.SimpleIRCClient):
                              params={
                                 "login": chan
                              })
+            r.raise_for_status()
             self._channel_id = r.json()['users'][0]['_id']
         return self._channel_id
 
@@ -76,6 +77,7 @@ class TwitchClient(irc.client.SimpleIRCClient):
         # Pull emote list from twitch
         try:
             r = requests.get(CHAT_ENDPOINT, headers=headers)
+            r.raise_for_status()
             r_data = r.json()
         except Exception as e:
             logger.error(
@@ -151,15 +153,16 @@ class TwitchClient(irc.client.SimpleIRCClient):
         url = "https://api.twitch.tv/kraken/streams/"
         url += self._get_channel_id(self._to_url_chan(settings.TWITCH_CHANNEL))
         req = requests.get(url, headers=headers)
-        res = req.json()
-        if 'stream' in res and res['stream']:
-            viewers = res['stream']['viewers']
+        data = req.json()
+        if 'stream' in data and data['stream']:
+            viewers = data['stream']['viewers']
             logger.info("Downloaded viewer info. "
                         "Currently viewers: %s" % viewers)
             return viewers
         else:
             logger.warn("Unable to get number of viewers. "
-                        "Possible that stream is offline.")
+                        "Possible that stream is offline. "
+                        "Status code: {}".format(req.status_code))
 
 
 if __name__ == '__main__':

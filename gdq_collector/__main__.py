@@ -138,11 +138,19 @@ def refresh_timeseries():
                     curr_d.total_donations)
     logger.info("Refreshed time series data")
 
+
+def refresh_tweets():
+    logger.info("Polling clients for tweets to save")
     tweets = twitter.get_tweets()
+    logger.info("Saving {} tweets".format(len(tweets)))
     save_tweets(tweets)
     logger.info("Saved tweets")
 
+
+def refresh_chats():
+    logger.info("Polling clients for chat messages to save")
     chats = twitch.get_chats()
+    logger.info("Saving {} chats".format(len(chats)))
     save_chats(chats)
     logger.info("Saved Twitch chats")
 
@@ -166,7 +174,6 @@ def refresh_tracker_donations():
         SELECT created_at
         FROM gdq_donations
         ORDER BY created_at DESC
-        LIMIT 1;
     '''
 
     cur = conn.cursor()
@@ -216,7 +223,7 @@ def refresh_tracker_donation_messages():
     for row in cur.fetchall():
         donation_id = row[0]
         message = tracker.scrape_donation_message(donation_id)
-        sleep(0.5)
+        sleep(1)
         try:
             cur.execute(SQL_update, (message, donation_id))
             conn.commit()
@@ -227,21 +234,26 @@ def refresh_tracker_donation_messages():
             logger.error(e)
 
 
+# Tracker list
+# (tracker_func, minute_timeseries, refresh_immediately)
+TRACKERS = {
+    'twitter': (refresh_tweets, 1, False),
+    'twitch': (refresh_chats, 1, False),
+    'timeseries': (refresh_timeseries, 1, False),
+    'schedule': (refresh_schedule, 10, True),
+    'donations': (refresh_tracker_donations, 20, True),
+    'donation_messages': (refresh_tracker_donation_messages, 60, True)
+}
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description="Startup the GDQStatus Collection Service")
     parser.add_argument(
-        '--notwitter', action='store_true', default=False,
-        help='Disable Twitter (to avoid rate limiting while debugging)')
-    parser.add_argument(
-        '--nodonations', action='store_true', default=False,
-        help='Disable scraping donations')
+        '--tracker', default=None, choices=list(TRACKERS.keys()),
+        help='Only use specific tracker')
     parser.add_argument(
         '-v', '--verbose', action='store_true', default=False,
         help='Raise log level to DEBUG for debugging purposes')
-    parser.add_argument(
-        '--refresh', action='store_true', default=False,
-        help='Run scrape operations on startup')
     parser.add_argument(
         '--cloudwatch', action='store_true', default=False,
         help='Add the CloudWatch logging handler to push logs to AWS.')
@@ -252,46 +264,37 @@ if __name__ == '__main__':
     level = 'DEBUG' if args.verbose else 'INFO'
     logging.basicConfig(level=level)
 
-    # Setup Twitter if not disabled
-    if not args.notwitter:
-        twitter.auth()
-        twitter.start()
-    else:
-        logger.info("Not starting TwitterClient")
-
     # Setup CloudWatch handler if requested
     if args.cloudwatch:
         handler = watchtower.CloudWatchLogHandler()
         logger.addHandler(handler)
         logging.getLogger('apscheduler').addHandler(handler)
 
-    # Setup connection to twitch IRC channel
-    twitch.connect()
+    # Setup Twitter if not disabled
+    if args.tracker in ['timeseries', 'twitter'] or args.tracker is None:
+        twitter.auth()
+        twitter.start()
+    else:
+        logger.info("Not starting TwitterClient")
+
+    if args.tracker in ['timeseries', 'twitch'] or args.tracker is None:
+        # Setup connection to twitch IRC channel
+        twitch.connect()
 
     # Add refresh jobs to scheduler
     scheduler = BackgroundScheduler()
-    scheduler.add_job(refresh_timeseries, trigger='interval', minutes=1)
-    scheduler.add_job(refresh_schedule, trigger='interval', minutes=10)
-
-    if not args.nodonations:
-        scheduler.add_job(refresh_tracker_donations,
-                          trigger='interval',
-                          minutes=20,
-                          max_instances=1)
-        scheduler.add_job(refresh_tracker_donation_messages,
-                          trigger='interval',
-                          minutes=60,
-                          max_instances=1)
-
-    # Run schedule scrape immediately if requested
-    if args.refresh:
-        scheduler.add_job(refresh_schedule, next_run_time=datetime.now())
-
-        if not args.nodonations:
-            scheduler.add_job(refresh_tracker_donations,
-                              next_run_time=datetime.now())
-            scheduler.add_job(refresh_tracker_donation_messages,
-                              next_run_time=datetime.now())
+    if args.tracker:
+        tracker_func, minutes, immediate = TRACKERS[args.tracker]
+        scheduler.add_job(tracker_func, trigger='interval', minutes=minutes)
+        if immediate:
+            scheduler.add_job(tracker_func)
+    else:
+        for _, tracker in TRACKERS.items():
+            tracker_func, minutes, immediate = tracker
+            scheduler.add_job(tracker_func, trigger='interval',
+                              minutes=minutes, max_instances=1)
+            if immediate:
+                scheduler.add_job(tracker_func)
 
     # Run scheduler
     logger.info("Starting Scheduler")
