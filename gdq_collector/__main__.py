@@ -14,7 +14,8 @@ import watchtower
 from time import sleep
 import pytz
 import logging
-logger = logging.getLogger('gdq_collector')
+
+logger = logging.getLogger("gdq_collector")
 
 # Setup clients
 donations = DonationClient()
@@ -28,18 +29,19 @@ conn = psycopg2.connect(**credentials.postgres)
 
 
 def results_to_psql(tweets, viewers, chats, emotes, donators, donations):
-    '''
+    """
     Takes results of refresh and inserts them into a new row in the
     timeseries database
-    '''
-    SQL = '''
+    """
+    SQL = """
         INSERT into gdq_timeseries (time, num_viewers, num_tweets,
             num_chats, num_emotes, num_donations, total_donations)
         VALUES (%s, %s, %s, %s, %s, %s, %s);
-    '''
+    """
 
-    data = (utils.get_truncated_time(), viewers, tweets, chats, emotes,
-            donators, donations)
+    data = (
+        utils.get_truncated_time(), viewers, tweets, chats, emotes, donators, donations
+    )
     try:
         cur = conn.cursor()
         cur.execute(SQL, data)
@@ -50,8 +52,8 @@ def results_to_psql(tweets, viewers, chats, emotes, donators, donations):
 
 
 def update_schedule_psql(sched):
-    ''' Inserts updated schedule into db '''
-    SQL_upsert = '''
+    """ Inserts updated schedule into db """
+    SQL_upsert = """
         INSERT INTO gdq_schedule
             (name, start_time, duration, runners, category, host)
         VALUES (%s, %s, %s, %s, %s, %s)
@@ -59,18 +61,24 @@ def update_schedule_psql(sched):
            (start_time, duration, runners) =
            (excluded.start_time, excluded.duration, excluded.runners)
         RETURNING id;
-    '''
+    """
 
-    SQL_drop_old = '''
+    SQL_drop_old = """
         DELETE FROM gdq_schedule
         WHERE NOT (id = ANY (%s));
-    '''
+    """
 
     try:
         game_ids = []
         for entry in sched:
-            data = (entry.title, entry.start_time, entry.duration,
-                    entry.runner, entry.category, entry.host)
+            data = (
+                entry.title,
+                entry.start_time,
+                entry.duration,
+                entry.runner,
+                entry.category,
+                entry.host,
+            )
             cur = conn.cursor()
             cur.execute(SQL_upsert, data)
             game = cur.fetchone()
@@ -88,16 +96,17 @@ def save_tweets(tweets):
     if not len(tweets):
         return
 
-    record_template = ','.join(['%s'] * len(tweets))
-    SQL = '''
+    record_template = ",".join(["%s"] * len(tweets))
+    SQL = """
         INSERT INTO gdq_tweets
             (id, created_at, content, username, user_id)
         VALUES {}
         ON CONFLICT DO NOTHING;
-    '''
+    """
 
-    tweets_formatted = [(t.id, t.created_at, t.text, t.user.name, t.user.id)
-                        for t in tweets]
+    tweets_formatted = [
+        (t.id, t.created_at, t.text, t.user.name, t.user.id) for t in tweets
+    ]
     try:
         cur = conn.cursor()
         cur.execute(SQL.format(record_template), tweets_formatted)
@@ -111,14 +120,13 @@ def save_chats(chats):
     if not len(chats):
         return
 
-    record_template = ','.join(['%s'] * len(chats))
-    SQL = '''
+    record_template = ",".join(["%s"] * len(chats))
+    SQL = """
         INSERT INTO gdq_chats (username, created_at, content)
         VALUES {}
-    '''
+    """
 
-    chats_formatted = [(c['user'], c['created_at'], c['content'])
-                       for c in chats]
+    chats_formatted = [(c["user"], c["created_at"], c["content"]) for c in chats]
     try:
         cur = conn.cursor()
         cur.execute(SQL.format(record_template), chats_formatted)
@@ -129,13 +137,19 @@ def save_chats(chats):
 
 
 def refresh_timeseries():
-    ''' Polls clients for new stat data and inserts timeseries entry to db '''
+    """ Polls clients for new stat data and inserts timeseries entry to db """
     curr_d = utils.try_execute(donations.scrape, DonationResult())
     num_tweets = twitter.num_tweets()
     viewers = twitch.get_num_viewers()
     chats, emotes = twitch.get_message_count(), twitch.get_emote_count()
-    results_to_psql(num_tweets, viewers, chats, emotes, curr_d.total_donators,
-                    curr_d.total_donations)
+    results_to_psql(
+        num_tweets,
+        viewers,
+        chats,
+        emotes,
+        curr_d.total_donators,
+        curr_d.total_donations,
+    )
     logger.info("Refreshed time series data")
 
 
@@ -156,25 +170,25 @@ def refresh_chats():
 
 
 def refresh_schedule():
-    ''' Scrapes schedule and pushes new version to Postgres '''
+    """ Scrapes schedule and pushes new version to Postgres """
     sched = schedule.scrape()
     update_schedule_psql(sched)
     logger.info("Refreshed schedule data")
 
 
 def refresh_tracker_donations():
-    SQL = '''
+    SQL = """
         INSERT INTO gdq_donations
            (donor_id, created_at, amount, donation_id, has_comment, donor_name)
         VALUES (%s, %s, %s, %s, %s, %s)
         ON CONFLICT DO NOTHING;
-    '''
+    """
 
-    SQL_check = '''
+    SQL_check = """
         SELECT created_at
         FROM gdq_donations
         ORDER BY created_at DESC
-    '''
+    """
 
     cur = conn.cursor()
     cur.execute(SQL_check)
@@ -190,11 +204,15 @@ def refresh_tracker_donations():
         if idx % 50 == 0:
             (_, time, _, _, _, _) = donation
             if time < latest_time:
-                message = ('Returning early from scraping donation pages. '
-                           'Found latest: {}, current donation is at {}.'
-                           .format(latest_time, time))
+                message = (
+                    "Returning early from scraping donation pages. "
+                    "Found latest: {}, current donation is at {}.".format(
+                        latest_time, time
+                    )
+                )
                 logger.info(message)
                 return
+
         try:
             cur.execute(SQL, donation)
             conn.commit()
@@ -204,19 +222,19 @@ def refresh_tracker_donations():
 
 
 def refresh_tracker_donation_messages():
-    SQL_find_donations_to_update = '''
+    SQL_find_donations_to_update = """
         SELECT donation_id
         FROM gdq_donations
         WHERE has_comment=True
             AND comment IS NULL
             OR comment LIKE '%(Comment pending approval)%';
-    '''
+    """
 
-    SQL_update = '''
+    SQL_update = """
         UPDATE gdq_donations
         SET comment=%s
         WHERE donation_id=%s;
-    '''
+    """
 
     cur = conn.cursor()
     cur.execute(SQL_find_donations_to_update)
@@ -227,8 +245,9 @@ def refresh_tracker_donation_messages():
         try:
             cur.execute(SQL_update, (message, donation_id))
             conn.commit()
-            logger.info('Successfully scraped message for donation {}'
-                        .format(donation_id))
+            logger.info(
+                "Successfully scraped message for donation {}".format(donation_id)
+            )
         except Exception as e:
             conn.rollback()
             logger.error(e)
@@ -237,47 +256,58 @@ def refresh_tracker_donation_messages():
 # Tracker list
 # (tracker_func, minute_timeseries, refresh_immediately)
 TRACKERS = {
-    'twitter': (refresh_tweets, 1, False),
-    'twitch': (refresh_chats, 1, False),
-    'timeseries': (refresh_timeseries, 1, False),
-    'schedule': (refresh_schedule, 10, True),
-    'donations': (refresh_tracker_donations, 20, True),
-    'donation_messages': (refresh_tracker_donation_messages, 60, True)
+    "twitter": (refresh_tweets, 1, False),
+    "twitch": (refresh_chats, 1, False),
+    "timeseries": (refresh_timeseries, 1, False),
+    "schedule": (refresh_schedule, 10, True),
+    "donations": (refresh_tracker_donations, 20, True),
+    "donation_messages": (refresh_tracker_donation_messages, 60, True),
 }
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="Startup the GDQStatus Collection Service")
+        description="Startup the GDQStatus Collection Service"
+    )
     parser.add_argument(
-        '--tracker', default=None, choices=list(TRACKERS.keys()),
-        help='Only use specific tracker')
+        "--tracker",
+        default=None,
+        choices=list(TRACKERS.keys()),
+        help="Only use specific tracker",
+    )
     parser.add_argument(
-        '-v', '--verbose', action='store_true', default=False,
-        help='Raise log level to DEBUG for debugging purposes')
+        "-v",
+        "--verbose",
+        action="store_true",
+        default=False,
+        help="Raise log level to DEBUG for debugging purposes",
+    )
     parser.add_argument(
-        '--cloudwatch', action='store_true', default=False,
-        help='Add the CloudWatch logging handler to push logs to AWS.')
+        "--cloudwatch",
+        action="store_true",
+        default=False,
+        help="Add the CloudWatch logging handler to push logs to AWS.",
+    )
 
     args = parser.parse_args()
 
     # Setup logging to correct log level
-    level = 'DEBUG' if args.verbose else 'INFO'
+    level = "DEBUG" if args.verbose else "INFO"
     logging.basicConfig(level=level)
 
     # Setup CloudWatch handler if requested
     if args.cloudwatch:
         handler = watchtower.CloudWatchLogHandler()
         logger.addHandler(handler)
-        logging.getLogger('apscheduler').addHandler(handler)
+        logging.getLogger("apscheduler").addHandler(handler)
 
     # Setup Twitter if not disabled
-    if args.tracker in ['timeseries', 'twitter'] or args.tracker is None:
+    if args.tracker in ["timeseries", "twitter"] or args.tracker is None:
         twitter.auth()
         twitter.start()
     else:
         logger.info("Not starting TwitterClient")
 
-    if args.tracker in ['timeseries', 'twitch'] or args.tracker is None:
+    if args.tracker in ["timeseries", "twitch"] or args.tracker is None:
         # Setup connection to twitch IRC channel
         twitch.connect()
 
@@ -285,14 +315,15 @@ if __name__ == '__main__':
     scheduler = BackgroundScheduler()
     if args.tracker:
         tracker_func, minutes, immediate = TRACKERS[args.tracker]
-        scheduler.add_job(tracker_func, trigger='interval', minutes=minutes)
+        scheduler.add_job(tracker_func, trigger="interval", minutes=minutes)
         if immediate:
             scheduler.add_job(tracker_func)
     else:
         for _, tracker in TRACKERS.items():
             tracker_func, minutes, immediate = tracker
-            scheduler.add_job(tracker_func, trigger='interval',
-                              minutes=minutes, max_instances=1)
+            scheduler.add_job(
+                tracker_func, trigger="interval", minutes=minutes, max_instances=1
+            )
             if immediate:
                 scheduler.add_job(tracker_func)
 
@@ -302,6 +333,6 @@ if __name__ == '__main__':
         scheduler.start()
         twitch.start()
     except KeyboardInterrupt:
-        logger.info('Got SIGTERM! Terminating...')
+        logger.info("Got SIGTERM! Terminating...")
         scheduler.shutdown(wait=False)
         os._exit(0)

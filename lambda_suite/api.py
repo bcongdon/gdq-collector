@@ -5,6 +5,7 @@ import dateutil.parser
 from utils import minify
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+
 app = Flask(__name__)
 CORS(app)
 
@@ -12,28 +13,28 @@ conn = psycopg2.connect(**p_creds)
 conn.set_session(readonly=True)
 cur = conn.cursor()
 
-SQL_filtered = '''
+SQL_filtered = """
     SELECT row_to_json(r) FROM
         (SELECT * FROM gdq_timeseries
         WHERE time > %s
         ORDER BY time DESC
         LIMIT 60) r
     ORDER BY r.time ASC;
-'''
+"""
 
-SQL_unfiltered = '''
+SQL_unfiltered = """
     SELECT row_to_json(r) FROM
         (SELECT * FROM gdq_timeseries
         ORDER BY time DESC
         LIMIT 60) r
     ORDER BY r.time ASC;
-'''
+"""
 
 
-@app.route('/recentEvents')
+@app.route("/recentEvents")
 def most_recent():
-    if 'since' in request.args:
-        d = request.args.get('since')
+    if "since" in request.args:
+        d = request.args.get("since")
         ts = dateutil.parser.parse(d)
         cur.execute(SQL_filtered, (ts,))
     else:
@@ -42,10 +43,10 @@ def most_recent():
     return jsonify(minify(map(lambda x: x[0], data)))
 
 
-@app.route('/')
+@app.route("/")
 def index():
-    return 'Hello there!'
+    return "Hello there!"
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run()
