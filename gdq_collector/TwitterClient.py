@@ -36,8 +36,12 @@ class TwitterClient:
         self.api = None
 
     def auth(self):
-        auth = tweepy.OAuthHandler(twitter["consumer_key"], twitter["consumer_secret"])
-        auth.set_access_token(twitter["access_token"], twitter["access_token_secret"])
+        auth = tweepy.OAuthHandler(
+            twitter["consumer_key"], twitter["consumer_secret"]
+        )
+        auth.set_access_token(
+            twitter["access_token"], twitter["access_token_secret"]
+        )
         self.api = tweepy.API(auth)
 
     def num_tweets(self):

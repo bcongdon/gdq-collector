@@ -90,3 +90,4 @@ ENV/
 credentials.json
 credentials.py
 account.key
+scripts

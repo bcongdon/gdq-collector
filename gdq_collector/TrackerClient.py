@@ -52,7 +52,9 @@ class TrackerClient:
                 donation_id = int(amount_el.find("a")["href"].split("/")[-1])
 
             has_comment = comment_el.text.strip() == "Yes"
-            results.append((donor_id, time, amount, donation_id, has_comment, name))
+            results.append(
+                (donor_id, time, amount, donation_id, has_comment, name)
+            )
         return results
 
     def scrape(self):

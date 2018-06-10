@@ -40,7 +40,13 @@ def results_to_psql(tweets, viewers, chats, emotes, donators, donations):
     """
 
     data = (
-        utils.get_truncated_time(), viewers, tweets, chats, emotes, donators, donations
+        utils.get_truncated_time(),
+        viewers,
+        tweets,
+        chats,
+        emotes,
+        donators,
+        donations,
     )
     try:
         cur = conn.cursor()
@@ -126,7 +132,9 @@ def save_chats(chats):
         VALUES {}
     """
 
-    chats_formatted = [(c["user"], c["created_at"], c["content"]) for c in chats]
+    chats_formatted = [
+        (c["user"], c["created_at"], c["content"]) for c in chats
+    ]
     try:
         cur = conn.cursor()
         cur.execute(SQL.format(record_template), chats_formatted)
@@ -246,7 +254,9 @@ def refresh_tracker_donation_messages():
             cur.execute(SQL_update, (message, donation_id))
             conn.commit()
             logger.info(
-                "Successfully scraped message for donation {}".format(donation_id)
+                "Successfully scraped message for donation {}".format(
+                    donation_id
+                )
             )
         except Exception as e:
             conn.rollback()
@@ -322,7 +332,10 @@ if __name__ == "__main__":
         for _, tracker in TRACKERS.items():
             tracker_func, minutes, immediate = tracker
             scheduler.add_job(
-                tracker_func, trigger="interval", minutes=minutes, max_instances=1
+                tracker_func,
+                trigger="interval",
+                minutes=minutes,
+                max_instances=1,
             )
             if immediate:
                 scheduler.add_job(tracker_func)

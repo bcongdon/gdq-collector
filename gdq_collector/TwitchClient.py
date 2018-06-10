@@ -23,7 +23,9 @@ class TwitchClient(irc.client.SimpleIRCClient):
     def connect(self):
         if self._exponential_backoff > 0:
             logger.info(
-                "Backing off on IRC join for {} sec".format(self._exponential_backoff)
+                "Backing off on IRC join for {} sec".format(
+                    self._exponential_backoff
+                )
             )
             sleep(self._exponential_backoff)
             self._exponential_backoff *= 2
@@ -86,7 +88,9 @@ class TwitchClient(irc.client.SimpleIRCClient):
             r.raise_for_status()
             r_data = r.json()
         except Exception as e:
-            logger.error("Unable to download emoji list for Twitch: {}".format(e))
+            logger.error(
+                "Unable to download emoji list for Twitch: {}".format(e)
+            )
             return []
 
         # Parse emotes out of the emote list
@@ -163,7 +167,9 @@ class TwitchClient(irc.client.SimpleIRCClient):
         data = req.json()
         if "stream" in data and data["stream"]:
             viewers = data["stream"]["viewers"]
-            logger.info("Downloaded viewer info. " "Currently viewers: %s" % viewers)
+            logger.info(
+                "Downloaded viewer info. " "Currently viewers: %s" % viewers
+            )
             return viewers
 
         else:
