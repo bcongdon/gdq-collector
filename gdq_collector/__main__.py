@@ -24,8 +24,14 @@ schedule = ScheduleClient()
 twitter = TwitterClient(tags=settings.TWITTER_TAGS)
 twitch = TwitchClient()
 
-# Setup db connection
-conn = psycopg2.connect(**credentials.postgres)
+# Setup db connection (retry up to 10 times)
+for _ in range(10):
+    try:
+        conn = psycopg2.connect(**credentials.postgres)
+        break
+    except psycopg2.OperationalError as e:
+        print(e)
+        sleep(1)
 
 
 def results_to_psql(tweets, viewers, chats, emotes, donators, donations):
