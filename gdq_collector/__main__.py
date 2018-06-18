@@ -42,7 +42,20 @@ def results_to_psql(tweets, viewers, chats, emotes, donators, donations):
     SQL = """
         INSERT into gdq_timeseries (time, num_viewers, num_tweets,
             num_chats, num_emotes, num_donations, total_donations)
-        VALUES (%s, %s, %s, %s, %s, %s, %s);
+        VALUES (%s, %s, %s, %s, %s, %s, %s)
+        ON CONFLICT (time) DO UPDATE SET
+            num_viewers=GREATEST(
+                gdq_timeseries.num_viewers, excluded.num_viewers),
+            num_tweets=GREATEST(
+                gdq_timeseries.num_tweets, excluded.num_tweets),
+            num_chats=GREATEST(
+                gdq_timeseries.num_chats, excluded.num_chats),
+            num_emotes=GREATEST(
+                gdq_timeseries.num_emotes, excluded.num_emotes),
+            num_donations=GREATEST(
+                gdq_timeseries.num_donations, excluded.num_donations),
+            total_donations=GREATEST(
+                gdq_timeseries.total_donations, excluded.total_donations);
     """
 
     data = (
