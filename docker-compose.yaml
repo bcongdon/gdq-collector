@@ -44,7 +44,7 @@ services:
     depends_on:
       - db
 
-  donations:
+  donation_messages:
     command: python -m gdq_collector --tracker=donation_messages
     build: .
     depends_on:
