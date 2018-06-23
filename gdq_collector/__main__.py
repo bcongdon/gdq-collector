@@ -25,6 +25,7 @@ twitter = TwitterClient(tags=settings.TWITTER_TAGS)
 twitch = TwitchClient()
 
 # Setup db connection (retry up to 10 times)
+conn = None
 for _ in range(10):
     try:
         conn = psycopg2.connect(**credentials.postgres)
