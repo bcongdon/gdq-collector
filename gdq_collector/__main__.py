@@ -24,8 +24,14 @@ schedule = ScheduleClient()
 twitter = TwitterClient(tags=settings.TWITTER_TAGS)
 twitch = TwitchClient()
 
-# Setup db connection
-conn = psycopg2.connect(**credentials.postgres)
+# Setup db connection (retry up to 10 times)
+for _ in range(10):
+    try:
+        conn = psycopg2.connect(**credentials.postgres)
+        break
+    except psycopg2.OperationalError as e:
+        print(e)
+        sleep(1)
 
 
 def results_to_psql(tweets, viewers, chats, emotes, donators, donations):
@@ -36,11 +42,30 @@ def results_to_psql(tweets, viewers, chats, emotes, donators, donations):
     SQL = """
         INSERT into gdq_timeseries (time, num_viewers, num_tweets,
             num_chats, num_emotes, num_donations, total_donations)
-        VALUES (%s, %s, %s, %s, %s, %s, %s);
+        VALUES (%s, %s, %s, %s, %s, %s, %s)
+        ON CONFLICT (time) DO UPDATE SET
+            num_viewers=GREATEST(
+                gdq_timeseries.num_viewers, excluded.num_viewers),
+            num_tweets=GREATEST(
+                gdq_timeseries.num_tweets, excluded.num_tweets),
+            num_chats=GREATEST(
+                gdq_timeseries.num_chats, excluded.num_chats),
+            num_emotes=GREATEST(
+                gdq_timeseries.num_emotes, excluded.num_emotes),
+            num_donations=GREATEST(
+                gdq_timeseries.num_donations, excluded.num_donations),
+            total_donations=GREATEST(
+                gdq_timeseries.total_donations, excluded.total_donations);
     """
 
     data = (
-        utils.get_truncated_time(), viewers, tweets, chats, emotes, donators, donations
+        utils.get_truncated_time(),
+        viewers,
+        tweets,
+        chats,
+        emotes,
+        donators,
+        donations,
     )
     try:
         cur = conn.cursor()
@@ -126,7 +151,9 @@ def save_chats(chats):
         VALUES {}
     """
 
-    chats_formatted = [(c["user"], c["created_at"], c["content"]) for c in chats]
+    chats_formatted = [
+        (c["user"], c["created_at"], c["content"]) for c in chats
+    ]
     try:
         cur = conn.cursor()
         cur.execute(SQL.format(record_template), chats_formatted)
@@ -246,7 +273,9 @@ def refresh_tracker_donation_messages():
             cur.execute(SQL_update, (message, donation_id))
             conn.commit()
             logger.info(
-                "Successfully scraped message for donation {}".format(donation_id)
+                "Successfully scraped message for donation {}".format(
+                    donation_id
+                )
             )
         except Exception as e:
             conn.rollback()
@@ -322,7 +351,10 @@ if __name__ == "__main__":
         for _, tracker in TRACKERS.items():
             tracker_func, minutes, immediate = tracker
             scheduler.add_job(
-                tracker_func, trigger="interval", minutes=minutes, max_instances=1
+                tracker_func,
+                trigger="interval",
+                minutes=minutes,
+                max_instances=1,
             )
             if immediate:
                 scheduler.add_job(tracker_func)

@@ -17,7 +17,9 @@ TWITCH_PORT = 6667
 EVENT_SHORTHAND = "sgdq2018"
 
 # The following should stay pretty stable between events
-DONATION_URL = ("https://gamesdonequick.com/tracker/index/{}".format(EVENT_SHORTHAND))
+DONATION_URL = (
+    "https://gamesdonequick.com/tracker/index/{}".format(EVENT_SHORTHAND)
+)
 SCHEDULE_URL = "https://gamesdonequick.com/schedule"
 DONATION_INDEX_URL = (
     "https://gamesdonequick.com/tracker/donations/{}".format(EVENT_SHORTHAND)

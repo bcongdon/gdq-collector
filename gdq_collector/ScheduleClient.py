@@ -10,7 +10,8 @@ logger = logging.getLogger(__name__)
 
 
 ScheduleItem = namedtuple(
-    "ScheduleItem", ["title", "duration", "runner", "start_time", "category", "host"]
+    "ScheduleItem",
+    ["title", "duration", "runner", "start_time", "category", "host"],
 )
 
 
@@ -64,7 +65,9 @@ class ScheduleClient:
         games = [
             x
             for x in games
-            if not any(x.title.lower().startswith(b.lower()) for b in blacklist)
+            if not any(
+                x.title.lower().startswith(b.lower()) for b in blacklist
+            )
         ]
 
         logger.info("Successfully scraped schedule")

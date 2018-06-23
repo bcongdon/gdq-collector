@@ -1,0 +1,51 @@
+version: '3'
+services:
+  db:
+    build:
+      dockerfile: postgres.Dockerfile
+      context: .
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+
+  twitter:
+    build: .
+    command: python -m gdq_collector --tracker=twitter
+    depends_on:
+      - db
+
+  timeseries:
+    build: .
+    command: python -m gdq_collector --tracker=timeseries
+    deploy:
+      mode: replicated
+      restart_policy:
+        delay: 10s
+      replicas: 2
+    depends_on:
+      - db
+
+  twitch:
+    build: .
+    command: python -m gdq_collector --tracker=twitch
+    depends_on:
+      - db
+
+  schedule:
+    build: .
+    command: python -m gdq_collector --tracker=schedule
+    depends_on:
+      - db
+
+  donations:
+    command: python -m gdq_collector --tracker=donations
+    build: .
+    depends_on:
+      - db
+
+  donation_messages:
+    command: python -m gdq_collector --tracker=donation_messages
+    build: .
+    depends_on:
+      - db

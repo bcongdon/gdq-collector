@@ -36,16 +36,24 @@ class DonationClient:
         soup = BeautifulSoup(self._get_page(), "html.parser")
         totals = soup.find("small").text.strip().split("\n")
         tot_mon = float(
-            DonationClient.total_donations_re.search(totals[1]).group(1).replace(
+            DonationClient.total_donations_re.search(totals[1]).group(
+                1
+            ).replace(
                 ",", ""
             )
         )
-        tot_don = int(DonationClient.total_donators_re.search(totals[1]).group(1))
+        tot_don = int(
+            DonationClient.total_donators_re.search(totals[1]).group(1)
+        )
         max_don = float(
-            DonationClient.max_donation_re.search(totals[3]).group(1).replace(",", "")
+            DonationClient.max_donation_re.search(totals[3]).group(1).replace(
+                ",", ""
+            )
         )
         avg_don = float(
-            DonationClient.avg_donation_re.search(totals[3]).group(1).replace(",", "")
+            DonationClient.avg_donation_re.search(totals[3]).group(1).replace(
+                ",", ""
+            )
         )
 
         logger.info("Successfully scraped donation page")
