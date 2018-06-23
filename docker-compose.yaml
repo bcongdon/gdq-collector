@@ -1,6 +1,8 @@
 version: '3'
 services:
   db:
+    env_file:
+      - postgres-settings.env
     build:
       dockerfile: postgres.Dockerfile
       context: .
@@ -18,11 +20,6 @@ services:
   timeseries:
     build: .
     command: python -m gdq_collector --tracker=timeseries
-    deploy:
-      mode: replicated
-      restart_policy:
-        delay: 10s
-      replicas: 2
     depends_on:
       - db
 

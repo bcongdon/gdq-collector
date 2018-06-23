@@ -92,3 +92,4 @@ credentials.py
 account.key
 scripts
 postgres-data
+postgres-settings.env
