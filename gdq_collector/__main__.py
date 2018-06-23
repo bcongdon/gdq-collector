@@ -7,6 +7,7 @@ from . import utils, credentials, settings
 from apscheduler.schedulers.background import BackgroundScheduler
 import psycopg2
 import os
+import sys
 import argparse
 from datetime import MINYEAR
 from datetime import datetime
@@ -24,15 +25,21 @@ schedule = ScheduleClient()
 twitter = TwitterClient(tags=settings.TWITTER_TAGS)
 twitch = TwitchClient()
 
+
+def _connect_to_postgress():
+    for _ in range(10):
+        try:
+            conn = psycopg2.connect(**credentials.postgres)
+            return conn
+        except psycopg2.OperationalError as e:
+            print(e)
+            sleep(1)
+    print("Unable to get postgres connection.")
+    sys.exit(1)
+
+
 # Setup db connection (retry up to 10 times)
-conn = None
-for _ in range(10):
-    try:
-        conn = psycopg2.connect(**credentials.postgres)
-        break
-    except psycopg2.OperationalError as e:
-        print(e)
-        sleep(1)
+conn = _connect_to_postgress()
 
 
 def results_to_psql(tweets, viewers, chats, emotes, donators, donations):
