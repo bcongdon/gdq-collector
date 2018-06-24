@@ -20,3 +20,10 @@ twitch = {
     "oauth": "",
     "clientid": ""
 }
+
+# AWS credentials for reporting logs to Cloudwatch
+aws = {
+    "aws_access_key_id": "",
+    "aws_secret_access_key": "",
+    "region_name": ""
+}

@@ -15,6 +15,7 @@ import watchtower
 from time import sleep
 import pytz
 import logging
+from boto3.session import Session
 
 logger = logging.getLogger("gdq_collector")
 
@@ -333,7 +334,8 @@ if __name__ == "__main__":
 
     # Setup CloudWatch handler if requested
     if args.cloudwatch:
-        handler = watchtower.CloudWatchLogHandler()
+        boto3_session = Session(**credentials.aws)
+        handler = watchtower.CloudWatchLogHandler(boto3_session=boto3_session)
         logger.addHandler(handler)
         logging.getLogger("apscheduler").addHandler(handler)
 

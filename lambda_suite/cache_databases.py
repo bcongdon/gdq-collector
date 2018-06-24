@@ -13,7 +13,9 @@ logger = logging.getLogger(__name__)
 BUCKET = os.environ.get("S3_CACHE_BUCKET")
 s3 = boto3.resource("s3")
 
+logger.info("Connecting to postgres...")
 conn = psycopg2.connect(**p_creds)
+logger.info("Established connection to DB.")
 conn.set_session(readonly=True)
 cur = conn.cursor()
 

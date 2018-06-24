@@ -77,7 +77,8 @@
         },
         "s3_bucket": "gdqstatus-zappa-deployments",
         "debug": false,
-        "apigateway_enabled": false
+        "apigateway_enabled": false,
+        "timeout_seconds": 15
     },
     "monitoring": {
         "extends": "base",

@@ -13,36 +13,36 @@ services:
 
   twitter:
     build: .
-    command: python -m gdq_collector --tracker=twitter
+    command: python -m gdq_collector --tracker=twitter --cloudwatch
     depends_on:
       - db
 
   timeseries:
     build: .
-    command: python -m gdq_collector --tracker=timeseries
+    command: python -m gdq_collector --tracker=timeseries --cloudwatch
     depends_on:
       - db
 
   twitch:
     build: .
-    command: python -m gdq_collector --tracker=twitch
+    command: python -m gdq_collector --tracker=twitch --cloudwatch
     depends_on:
       - db
 
   schedule:
     build: .
-    command: python -m gdq_collector --tracker=schedule
+    command: python -m gdq_collector --tracker=schedule --cloudwatch
     depends_on:
       - db
 
   donations:
-    command: python -m gdq_collector --tracker=donations
+    command: python -m gdq_collector --tracker=donations --cloudwatch
     build: .
     depends_on:
       - db
 
   donation_messages:
-    command: python -m gdq_collector --tracker=donation_messages
+    command: python -m gdq_collector --tracker=donation_messages --cloudwatch
     build: .
     depends_on:
       - db
