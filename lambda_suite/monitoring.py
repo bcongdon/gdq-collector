@@ -2,9 +2,12 @@ import requests
 from dateutil.parser import parse
 from datetime import timedelta, datetime
 from credentials import sns_arn
+from credentials import postgres as p_creds
 import boto3
 import pytz
 import logging
+import psycopg2
+from utils import rollback_on_exception
 
 logger = logging.getLogger(__name__)
 
@@ -28,7 +31,49 @@ def send_alarm(message):
     logger.warn("Sent alarm")
 
 
-def health_check(event, context):
+def health_check_databases(event, context):
+    logger.info("Starting connection to database")
+
+    conn = None
+    try:
+        conn = psycopg2.connect(connect_timeout=10, **p_creds)
+        conn.set_session(readonly=True)
+    except Exception as e:
+        logger.error(e)
+        send_alarm("Unable to connect to postgres: {}".format(e))
+        return
+
+    tweets_sql = """
+        SELECT COUNT(*) FROM gdq_tweets
+        WHERE created_at >
+            (SELECT now()::TIMESTAMP - INTERVAL '5 min')::TIMESTAMP;
+    """
+
+    chats_sql = """
+        SELECT COUNT(*) FROM gdq_chats
+        WHERE created_at >
+            (SELECT now()::TIMESTAMP - INTERVAL '5 min')::TIMESTAMP;
+    """
+
+    @rollback_on_exception(conn)
+    def _health_check():
+        cur = conn.cursor()
+
+        cur.execute(tweets_sql)
+        tweets_row = cur.fetchone()
+        if tweets_row is None or tweets_row[0] == 0:
+            send_alarm("No tweets being saved to gdq_tweets table!")
+
+        cur.execute(chats_sql)
+        chats_row = cur.fetchone()
+        if chats_row is None or chats_row[0] == 0:
+            send_alarm("No chats being saved to gdq_chats table!")
+
+    _health_check()
+    logger.info("Did health check on database tables. Nothing to report.")
+
+
+def health_check_api(event, context):
     logger.info("Starting connection to API")
     recent_url = api_endpoint + "/recentEvents"
     try:
@@ -62,4 +107,5 @@ def health_check(event, context):
 
 # if __name__ == '__main__':
 #     logging.basicConfig(level='INFO')
-#     health_check(None, None)
+#     health_check_api(None, None)
+#     health_check_databases(None, None)

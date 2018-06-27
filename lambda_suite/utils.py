@@ -1,4 +1,7 @@
 import six
+import logging
+logger = logging.getLogger(__name__)
+
 
 minify_keys = {
     "num_emotes": "e",
@@ -13,6 +16,20 @@ minify_keys = {
 
 def minify(rows):
     return [{minify_keys[k]: v for k, v in six.iteritems(i)} for i in rows]
+
+
+def rollback_on_exception(conn):
+    def decorator(func):
+        def executor(*args, **kwargs):
+            try:
+                return func(*args, **kwargs)
+
+            except Exception as e:
+                logger.error(e)
+                conn.rollback()
+
+        return executor
+    return decorator
 
 
 if __name__ == "__main__":

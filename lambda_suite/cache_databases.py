@@ -3,7 +3,7 @@ import psycopg2
 from credentials import postgres as p_creds
 import json
 import boto3
-from utils import minify
+from utils import minify, rollback_on_exception
 import os
 from datetime import datetime, timedelta
 import logging
@@ -20,20 +20,7 @@ conn.set_session(readonly=True)
 cur = conn.cursor()
 
 
-def rollback_on_exception(func):
-
-    def executor(*args, **kwargs):
-        try:
-            return func(*args, **kwargs)
-
-        except Exception as e:
-            logger.error(e)
-            conn.rollback()
-
-    return executor
-
-
-@rollback_on_exception
+@rollback_on_exception(conn)
 def refresh_timeseries():
     """
     Refreshes timeseries data S3 cache for use with the main graph
@@ -58,7 +45,7 @@ def refresh_timeseries():
     return data_json
 
 
-@rollback_on_exception
+@rollback_on_exception(conn)
 def refresh_schedule():
     """
     Refreshes livestream game schedule S3 cache
@@ -82,7 +69,7 @@ def refresh_schedule():
     return data_json
 
 
-@rollback_on_exception
+@rollback_on_exception(conn)
 def refresh_chat_words():
     """
     Refreshes the S3 cache of words used in chat
@@ -110,7 +97,7 @@ def refresh_chat_words():
     return data_json
 
 
-@rollback_on_exception
+@rollback_on_exception(conn)
 def refresh_chat_users():
     """
     Refreshes the S3 cache of Twitch chat users
@@ -138,7 +125,7 @@ def refresh_chat_users():
     return data_json
 
 
-# @rollback_on_exception
+# @rollback_on_exception(conn)
 # def refresh_kill_save():
 #     SQL = '''
 #         SELECT row_to_json(r) FROM
@@ -152,7 +139,7 @@ def refresh_chat_users():
 #     s3.Bucket(BUCKET).put_object(Key='kill_save_animals.json', Body=data_json)
 
 
-@rollback_on_exception
+@rollback_on_exception(conn)
 def refresh_donation_stats():
     SQL = """
         SELECT has_comment, COUNT(*), sum(amount),
@@ -241,7 +228,7 @@ def refresh_donation_stats():
     return data
 
 
-@rollback_on_exception
+@rollback_on_exception(conn)
 def refresh_donation_words():
     SQL = """
         SELECT word, nentry AS entries FROM
@@ -265,7 +252,7 @@ def refresh_donation_words():
     return json_data
 
 
-@rollback_on_exception
+@rollback_on_exception(conn)
 def refresh_top_donors():
     SQL_frequent = """
         SELECT donor_name, COUNT(*) count
@@ -299,7 +286,7 @@ def refresh_top_donors():
     return json_data
 
 
-@rollback_on_exception
+@rollback_on_exception(conn)
 def refresh_game_stats():
     SQL = """
         SELECT * FROM (

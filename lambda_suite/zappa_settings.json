@@ -25,7 +25,7 @@
         "extends": "dev",
         "app_function": "api.app", 
         "s3_bucket": "gdqstatus-zappa-deployments",
-        "certificate_arn": "arn:aws:acm:us-east-1:847166266056:certificate/e8aa2a0d-8595-43bf-a86b-dd603c5a8c1f",
+        "certificate_arn": "arn:aws:acm:us-east-1:847166266056:certificate/d62524d4-d483-466d-bbb4-a91e1e1e4b31",
         "domain": "api.gdqstat.us",
         "debug": false,
         "environment_variables": {
@@ -83,12 +83,16 @@
     "monitoring": {
         "extends": "base",
         "vpc_config": {
-            "SubnetIds": [],
-            "SecurityGroupIds": []
+            "SubnetIds": ["subnet-af33aef4", "subnet-ce20bae3"],
+            "SecurityGroupIds": ["sg-838683fe"]
         },
         "events": [
             {
-                "function": "monitoring.health_check",
+                "function": "monitoring.health_check_api",
+                "expression": "rate(5 minutes)"
+            },
+            {
+                "function": "monitoring.health_check_databases",
                 "expression": "rate(5 minutes)"
             }
         ],
