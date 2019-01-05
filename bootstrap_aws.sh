@@ -6,22 +6,6 @@ sudo apt-get update -y && sudo apt-get upgrade -y
 sudo apt-get install git postgresql postgresql-contrib libpq-dev build-essential python3-pip awscli unzip libwww-perl libdatetime-perl -y
 sudo pip3 install pipenv
 
-# Setup postgres
-sudo service postgresql start
-
-sudo su - postgres
-
-# Setup gdq postgres:
-createuser gdqstatus --createdb --password
-
-# Add the following lines:
-#   local all gdqstatus md5
-#   host all gdqstatus 0.0.0.0/0 md5
-vim /etc/postgresql/9.5/main/postgresql.conf
-
-exit
-sudo /etc/init.d/postgresql restart
-
 # Setup gdqstatus user
 sudo useradd -m gdqstatus
 sudo usermod -aG sudo gdqstatus
@@ -35,18 +19,10 @@ createdb gdqstatus -U gdqstatus
 git clone https://github.com/bcongdon/gdq-collector
 cd gdq-collector
 
-
-# Setup pip to work in low-memory environment
-mkdir -p ~/.config/pip
-echo -e "[global]\nno-cache-dir = true" > ~/.config/pip/pip.conf
-
 # Install dependencies
 pipenv --three
 pipenv install
 mv gdq_collector/credentials_template.py gdq_collector/credentials.py
-
-# Setup postgres tables
-psql < schema.sql
 
 # Setup AWS credentials
 aws configure
@@ -63,3 +39,30 @@ cat <(crontab -l) <(echo "*/5 * * * * ~/aws-scripts-mon/mon-put-instance-data.pl
 
 # Enter AWS credentials (can copy keys from ~/.aws/credentials)
 vim awscreds.conf
+
+# Install docker
+sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable"
+sudo apt-get update
+sudo apt-get install docker-ce docker-compose
+sudo systemctl enable docker
+sudo groupadd docker
+sudo usermod -aG docker $USER
+
+# log out and log back in
+exit
+sudo su - gdqstatus
+
+# Build docker images
+cd ~/gdq-collector
+cp postgres-settings.env.template postgres-settings.env
+# Generate and add postgres credentials
+vim postgres-settings.env
+docker-compose build
+# Add postgres settings to python credentials file
+cp gdq_collector/credentials_template.py gdq_collector/credentials.py
+vim gdq_collector/credentials.py
+
+# Update settings file to reflect new event
+vim gdq_collector/settings.py
