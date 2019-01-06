@@ -61,7 +61,7 @@ class ScheduleClient:
             )
             games.append(game)
 
-        blacklist = ["pre-show", "setup block", "finale"]
+        blacklist = ["pre-show", "preshow", "setup block", "finale"]
         games = [
             x
             for x in games

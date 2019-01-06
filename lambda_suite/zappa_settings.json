@@ -3,8 +3,13 @@
         "project_name": "gdqstatus",
         "aws_region": "us-east-1",
         "vpc_config": {
-            "SubnetIds": ["subnet-af33aef4", "subnet-ce20bae3"],
-            "SecurityGroupIds": ["sg-838683fe"]
+            "SubnetIds": [
+                "subnet-af33aef4",
+                "subnet-ce20bae3"
+            ],
+            "SecurityGroupIds": [
+                "sg-838683fe"
+            ]
         },
         "tags": {
             "project": "gdqstatus"
@@ -13,7 +18,7 @@
     },
     "dev": {
         "extends": "base",
-        "app_function": "api.app", 
+        "app_function": "api.app",
         "s3_bucket": "gdqstatus-dev-zappa-deployments",
         "cors": true,
         "debug": true,
@@ -23,7 +28,7 @@
     },
     "prod": {
         "extends": "dev",
-        "app_function": "api.app", 
+        "app_function": "api.app",
         "s3_bucket": "gdqstatus-zappa-deployments",
         "certificate_arn": "arn:aws:acm:us-east-1:847166266056:certificate/d62524d4-d483-466d-bbb4-a91e1e1e4b31",
         "domain": "api.gdqstat.us",
@@ -37,7 +42,7 @@
         "events": [
             {
                 "function": "cache_databases.timeseries_handler",
-                "expression": "rate(5 minutes)"
+                "expression": "rate(10 minutes)"
             },
             // {
             //     "function": "cache_databases.animals_handler",
@@ -45,12 +50,12 @@
             // },
             {
                 "function": "cache_databases.schedule_handler",
-                "expression": "rate(10 minutes)"
+                "expression": "rate(20 minutes)"
             },
             {
                 "function": "cache_databases.games_stats_handler",
                 "expression": "rate(30 minutes)"
-            }
+            },
             {
                 "function": "cache_databases.chat_words_handler",
                 "expression": "rate(30 minutes)"
@@ -83,8 +88,13 @@
     "monitoring": {
         "extends": "base",
         "vpc_config": {
-            "SubnetIds": ["subnet-af33aef4", "subnet-ce20bae3"],
-            "SecurityGroupIds": ["sg-838683fe"]
+            "SubnetIds": [
+                "subnet-af33aef4",
+                "subnet-ce20bae3"
+            ],
+            "SecurityGroupIds": [
+                "sg-838683fe"
+            ]
         },
         "events": [
             {
