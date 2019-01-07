@@ -376,6 +376,16 @@ def games_stats_handler(event, context):
     return refresh_game_stats()
 
 
+def all_handler(event, context):
+    refresh_timeseries()
+    refresh_schedule()
+    refresh_chat_words()
+    refresh_chat_users()
+    refresh_donation_stats()
+    refresh_donation_words()
+    refresh_top_donors()
+    refresh_game_stats()
+
 if __name__ == "__main__":
     BUCKET = "storage.api.gdqstat.us"
 # refresh_timeseries()
