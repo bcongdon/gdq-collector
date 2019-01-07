@@ -4,8 +4,7 @@
         "aws_region": "us-east-1",
         "vpc_config": {
             "SubnetIds": [
-                "subnet-af33aef4",
-                "subnet-ce20bae3"
+                "subnet-04fa359a87fe68ac6"
             ],
             "SecurityGroupIds": [
                 "sg-838683fe"
@@ -87,15 +86,6 @@
     },
     "monitoring": {
         "extends": "base",
-        "vpc_config": {
-            "SubnetIds": [
-                "subnet-af33aef4",
-                "subnet-ce20bae3"
-            ],
-            "SecurityGroupIds": [
-                "sg-838683fe"
-            ]
-        },
         "events": [
             {
                 "function": "monitoring.health_check_api",
@@ -106,6 +96,7 @@
                 "expression": "rate(5 minutes)"
             }
         ],
-        "apigateway_enabled": false
+        "apigateway_enabled": false,
+        "timeout_seconds": 10,
     }
 }
