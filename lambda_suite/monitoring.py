@@ -12,7 +12,7 @@ from utils import rollback_on_exception
 logger = logging.getLogger(__name__)
 
 api_endpoint = "https://api.gdqstat.us"
-resouce_map = {
+resource_map = {
     "e": "num_emotes",
     "m": "total_donations",
     "d": "num_donations",
@@ -20,8 +20,6 @@ resouce_map = {
     "t": "num_tweets",
     "v": "num_viewers",
 }
-
-alarm_msg = "Alarms triggered on: "
 
 
 def send_alarm(message):
@@ -80,8 +78,8 @@ def health_check_api(event, context):
         r = requests.get(recent_url, timeout=5)
         data = r.json()
     except Exception as e:
-        logger.info("API resulting in exception", e)
         send_alarm("Something went wrong with the API request: {}".format(e))
+        logger.info("API resulting in exception: {}".format(e))
 
     if r.status_code != 200:
         send_alarm("Got status code {} from API".format(r.status_code))
@@ -94,16 +92,19 @@ def health_check_api(event, context):
         send_alarm("API serving stale data! (Or collector has halted)")
     data = sorted(data, key=lambda x: x["time"], reverse=True)
     alarms = []
-    for k in resouce_map:
-        num_invalid = sum(1 for i in range(5) if data[i][k] <= 0 or data[i][k] is None)
+    for k in resource_map:
+        num_invalid = sum(1 for i in range(5) if data[i][k] is None or data[i][k] <= 0)
         if num_invalid >= 3:
-            alarms.append(resouce_map[k])
+            alarms.append(resource_map[k])
     if len(alarms) > 0:
-        msg = alarm_msg + ", ".join(alarms)
+        msg = "API Alarms triggered on " + ", ".join(alarms)
         send_alarm(msg)
     else:
         logger.info("Did health check. Nothing to report.")
 
+def test_alarm(event, context):
+    logger.info("Testing alarm")
+    send_alarm("Test alarm.")
 
 # if __name__ == '__main__':
 #     logging.basicConfig(level='INFO')
