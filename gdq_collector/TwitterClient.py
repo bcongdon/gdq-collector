@@ -73,7 +73,7 @@ class TwitterClient:
 
         s_listener = HashtagStreamListener(self)
         stream = tweepy.Stream(auth=self.api.auth, listener=s_listener)
-        stream.filter(track=self.tags, async=True)
+        stream.filter(track=self.tags, is_async=True)
 
     def _increment_tweet_counter(self):
         self.curr_tweets += 1
