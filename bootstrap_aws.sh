@@ -61,8 +61,10 @@ cp postgres-settings.env.template postgres-settings.env
 vim postgres-settings.env
 docker-compose build
 # Add postgres settings to python credentials file
-cp gdq_collector/credentials_template.py gdq_collector/credentials.py
 vim gdq_collector/credentials.py
 
 # Update settings file to reflect new event
 vim gdq_collector/settings.py
+
+# Rebuild docker containers
+docker-compose build
