@@ -7,10 +7,10 @@
 
 # Networking
 * Make sure that the `monitoring` lambda is on the VPC and is associated with VPC's subnets
-* Create a NAT Gateway for the VPC. Make a route table that maps `0.0.0.0/0` to the created NAT, and associate that with all the VPC's subnets
-* There needs to be 2 route tables:
-  * 1 that maps `0.0.0.0/0` to the VPC's inet gateway (for internal connections)
-  * 1 that maps `0.0.0.0/0` to the created NAT (for external connections)
+* Create a NAT Gateway for the VPC. Make a route table that maps `0.0.0.0/0` to the created NAT, and associate that with the VPC's subnets
+* There needs to be 1 route tables:
+  * It should maps `0.0.0.0/0` to the VPC's inet gateway (for internal connections)
+  * It should include a route to the S3 VPC endpoint
 * More info about Lambda/VPC: https://aws.amazon.com/premiumsupport/knowledge-center/internet-access-lambda-function/
 
 # Checklist

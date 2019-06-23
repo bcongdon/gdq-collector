@@ -59,8 +59,8 @@ def health_check_databases(event, context):
 
         cur.execute(tweets_sql)
         tweets_row = cur.fetchone()
-        # if tweets_row is None or tweets_row[0] == 0:
-        #     send_alarm("No tweets being saved to gdq_tweets table!")
+        if tweets_row is None or tweets_row[0] == 0:
+            send_alarm("No tweets being saved to gdq_tweets table!")
 
         cur.execute(chats_sql)
         chats_row = cur.fetchone()
@@ -93,7 +93,8 @@ def health_check_api(event, context):
     data = sorted(data, key=lambda x: x["time"], reverse=True)
     alarms = []
     for k in resource_map:
-        num_invalid = sum(1 for i in range(5) if data[i][k] is None or data[i][k] <= 0)
+        num_invalid = sum(1 for i in range(
+            5) if data[i][k] is None or data[i][k] <= 0)
         if num_invalid >= 3:
             alarms.append(resource_map[k])
     if len(alarms) > 0:
@@ -101,6 +102,7 @@ def health_check_api(event, context):
         send_alarm(msg)
     else:
         logger.info("Did health check. Nothing to report.")
+
 
 def test_alarm(event, context):
     logger.info("Testing alarm")
