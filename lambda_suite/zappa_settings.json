@@ -92,7 +92,7 @@
             ]
         }
     },
-    "monitoring": {
+    "monitoring_databases": {
         "extends": "base",
         "events": [
             {
@@ -106,5 +106,25 @@
         ],
         "apigateway_enabled": false,
         "timeout_seconds": 10,
+        "vpc_config": {
+            "SubnetIds": [
+                "subnet-af33aef4"
+            ],
+            "SecurityGroupIds": [
+                "sg-838683fe"
+            ]
+        }
+    },
+    "monitoring_api": {
+        "extends": "base",
+        "events": [
+            {
+                "function": "monitoring.health_check_api",
+                "expression": "rate(5 minutes)"
+            }
+        ],
+        "apigateway_enabled": false,
+        "timeout_seconds": 10,
+        "vpc_config": {}
     }
 }
