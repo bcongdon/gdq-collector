@@ -11,7 +11,7 @@ from utils import rollback_on_exception
 
 logger = logging.getLogger(__name__)
 
-api_endpoint = "https://mjq4it7uie.execute-api.us-east-1.amazonaws.com/prod"
+api_endpoint = "https://api.gdqstat.us"
 resource_map = {
     "e": "num_emotes",
     "m": "total_donations",
