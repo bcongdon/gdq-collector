@@ -57,10 +57,10 @@ def health_check_databases(event, context):
     def _health_check():
         cur = conn.cursor()
 
-        cur.execute(tweets_sql)
-        tweets_row = cur.fetchone()
-        if tweets_row is None or tweets_row[0] == 0:
-            send_alarm("No tweets being saved to gdq_tweets table!")
+        # cur.execute(tweets_sql)
+        # tweets_row = cur.fetchone()
+        # if tweets_row is None or tweets_row[0] == 0:
+        #     send_alarm("No tweets being saved to gdq_tweets table!")
 
         cur.execute(chats_sql)
         chats_row = cur.fetchone()
