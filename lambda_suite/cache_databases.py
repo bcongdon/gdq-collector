@@ -323,9 +323,9 @@ def refresh_game_stats():
         return dict(
             name=x[0],
             max_viewers=int(x[1]),
-            median_donation=float(x[2]),
-            total_donations=float(x[3]),
-            donations_per_min=float(x[4]),
+            median_donation=float(x[2] or 0),
+            total_donations=float(x[3] or 0),
+            donations_per_min=float(x[4] or 0),
             num_chats=int(x[5]),
         )
 
@@ -385,6 +385,7 @@ def all_handler(event, context):
     refresh_donation_words()
     refresh_top_donors()
     refresh_game_stats()
+
 
 if __name__ == "__main__":
     BUCKET = "storage.api.gdqstat.us"
