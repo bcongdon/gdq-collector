@@ -1,21 +1,24 @@
 # EC2
-* Region: us-east-1 (for historical reasons)
-* Storage: 16GB
-* OS: ubuntu 16.04
-* Size: t2.medium
-* Be sure to set "Auto-assign Public IP" to True
+
+- Region: us-east-1 (for historical reasons)
+- Storage: 16GB
+- OS: ubuntu 16.04
+- Size: t2.medium
+- Be sure to set "Auto-assign Public IP" to True
 
 # Networking
-* Make sure that the `monitoring` lambda is on the VPC and is associated with VPC's subnets
-* Create a NAT Gateway for the VPC. Make a route table that maps `0.0.0.0/0` to the created NAT, and associate that with the VPC's subnets
-* Create VPC endpoints for S3 and SNS
-* There needs to be 1 route tables:
-  * It should maps `0.0.0.0/0` to the VPC's inet gateway (for internal connections)
-  * It should include a route to the S3 VPC endpoint
-  * It should include a route to the SNS VPC endpoint
-* More info about Lambda/VPC: https://aws.amazon.com/premiumsupport/knowledge-center/internet-access-lambda-function/
+
+- Make sure that the `monitoring` lambda is on the VPC and is associated with VPC's subnets
+- Create a NAT Gateway for the VPC. Make a route table that maps `0.0.0.0/0` to the created NAT, and associate that with the VPC's subnets
+- Create VPC endpoints for S3 and SNS
+- There needs to be 1 route tables:
+  - It should maps `0.0.0.0/0` to the VPC's inet gateway (for internal connections)
+  - It should include a route to the S3 VPC endpoint
+  - It should include a route to the SNS VPC endpoint
+- More info about Lambda/VPC: https://aws.amazon.com/premiumsupport/knowledge-center/internet-access-lambda-function/
 
 # Pre-Event Checklist
+
 - [ ] Take a snapshot of the previous event if not already done
 - [ ] Update the Hugo config to have the countdown for "next" event. Deploy countdown and snapshot-ed previous event.
 - [ ] Make sure that `monitoring` lambda isn't timing out
@@ -27,9 +30,20 @@
   - [ ] `zappa invoke monitoring monitoring.health_check_databases`
 
 # Post-Event Checklist
+
 - [ ] Export DB tables via Postico and save to site/data folder
 - [ ] Download latest db cache files from S3 and safe to site/data folder
 - [ ] Do a DB dump w/ `pg_dump`
   - Might need to install postgresql 9.6 on the host machine (https://askubuntu.com/a/831293)
-  -
 - [ ] Set frontend to offline mode
+- [ ] Delete object versions from S3 cache
+  - https://stackoverflow.com/a/41399166
+
+```python
+#!/usr/bin/env python
+import boto3
+
+s3 = boto3.resource('s3')
+bucket = s3.Bucket('your-bucket-name')
+bucket.object_versions.all().delete()
+```
