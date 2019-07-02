@@ -8,12 +8,14 @@
 # Networking
 * Make sure that the `monitoring` lambda is on the VPC and is associated with VPC's subnets
 * Create a NAT Gateway for the VPC. Make a route table that maps `0.0.0.0/0` to the created NAT, and associate that with the VPC's subnets
+* Create VPC endpoints for S3 and SNS
 * There needs to be 1 route tables:
   * It should maps `0.0.0.0/0` to the VPC's inet gateway (for internal connections)
   * It should include a route to the S3 VPC endpoint
+  * It should include a route to the SNS VPC endpoint
 * More info about Lambda/VPC: https://aws.amazon.com/premiumsupport/knowledge-center/internet-access-lambda-function/
 
-# Checklist
+# Pre-Event Checklist
 - [ ] Take a snapshot of the previous event if not already done
 - [ ] Update the Hugo config to have the countdown for "next" event. Deploy countdown and snapshot-ed previous event.
 - [ ] Make sure that `monitoring` lambda isn't timing out
@@ -23,3 +25,11 @@
 - [ ] Manually invoke health checks and make sure they return "no error".
   - [ ] `zappa invoke monitoring monitoring.health_check_api`
   - [ ] `zappa invoke monitoring monitoring.health_check_databases`
+
+# Post-Event Checklist
+- [ ] Export DB tables via Postico and save to site/data folder
+- [ ] Download latest db cache files from S3 and safe to site/data folder
+- [ ] Do a DB dump w/ `pg_dump`
+  - Might need to install postgresql 9.6 on the host machine (https://askubuntu.com/a/831293)
+  -
+- [ ] Set frontend to offline mode
