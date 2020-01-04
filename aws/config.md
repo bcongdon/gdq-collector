@@ -21,9 +21,10 @@
 
 - [ ] Take a snapshot of the previous event if not already done
 - [ ] Update the Hugo config to have the countdown for "next" event. Deploy countdown and snapshot-ed previous event.
-- [ ] Make sure that `monitoring` lambda isn't timing out
+- [ ] Setup new EC2 instance following the above steps
 - [ ] Setup cloud watch dashboard to track new EC2 instance
 - [ ] Make sure you can connect to postgres over SSH
+- [ ] Make sure that `monitoring` lambda isn't timing out
 - [ ] Trigger a test alarm with `zappa invoke monitoring monitoring.test_alarm` and make sure it sends a text/email
 - [ ] Manually invoke health checks and make sure they return "no error".
   - [ ] `zappa invoke monitoring monitoring.health_check_api`
@@ -36,6 +37,7 @@
 - [ ] Do a DB dump w/ `pg_dump`
   - Might need to install postgresql 9.6 on the host machine (https://askubuntu.com/a/831293)
 - [ ] Set frontend to offline mode
+- [ ] Delete the NAT gateway and VPC endpoints
 - [ ] Delete object versions from S3 cache
   - https://stackoverflow.com/a/41399166
 

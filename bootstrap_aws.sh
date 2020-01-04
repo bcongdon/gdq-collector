@@ -11,9 +11,10 @@ sudo useradd -m gdqstatus
 sudo usermod -aG sudo gdqstatus
 sudo passwd gdqstatus
 
-# Setup gdqstatus database
-sudo su - gdqstatus
-createdb gdqstatus -U gdqstatus
+# Setup gdqstatus database (No longer necessary as the db has been dockerized)
+# sudo -u postgres createuser -U postgres -s gdqstatus
+# sudo -u postgres createdb gdqstatus -U gdqstatus
+# sudo su - gdqstatus
 
 # Clone gdq collector repo
 git clone https://github.com/bcongdon/gdq-collector
@@ -45,7 +46,7 @@ sudo apt-get install apt-transport-https ca-certificates curl software-propertie
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable"
 sudo apt-get update
-sudo apt-get install docker-ce docker-compose
+sudo apt-get install docker-ce docker-compose -y
 sudo systemctl enable docker
 sudo groupadd docker
 sudo usermod -aG docker $USER
