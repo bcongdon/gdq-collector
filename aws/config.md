@@ -22,13 +22,19 @@
 - [ ] Take a snapshot of the previous event if not already done
 - [ ] Update the Hugo config to have the countdown for "next" event. Deploy countdown and snapshot-ed previous event.
 - [ ] Setup new EC2 instance following the above steps
+- [ ] Follow the instructions in `bootstrap_aws.sh` to setup the EC2 instance w/ Docker
+- [ ] Deploy the zappa lambda_suite:
+    - `zappa deploy prod`
+    - `zappa deploy cache_databases`
+    - `zappa deploy monitoring_databases`
+    - `zappa deploy monitoring_api`
 - [ ] Setup cloud watch dashboard to track new EC2 instance
 - [ ] Make sure you can connect to postgres over SSH
 - [ ] Make sure that `monitoring` lambda isn't timing out
 - [ ] Trigger a test alarm with `zappa invoke monitoring monitoring.test_alarm` and make sure it sends a text/email
 - [ ] Manually invoke health checks and make sure they return "no error".
-  - [ ] `zappa invoke monitoring monitoring.health_check_api`
-  - [ ] `zappa invoke monitoring monitoring.health_check_databases`
+  - [ ] `zappa invoke monitoring_api monitoring.health_check_api`
+  - [ ] `zappa invoke monitoring_databases monitoring.health_check_databases`
 
 # Post-Event Checklist
 

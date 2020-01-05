@@ -10,7 +10,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-BUCKET = os.environ.get("S3_CACHE_BUCKET")
+BUCKET = os.environ.get("S3_CACHE_BUCKET", "storage.api.gdqstat.us")
 s3 = boto3.resource("s3")
 
 logger.info("Connecting to postgres...")
@@ -389,11 +389,11 @@ def all_handler(event, context):
 
 if __name__ == "__main__":
     BUCKET = "storage.api.gdqstat.us"
-# refresh_timeseries()
-# refresh_schedule()
-# refresh_chat_words()
-# refresh_chat_users()
-# refresh_donation_stats()
-# refresh_donation_words()
-# refresh_top_donors()
-# refresh_game_stats()
+    refresh_timeseries()
+    refresh_schedule()
+    refresh_chat_words()
+    refresh_chat_users()
+    refresh_donation_stats()
+    refresh_donation_words()
+    refresh_top_donors()
+    refresh_game_stats()

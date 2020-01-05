@@ -83,14 +83,7 @@
         "debug": false,
         "apigateway_enabled": false,
         "timeout_seconds": 15,
-        "vpc_config": {
-            "SubnetIds": [
-                "subnet-af33aef4"
-            ],
-            "SecurityGroupIds": [
-                "sg-838683fe"
-            ]
-        }
+        "vpc_config": {}
     },
     "monitoring_databases": {
         "extends": "base",
