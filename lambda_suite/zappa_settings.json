@@ -2,14 +2,7 @@
     "base": {
         "project_name": "gdqstatus",
         "aws_region": "us-east-1",
-        "vpc_config": {
-            "SubnetIds": [
-                "subnet-04fa359a87fe68ac6"
-            ],
-            "SecurityGroupIds": [
-                "sg-838683fe"
-            ]
-        },
+        "vpc_config": {},
         "tags": {
             "project": "gdqstatus"
         },
@@ -29,7 +22,7 @@
         "extends": "dev",
         "app_function": "api.app",
         "s3_bucket": "gdqstatus-zappa-deployments",
-        "certificate_arn": "arn:aws:acm:us-east-1:847166266056:certificate/d62524d4-d483-466d-bbb4-a91e1e1e4b31",
+        "certificate_arn": "arn:aws:acm:us-east-1:847166266056:certificate/3d405657-34e0-4b58-8c79-6b0dd52b3cfe",
         "domain": "api.gdqstat.us",
         "debug": false,
         "environment_variables": {
@@ -99,14 +92,7 @@
         ],
         "apigateway_enabled": false,
         "timeout_seconds": 10,
-        "vpc_config": {
-            "SubnetIds": [
-                "subnet-af33aef4"
-            ],
-            "SecurityGroupIds": [
-                "sg-838683fe"
-            ]
-        }
+        "vpc_config": {}
     },
     "monitoring_api": {
         "extends": "base",

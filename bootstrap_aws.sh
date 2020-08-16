@@ -34,12 +34,12 @@ curl http://aws-cloudwatch.s3.amazonaws.com/downloads/CloudWatchMonitoringScript
 unzip CloudWatchMonitoringScripts-1.2.1.zip
 rm CloudWatchMonitoringScripts-1.2.1.zip
 cd aws-scripts-mon
-mv awscreds.template awscreds.conf
-cat <(crontab -l) <(echo "*/5 * * * * ~/aws-scripts-mon/mon-put-instance-data.pl --mem-used-incl-cache-buff --mem-util --disk-space-util --disk-space-avail --disk-space-used --disk-path=/ --from-cron"
+mv awscreds.template ~/.awscreds.conf
+cat <(crontab -l) <(echo "*/5 * * * * ~/aws-scripts-mon/mon-put-instance-data.pl --mem-used-incl-cache-buff --mem-util --disk-space-util --disk-space-avail --disk-space-used --disk-path=/ --from-cron --aws-credential-file=/home/ubuntu/.awscreds.conf"
 ) | crontab -
 
 # Enter AWS credentials (can copy keys from ~/.aws/credentials)
-vim awscreds.conf
+vim ~/.awscreds.conf
 
 # Install docker
 sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
@@ -47,20 +47,20 @@ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable"
 sudo apt-get update
 sudo apt-get install docker-ce docker-compose -y
+
+# Setup docker groups
 sudo systemctl enable docker
 sudo groupadd docker
 sudo usermod -aG docker $USER
 
 # log out and log back in
 exit
-sudo su - gdqstatus
 
 # Build docker images
 cd ~/gdq-collector
 cp postgres-settings.env.template postgres-settings.env
 # Generate and add postgres credentials
 vim postgres-settings.env
-docker-compose build
 # Add postgres settings to python credentials file
 vim gdq_collector/credentials.py
 
