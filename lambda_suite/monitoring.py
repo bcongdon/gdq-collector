@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 api_endpoint = "https://api.gdqstat.us"
 resource_map = {
-    "e": "num_emotes",
+    # "e": "num_emotes",
     "m": "total_donations",
     "d": "num_donations",
     "c": "num_chats",
