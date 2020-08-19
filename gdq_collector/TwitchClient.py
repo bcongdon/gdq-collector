@@ -76,6 +76,8 @@ class TwitchClient(irc.client.SimpleIRCClient):
         return self._channel_id
 
     def _get_emote_list(self):
+        # Emotes currently causes OOMs due to Twitch's emote list being way too big now
+        return []
         logger.info("Fetching emote list")
         headers = {
             "Accept": "application/vnd.twitchtv.v5+json",
