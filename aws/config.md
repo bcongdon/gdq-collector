@@ -37,8 +37,9 @@
 - [ ] Setup cloud watch dashboard to track new EC2 instance
 - [ ] Make sure you can connect to postgres over SSH
 - [ ] Make sure that `monitoring` lambda isn't timing out
-- [ ] Trigger a test alarm with `zappa invoke monitoring monitoring.test_alarm`
-      and make sure it sends a text/email
+- [ ] Trigger a test alarm with
+      `zappa invoke monitoring_api monitoring.test_alarm` and make sure it sends
+      a text/email
 - [ ] Manually invoke health checks and make sure they return "no error".
   - [ ] `zappa invoke monitoring_api monitoring.health_check_api`
   - [ ] `zappa invoke monitoring_databases monitoring.health_check_databases`
@@ -62,6 +63,6 @@
 import boto3
 
 s3 = boto3.resource('s3')
-bucket = s3.Bucket('your-bucket-name')
+bucket = s3.Bucket('storage.api.gdqstat.us')
 bucket.object_versions.all().delete()
 ```
