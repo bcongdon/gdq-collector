@@ -1,4 +1,4 @@
-# Designed to be run on ubuntu 16.04
+# Designed to be run on ubuntu 20.04
 # NOTE: Do not run this as a script. Meant to be more an "operator's guide"
 
 # Install packages
@@ -19,11 +19,11 @@ sudo passwd gdqstatus
 # Clone gdq collector repo
 git clone https://github.com/bcongdon/gdq-collector
 cd gdq-collector
-
-# Install dependencies
-pipenv --three
-pipenv install
 mv gdq_collector/credentials_template.py gdq_collector/credentials.py
+
+# Install dependencies (no longer necessary)
+# pipenv --three
+# pipenv install
 
 # Setup AWS credentials
 aws configure
@@ -42,9 +42,9 @@ cat <(crontab -l) <(echo "*/5 * * * * ~/aws-scripts-mon/mon-put-instance-data.pl
 vim ~/.awscreds.conf
 
 # Install docker
-sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
+sudo apt-get install apt-transport-https ca-certificates curl software-properties-common -y
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable"
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 sudo apt-get update
 sudo apt-get install docker-ce docker-compose -y
 
