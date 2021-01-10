@@ -1,4 +1,4 @@
-version: '2'
+version: "2"
 services:
   db:
     env_file:
@@ -11,11 +11,11 @@ services:
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
 
-  twitter:
-    build: .
-    command: python -m gdq_collector --tracker=twitter --cloudwatch
-    depends_on:
-      - db
+  # twitter:
+  #   build: .
+  #   command: python -m gdq_collector --tracker=twitter --cloudwatch
+  #   depends_on:
+  #     - db
 
   timeseries:
     build: .
