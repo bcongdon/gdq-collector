@@ -35,8 +35,7 @@ unzip CloudWatchMonitoringScripts-1.2.1.zip
 rm CloudWatchMonitoringScripts-1.2.1.zip
 cd aws-scripts-mon
 mv awscreds.template ~/.awscreds.conf
-cat <(crontab -l) <(echo "*/5 * * * * ~/aws-scripts-mon/mon-put-instance-data.pl --mem-used-incl-cache-buff --mem-util --disk-space-util --disk-space-avail --disk-space-used --disk-path=/ --from-cron --aws-credential-file=/home/ubuntu/.awscreds.conf"
-) | crontab -
+cat <(crontab -l) <(echo "*/5 * * * * ~/aws-scripts-mon/mon-put-instance-data.pl --mem-used-incl-cache-buff --mem-util --disk-space-util --disk-space-avail --disk-space-used --disk-path=/ --from-cron --aws-credential-file=/home/ubuntu/.awscreds.conf") | crontab -
 
 # Enter AWS credentials (can copy keys from ~/.aws/credentials)
 vim ~/.awscreds.conf
