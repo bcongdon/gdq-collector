@@ -50,7 +50,7 @@ def health_check_databases(event, context):
     chats_sql = """
         SELECT COUNT(*) FROM gdq_chats
         WHERE created_at >
-            (SELECT now()::TIMESTAMP - INTERVAL '5 min')::TIMESTAMP;
+            (SELECT now()::TIMESTAMP - INTERVAL '10 min')::TIMESTAMP;
     """
 
     @rollback_on_exception(conn)

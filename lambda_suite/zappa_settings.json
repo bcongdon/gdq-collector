@@ -82,10 +82,6 @@
         "extends": "base",
         "events": [
             {
-                "function": "monitoring.health_check_api",
-                "expression": "rate(5 minutes)"
-            },
-            {
                 "function": "monitoring.health_check_databases",
                 "expression": "rate(5 minutes)"
             }
