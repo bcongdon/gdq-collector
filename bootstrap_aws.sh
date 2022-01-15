@@ -4,7 +4,7 @@
 # Install packages
 sudo apt-get update -y && sudo apt-get upgrade -y
 sudo apt-get install git postgresql postgresql-contrib libpq-dev build-essential python3-pip awscli unzip libwww-perl libdatetime-perl -y
-sudo pip3 install pipenv
+# sudo pip3 install pipenv
 
 # Setup gdqstatus user
 sudo useradd -m gdqstatus
@@ -44,8 +44,7 @@ vim ~/.awscreds.conf
 sudo apt-get install apt-transport-https ca-certificates curl software-properties-common -y
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-sudo apt-get update
-sudo apt-get install docker-ce docker-compose -y
+sudo apt-get update && sudo apt-get install docker-ce docker-compose -y
 
 # Setup docker groups
 sudo systemctl enable docker
@@ -68,3 +67,10 @@ vim gdq_collector/settings.py
 
 # Rebuild docker containers
 docker-compose build
+
+# Setup sudo crontab to restart docker containers
+sudo su
+cat <(crontab -l) <(echo "0 */2 * * * docker container restart gdq-collector_timeseries_1") | crontab -
+cat <(crontab -l) <(echo "30 */4 * * * docker container restart gdq-collector_timeseries_2") | crontab -
+cat <(crontab -l) <(echo "15 */12 * * * docker container restart gdq-collector_twitch_1") | crontab -
+exit
