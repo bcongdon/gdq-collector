@@ -46,7 +46,7 @@
 
 # Post-Event Checklist
 
-- [ ] Export DB tables via Postico and save to site/data folder
+- [ ] Export DB tables via Postico and save to `site/data` folder in `gdq-stats`
 - [ ] Download latest db cache files from S3 and safe to site/data folder
   - `aws s3 cp --recursive s3://storage.api.gdqstat.us/ site/static/data/$YEAR/$EVENT`
 - [ ] Do a DB dump w/ `pg_dump`
